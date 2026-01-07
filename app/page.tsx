@@ -30,15 +30,9 @@ export default function LandingPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/auth/signin"
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition font-medium"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/register"
                 className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full hover:from-blue-700 hover:to-indigo-700 transition shadow-lg shadow-blue-500/30 font-medium"
               >
-                Get Started
+                Sign In
               </Link>
             </div>
           </div>
@@ -79,19 +73,13 @@ export default function LandingPage() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
               <Link
-                href="/auth/register"
+                href="/auth/signin"
                 className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition shadow-2xl shadow-blue-500/40 font-semibold text-lg flex items-center space-x-2"
               >
-                <span>Get Started</span>
+                <span>Sign In to Your Account</span>
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </Link>
-              <Link
-                href="/auth/signin"
-                className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-2xl hover:shadow-xl transition border-2 border-gray-200 dark:border-gray-700 font-semibold text-lg"
-              >
-                View Demo
               </Link>
             </div>
 
@@ -303,16 +291,16 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-12 text-center shadow-2xl">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Launch Your Course Platform Today
+              Access Your Course Platform
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Complete, customizable, and ready to deploy
+              Enrolled students: Sign in with your credentials
             </p>
             <Link
-              href="/auth/register"
+              href="/auth/signin"
               className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-blue-600 rounded-2xl hover:shadow-xl transition font-semibold text-lg"
             >
-              <span>Get Started</span>
+              <span>Sign In</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>

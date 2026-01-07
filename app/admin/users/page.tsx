@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import Link from 'next/link'
 
 type User = {
   id: string
@@ -154,13 +155,21 @@ export default function UsersManagement() {
     <DashboardLayout role={session?.user?.role || 'ADMIN'}>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            User Management
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Manage user accounts and roles
-          </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              User Management
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              Manage user accounts and roles
+            </p>
+          </div>
+          <Link
+            href="/admin/users/create"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
+          >
+            + Create User
+          </Link>
         </div>
 
         {/* Users Table */}

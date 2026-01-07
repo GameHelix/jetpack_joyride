@@ -4,6 +4,8 @@ import { generateUploadUrl, generateFileKey, validateFileType, validateFileSize 
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const uploadUrlSchema = z.object({
   filename: z.string().min(1),
   contentType: z.string().min(1),

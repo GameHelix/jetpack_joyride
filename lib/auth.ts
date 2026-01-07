@@ -62,17 +62,36 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // Initial sign in
       if (user) {
         token.role = user.role
         token.id = user.id
+        token.email = user.email
+        token.name = user.name
       }
+
+      // Refresh token data on update
+      if (trigger === 'update' && token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { role: true, name: true, email: true },
+        })
+        if (dbUser) {
+          token.role = dbUser.role
+          token.name = dbUser.name
+          token.email = dbUser.email
+        }
+      }
+
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token) {
         session.user.role = token.role as RoleName
         session.user.id = token.id as string
+        session.user.email = token.email as string
+        session.user.name = token.name as string
       }
       return session
     },
@@ -83,8 +102,14 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours - session will be updated if older than this
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days - must match session maxAge
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 }
 
 // Type augmentation for NextAuth
