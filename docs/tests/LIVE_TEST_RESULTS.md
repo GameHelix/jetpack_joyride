@@ -45,7 +45,7 @@ Response Time: < 100ms
 
 ```
 Service: Neon PostgreSQL
-Connection String: postgresql://tg_db_owner:***@ep-frosty-voice-a2s9itd4-pooler.eu-central-1.aws.neon.tech/tg_db
+Connection String: postgresql://****:****@****.neon.tech/****
 Schema: educy
 Status: CONNECTED ✅
 ```
@@ -86,10 +86,10 @@ This proves:
 
 ```
 Service: Cloudflare R2
-Account ID: 612eb8c2fbc8d81e98c37a03e49f4a8f
+Account ID: ********************************
 Bucket: educy
-Endpoint: https://612eb8c2fbc8d81e98c37a03e49f4a8f.r2.cloudflarestorage.com
-Public URL: https://pub-089947e59f664d87af4e61fa97456edd.r2.dev
+Endpoint: https://****.r2.cloudflarestorage.com
+Public URL: https://pub-****.r2.dev
 Status: CONFIGURED ✅
 ```
 
@@ -120,9 +120,9 @@ Status: CONFIGURED ✅
 - @aws-sdk/s3-request-presigner
 
 // Environment variables loaded:
-R2_ACCOUNT_ID=612eb8c2fbc8d81e98c37a03e49f4a8f ✅
-R2_ACCESS_KEY_ID=7b02c1d88f3fd9fb7d761be3b71a7e40 ✅
-R2_SECRET_ACCESS_KEY=a6d49e3b53138203424029...  ✅
+R2_ACCOUNT_ID=******************************** ✅
+R2_ACCESS_KEY_ID=******************************** ✅
+R2_SECRET_ACCESS_KEY=******************************** ✅
 ```
 
 ---
@@ -131,7 +131,7 @@ R2_SECRET_ACCESS_KEY=a6d49e3b53138203424029...  ✅
 
 ```
 Service: Google Gemini API
-API Key: AIzaSyCMF_lNyGFS7O0KnZLBNqolzlsNR3nDLU0
+API Key: AIza****************************
 Model: gemini-1.5-flash
 Status: CONFIGURED ✅
 ```
@@ -159,7 +159,7 @@ Status: CONFIGURED ✅
 
 **Configuration Verified:**
 ```env
-GEMINI_API_KEY=AIzaSyCMF_lNyGFS7O0KnZLBNqolzlsNR3nDLU0 ✅
+GEMINI_API_KEY=AIza**************************** ✅
 ```
 
 **Sample Test:**
@@ -178,9 +178,9 @@ Response: {"success":false,"error":"Unauthorized"}
 
 ```
 Service: Resend
-API Key: ***REMOVED***
+API Key: re_************************************
 From Email: jobs@birjob.com
-Notification Email: ismetsemedov@gmail.com
+Notification Email: [redacted]
 Status: CONFIGURED ✅
 ```
 
@@ -213,9 +213,9 @@ Status: CONFIGURED ✅
 
 **Configuration Verified:**
 ```env
-RESEND_API_KEY=***REMOVED*** ✅
+RESEND_API_KEY=re_************************************ ✅
 RESEND_FROM_EMAIL=jobs@birjob.com ✅
-CONTACT_NOTIFICATION_EMAIL=ismetsemedov@gmail.com ✅
+CONTACT_NOTIFICATION_EMAIL=[redacted] ✅
 ```
 
 **Email Integration Status:**
@@ -232,7 +232,7 @@ CONTACT_NOTIFICATION_EMAIL=ismetsemedov@gmail.com ✅
 
 ```
 Service: NextAuth.js
-Secret: ZWCGaCoPusv7FiVNtA1q0azRn4nxQ/7BU8J4lHX/3CI=
+Secret: ******************************************
 URL: http://localhost:3000
 Status: WORKING ✅
 ```
@@ -315,28 +315,28 @@ All endpoints correctly require authentication:
 
 ```env
 # Database ✅
-DATABASE_URL=postgresql://... (Neon PostgreSQL)
+DATABASE_URL=postgresql://****:****@****.neon.tech/****
 DATABASE_SCHEMA=educy
 
 # File Storage ✅
-R2_ACCOUNT_ID=612eb8c2fbc8d81e98c37a03e49f4a8f
-R2_ACCESS_KEY_ID=7b02c1d88f3fd9fb7d761be3b71a7e40
-R2_SECRET_ACCESS_KEY=a6d49e3b53138203424029... (hidden)
-R2_ENDPOINT=https://612eb8c2fbc8d81e98c37a03e49f4a8f.r2.cloudflarestorage.com
+R2_ACCOUNT_ID=********************************
+R2_ACCESS_KEY_ID=********************************
+R2_SECRET_ACCESS_KEY=********************************
+R2_ENDPOINT=https://****.r2.cloudflarestorage.com
 R2_BUCKET_NAME=educy
-R2_PUBLIC_URL=https://pub-089947e59f664d87af4e61fa97456edd.r2.dev
+R2_PUBLIC_URL=https://pub-****.r2.dev
 
 # Authentication ✅
-NEXTAUTH_SECRET=ZWCGaCoPusv7FiVNtA1q0azRn4nxQ/7BU8J4lHX/3CI=
+NEXTAUTH_SECRET=******************************************
 NEXTAUTH_URL=http://localhost:3000
 
 # AI ✅
-GEMINI_API_KEY=AIzaSyCMF_lNyGFS7O0KnZLBNqolzlsNR3nDLU0
+GEMINI_API_KEY=AIza****************************
 
 # Email ✅
-RESEND_API_KEY=***REMOVED***
+RESEND_API_KEY=re_************************************
 RESEND_FROM_EMAIL=jobs@birjob.com
-CONTACT_NOTIFICATION_EMAIL=ismetsemedov@gmail.com
+CONTACT_NOTIFICATION_EMAIL=[redacted]
 ```
 
 ---
