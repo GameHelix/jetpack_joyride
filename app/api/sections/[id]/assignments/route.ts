@@ -96,7 +96,7 @@ export async function POST(
       },
     })
 
-    // TODO: Create notifications for enrolled students
+    // Create notifications for enrolled students
     const enrolledStudents = await prisma.enrollment.findMany({
       where: {
         sectionId: params.id,

@@ -28,78 +28,78 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const data = enrollmentRequestSchema.parse(body)
 
-    // Get section details
-    const section = await prisma.section.findUnique({
-      where: { id: data.sectionId },
-      include: {
-        course: true,
-        enrollments: {
-          where: { status: 'ENROLLED' },
+    // Use transaction to prevent race conditions with capacity check
+    const enrollment = await prisma.$transaction(async (tx) => {
+      // Get section details within transaction
+      const section = await tx.section.findUnique({
+        where: { id: data.sectionId },
+        include: {
+          course: true,
         },
-      },
-    })
+      })
 
-    if (!section) {
-      return NextResponse.json(
-        { success: false, error: 'Section not found' },
-        { status: 404 }
-      )
-    }
+      if (!section) {
+        throw new Error('Section not found')
+      }
 
-    // Check if already enrolled or pending
-    const existing = await prisma.enrollment.findUnique({
-      where: {
-        userId_sectionId: {
+      // Check if already enrolled or pending
+      const existing = await tx.enrollment.findUnique({
+        where: {
+          userId_sectionId: {
+            userId: user.id,
+            sectionId: data.sectionId,
+          },
+        },
+      })
+
+      if (existing) {
+        if (existing.status === 'ENROLLED') {
+          throw new Error('You are already enrolled in this section')
+        } else if (existing.status === 'PENDING') {
+          throw new Error('You already have a pending enrollment request for this section')
+        }
+      }
+
+      // Check capacity atomically within transaction
+      const enrolledCount = await tx.enrollment.count({
+        where: {
+          sectionId: data.sectionId,
+          status: 'ENROLLED',
+        },
+      })
+
+      if (enrolledCount >= section.capacity) {
+        throw new Error('Section is at full capacity')
+      }
+
+      // Create enrollment request
+      const newEnrollment = await tx.enrollment.create({
+        data: {
           userId: user.id,
           sectionId: data.sectionId,
+          status: 'PENDING',
         },
-      },
-    })
-
-    if (existing) {
-      if (existing.status === 'ENROLLED') {
-        return NextResponse.json(
-          { success: false, error: 'You are already enrolled in this section' },
-          { status: 409 }
-        )
-      } else if (existing.status === 'PENDING') {
-        return NextResponse.json(
-          { success: false, error: 'You already have a pending enrollment request for this section' },
-          { status: 409 }
-        )
-      }
-    }
-
-    // Check capacity
-    if (section.enrollments.length >= section.capacity) {
-      return NextResponse.json(
-        { success: false, error: 'Section is at full capacity' },
-        { status: 409 }
-      )
-    }
-
-    // Create enrollment request
-    const enrollment = await prisma.enrollment.create({
-      data: {
-        userId: user.id,
-        sectionId: data.sectionId,
-        status: 'PENDING',
-      },
-      include: {
-        section: {
-          include: {
-            course: true,
-            instructor: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
+        include: {
+          section: {
+            include: {
+              course: true,
+              instructor: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
               },
             },
           },
         },
-      },
+      })
+
+      return newEnrollment
     })
+
+    // Get section info for notification (outside transaction)
+    const section = enrollment.section
 
     // Create audit log
     await prisma.auditLog.create({
@@ -140,6 +140,26 @@ export async function POST(request: NextRequest) {
         { success: false, error: 'Validation error', details: error.errors },
         { status: 400 }
       )
+    }
+
+    // Handle custom errors from transaction
+    if (error instanceof Error) {
+      if (error.message === 'Section not found') {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 404 }
+        )
+      }
+      if (
+        error.message.includes('already enrolled') ||
+        error.message.includes('pending enrollment') ||
+        error.message.includes('full capacity')
+      ) {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 409 }
+        )
+      }
     }
 
     console.error('Enrollment request error:', error)

@@ -56,24 +56,7 @@ export async function POST(
       )
     }
 
-    // Check if already submitted
-    const existing = await prisma.submission.findUnique({
-      where: {
-        assignmentId_studentId: {
-          assignmentId: params.id,
-          studentId: user.id,
-        },
-      },
-    })
-
-    if (existing) {
-      return NextResponse.json(
-        { success: false, error: 'You have already submitted this assignment' },
-        { status: 409 }
-      )
-    }
-
-    // Create submission
+    // Create submission (unique constraint will prevent duplicates)
     const submission = await prisma.submission.create({
       data: {
         assignmentId: params.id,
@@ -124,6 +107,14 @@ export async function POST(
       return NextResponse.json(
         { success: false, error: 'Validation error', details: error.errors },
         { status: 400 }
+      )
+    }
+
+    // Handle Prisma unique constraint violation (duplicate submission)
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+      return NextResponse.json(
+        { success: false, error: 'You have already submitted this assignment' },
+        { status: 409 }
       )
     }
 

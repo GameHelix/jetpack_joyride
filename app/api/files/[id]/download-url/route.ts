@@ -22,10 +22,47 @@ export async function GET(
     }
 
     // Check if user has access to the file
-    // For now, only file owner and admins can download
-    // TODO: Add more granular permissions based on file context (assignment, course materials, etc.)
-    if (file.ownerId !== user.id && user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    let hasAccess = false
+
+    // 1. Owner can always download their own files
+    if (file.ownerId === user.id) {
+      hasAccess = true
+    }
+
+    // 2. Admins can download any file
+    if (user.role === 'ADMIN') {
+      hasAccess = true
+    }
+
+    // 3. Check if file is part of a submission
+    if (!hasAccess) {
+      const submission = await prisma.submission.findFirst({
+        where: { fileKey: file.key },
+        include: {
+          assignment: {
+            include: {
+              section: true,
+            },
+          },
+          student: true,
+        },
+      })
+
+      if (submission) {
+        // Student who submitted can download
+        if (submission.studentId === user.id) {
+          hasAccess = true
+        }
+
+        // Instructor of the section can download
+        if (submission.assignment.section.instructorId === user.id) {
+          hasAccess = true
+        }
+      }
+    }
+
+    if (!hasAccess) {
+      return NextResponse.json({ error: 'Forbidden: You do not have access to this file' }, { status: 403 })
     }
 
     // Generate signed download URL
