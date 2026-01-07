@@ -4,6 +4,8 @@ import { getStudentHelp } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const studentHelpSchema = z.object({
   assignmentId: z.string(),
   question: z.string().min(10).max(1000),

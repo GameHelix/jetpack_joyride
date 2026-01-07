@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { DayOfWeek } from '@prisma/client'
 
+export const dynamic = 'force-dynamic'
+
 const updateLessonSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().optional(),

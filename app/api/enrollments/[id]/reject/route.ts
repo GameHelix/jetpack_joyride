@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendEnrollmentRejectedEmail } from '@/lib/email'
 
+export const dynamic = 'force-dynamic'
+
 const rejectSchema = z.object({
   reason: z.string().optional(),
 })

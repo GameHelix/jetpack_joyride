@@ -4,6 +4,8 @@ import { getGradingAssistance, generateFeedbackSuggestions } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const gradingAssistSchema = z.object({
   submissionId: z.string(),
   mode: z.enum(['full', 'feedback-only']).default('full'),

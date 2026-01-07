@@ -4,6 +4,8 @@ import { explainConcept } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const explainConceptSchema = z.object({
   courseId: z.string(),
   topic: z.string().min(3).max(200),

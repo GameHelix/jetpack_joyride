@@ -3,6 +3,8 @@ import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { sendEnrollmentApprovedEmail } from '@/lib/email'
 
+export const dynamic = 'force-dynamic'
+
 // POST /api/enrollments/[id]/approve - Approve enrollment request
 export async function POST(
   request: NextRequest,

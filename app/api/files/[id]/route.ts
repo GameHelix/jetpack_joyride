@@ -3,6 +3,8 @@ import { requireAuth } from '@/lib/rbac'
 import { deleteFile } from '@/lib/r2'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

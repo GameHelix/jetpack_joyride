@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendAssignmentCreatedEmail } from '@/lib/email'
 
+export const dynamic = 'force-dynamic'
+
 const createAssignmentSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().optional(),

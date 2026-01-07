@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { getCurrentUser } from '@/lib/rbac'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const updateRoomSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   location: z.string().optional(),

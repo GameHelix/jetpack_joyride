@@ -3,6 +3,8 @@ import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const updateAssignmentSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().optional(),

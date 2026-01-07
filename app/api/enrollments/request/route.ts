@@ -3,6 +3,8 @@ import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const enrollmentRequestSchema = z.object({
   sectionId: z.string(),
 })

@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendGradeReceivedEmail } from '@/lib/email'
 
+export const dynamic = 'force-dynamic'
+
 const gradeSubmissionSchema = z.object({
   grade: z.number().min(0).max(100),
   feedback: z.string().optional(),
