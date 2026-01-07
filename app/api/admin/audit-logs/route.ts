@@ -24,15 +24,43 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get query parameters for pagination
+    // Get query parameters for pagination and filtering
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
     const skip = (page - 1) * limit
 
-    // Fetch audit logs with pagination
+    // Filter parameters
+    const action = searchParams.get('action')
+    const targetType = searchParams.get('targetType')
+    const userId = searchParams.get('userId')
+    const search = searchParams.get('search')
+    const startDate = searchParams.get('startDate')
+    const endDate = searchParams.get('endDate')
+
+    // Build where clause
+    const where: any = {}
+    if (action) where.action = action
+    if (targetType) where.targetType = targetType
+    if (userId) where.userId = userId
+    if (startDate || endDate) {
+      where.createdAt = {}
+      if (startDate) where.createdAt.gte = new Date(startDate)
+      if (endDate) where.createdAt.lte = new Date(endDate)
+    }
+    if (search) {
+      where.OR = [
+        { action: { contains: search, mode: 'insensitive' } },
+        { targetType: { contains: search, mode: 'insensitive' } },
+        { user: { name: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+      ]
+    }
+
+    // Fetch audit logs with pagination and filters
     const [logs, total] = await Promise.all([
       prisma.auditLog.findMany({
+        where,
         include: {
           user: {
             select: {
@@ -46,7 +74,7 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
       }),
-      prisma.auditLog.count(),
+      prisma.auditLog.count({ where }),
     ])
 
     return NextResponse.json({

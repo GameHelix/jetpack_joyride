@@ -40,6 +40,15 @@ export default function AuditLogsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // Filter states
+  const [search, setSearch] = useState('')
+  const [actionFilter, setActionFilter] = useState('')
+  const [targetTypeFilter, setTargetTypeFilter] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [availableActions, setAvailableActions] = useState<string[]>([])
+  const [availableTargetTypes, setAvailableTargetTypes] = useState<string[]>([])
+
   // Redirect if not authenticated or not admin/moderator
   useEffect(() => {
     if (status === 'loading') return
@@ -55,19 +64,39 @@ export default function AuditLogsPage() {
   // Fetch audit logs
   useEffect(() => {
     if (session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') {
-      fetchLogs(pagination.page)
+      fetchLogs()
     }
-  }, [session, pagination.page])
+  }, [session, pagination.page, search, actionFilter, targetTypeFilter, startDate, endDate])
 
-  const fetchLogs = async (page: number) => {
+  const fetchLogs = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/admin/audit-logs?page=${page}&limit=${pagination.limit}`)
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
+      })
+      if (search) params.append('search', search)
+      if (actionFilter) params.append('action', actionFilter)
+      if (targetTypeFilter) params.append('targetType', targetTypeFilter)
+      if (startDate) params.append('startDate', new Date(startDate).toISOString())
+      if (endDate) params.append('endDate', new Date(endDate).toISOString())
+
+      const response = await fetch(`/api/admin/audit-logs?${params}`)
       const data = await response.json()
 
       if (data.success) {
         setLogs(data.logs)
         setPagination(data.pagination)
+
+        // Extract unique actions and target types
+        const actions = new Set<string>()
+        const targetTypes = new Set<string>()
+        data.logs.forEach((log: AuditLog) => {
+          if (log.action) actions.add(log.action)
+          if (log.targetType) targetTypes.add(log.targetType)
+        })
+        setAvailableActions(Array.from(actions).sort())
+        setAvailableTargetTypes(Array.from(targetTypes).sort())
       } else {
         setError(data.error)
       }
@@ -76,6 +105,53 @@ export default function AuditLogsPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleExport = async (format: 'csv' | 'json') => {
+    try {
+      const params = new URLSearchParams({ format })
+      if (actionFilter) params.append('action', actionFilter)
+      if (targetTypeFilter) params.append('targetType', targetTypeFilter)
+      if (startDate) params.append('startDate', new Date(startDate).toISOString())
+      if (endDate) params.append('endDate', new Date(endDate).toISOString())
+
+      const response = await fetch(`/api/admin/audit-logs/export?${params}`)
+
+      if (format === 'csv') {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+      } else {
+        const data = await response.json()
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.json`
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+      }
+    } catch (err) {
+      console.error('Export error:', err)
+      alert('Failed to export logs')
+    }
+  }
+
+  const resetFilters = () => {
+    setSearch('')
+    setActionFilter('')
+    setTargetTypeFilter('')
+    setStartDate('')
+    setEndDate('')
+    setPagination({ ...pagination, page: 1 })
   }
 
   const getActionBadgeColor = (action: string) => {
@@ -104,22 +180,38 @@ export default function AuditLogsPage() {
     <DashboardLayout role={session?.user?.role || 'ADMIN'}>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Audit Logs
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            System activity and security logs
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Audit Logs
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              System activity and security logs
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleExport('csv')}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+              Export CSV
+            </button>
+            <button
+              onClick={() => handleExport('json')}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Export JSON
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Total Logs</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {pagination.total}
+                {pagination.total.toLocaleString()}
               </p>
             </div>
             <div>
@@ -133,6 +225,116 @@ export default function AuditLogsPage() {
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {logs.length} logs
               </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Active Filters</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {[search, actionFilter, targetTypeFilter, startDate, endDate].filter(Boolean).length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
+            <button
+              onClick={resetFilters}
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Reset All
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Search
+              </label>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value)
+                  setPagination({ ...pagination, page: 1 })
+                }}
+                placeholder="Search logs..."
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+
+            {/* Action Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Action
+              </label>
+              <select
+                value={actionFilter}
+                onChange={(e) => {
+                  setActionFilter(e.target.value)
+                  setPagination({ ...pagination, page: 1 })
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              >
+                <option value="">All Actions</option>
+                {availableActions.map((action) => (
+                  <option key={action} value={action}>{action}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Target Type Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Target Type
+              </label>
+              <select
+                value={targetTypeFilter}
+                onChange={(e) => {
+                  setTargetTypeFilter(e.target.value)
+                  setPagination({ ...pagination, page: 1 })
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              >
+                <option value="">All Types</option>
+                {availableTargetTypes.map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Start Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value)
+                  setPagination({ ...pagination, page: 1 })
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+
+            {/* End Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                End Date
+              </label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value)
+                  setPagination({ ...pagination, page: 1 })
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              />
             </div>
           </div>
         </div>
