@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { sendWelcomeEmail } from '@/lib/email'
+import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
 
@@ -101,8 +102,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate temporary password (8 characters, alphanumeric)
-    const temporaryPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8).toUpperCase()
+    // Generate cryptographically secure temporary password (16 characters)
+    const temporaryPassword = crypto.randomBytes(12).toString('base64').slice(0, 16)
     const hashedPassword = await bcrypt.hash(temporaryPassword, 10)
 
     // Create user

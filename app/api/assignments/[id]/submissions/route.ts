@@ -8,6 +8,8 @@ export const dynamic = 'force-dynamic'
 const createSubmissionSchema = z.object({
   fileKey: z.string().optional(),
   text: z.string().optional(),
+}).refine(data => data.fileKey || data.text, {
+  message: "Either fileKey or text must be provided for submission"
 })
 
 // POST /api/assignments/[id]/submissions - Submit assignment
