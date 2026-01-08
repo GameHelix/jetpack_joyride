@@ -34,19 +34,50 @@ export async function GET(request: NextRequest) {
             email: true,
           },
         },
+        sections: {
+          include: {
+            _count: {
+              select: {
+                enrollments: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             sections: true,
-            enrollments: true,
           },
         },
       },
       orderBy: { createdAt: 'desc' },
     })
 
+    // Calculate total enrollments for each course
+    const coursesWithEnrollments = courses.map((course) => {
+      const totalEnrollments = course.sections.reduce(
+        (sum, section) => sum + section._count.enrollments,
+        0
+      )
+
+      return {
+        id: course.id,
+        code: course.code,
+        title: course.title,
+        description: course.description,
+        term: course.term,
+        visibility: course.visibility,
+        createdAt: course.createdAt,
+        createdBy: course.createdBy,
+        _count: {
+          sections: course._count.sections,
+          enrollments: totalEnrollments,
+        },
+      }
+    })
+
     return NextResponse.json({
       success: true,
-      courses,
+      courses: coursesWithEnrollments,
     })
   } catch (error) {
     console.error('Courses fetch error:', error)
