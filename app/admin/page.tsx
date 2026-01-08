@@ -28,6 +28,12 @@ export default async function AdminDashboard() {
       prisma.enrollment.count({ where: { status: 'ENROLLED' } }),
       prisma.room.count(),
       prisma.auditLog.findMany({
+        where: {
+          OR: [
+            { severity: 'CRITICAL' },
+            { severity: 'WARNING' }
+          ]
+        },
         include: {
           user: {
             select: {
@@ -306,10 +312,21 @@ export default async function AdminDashboard() {
 
         {/* Recent Activity */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Recent Activity (Audit Logs)
-            </h2>
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Recent Important Activity
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Critical and warning events (excluding routine logins)
+              </p>
+            </div>
+            <Link
+              href="/admin/audit-logs"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              View All →
+            </Link>
           </div>
           <div className="p-6">
             {recentAuditLogs.length === 0 ? (

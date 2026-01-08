@@ -37,12 +37,16 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search')
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
+    const severity = searchParams.get('severity') // NEW: INFO, WARNING, CRITICAL
+    const category = searchParams.get('category') // NEW: SECURITY, SYSTEM, ADMIN_ACTION, USER_ACTION
 
     // Build where clause
     const where: any = {}
     if (action) where.action = action
     if (targetType) where.targetType = targetType
     if (userId) where.userId = userId
+    if (severity) where.severity = severity
+    if (category) where.category = category
     if (startDate || endDate) {
       where.createdAt = {}
       if (startDate) where.createdAt.gte = new Date(startDate)

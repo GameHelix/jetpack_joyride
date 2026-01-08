@@ -51,6 +51,14 @@ enum NotificationType {
   @@schema("educy")
 }
 
+enum AuditLogSeverity {
+  INFO      // Regular operations (logins, views)
+  WARNING   // Potential issues (failed attempts, retries)
+  CRITICAL  // Important changes (role changes, deletions, permission updates)
+
+  @@schema("educy")
+}
+
 model User {
   id                String         @id @default(uuid())
   email             String         @unique
@@ -241,14 +249,16 @@ model Notification {
 }
 
 model AuditLog {
-  id         String   @id @default(uuid())
+  id         String            @id @default(uuid())
   userId     String?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  action     String   // "USER_ROLE_CHANGED", "ASSIGNMENT_GRADED", etc.
-  targetType String?  // "User", "Assignment", "Course", etc.
+  user       User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String            // "USER_ROLE_CHANGED", "ASSIGNMENT_GRADED", etc.
+  targetType String?           // "User", "Assignment", "Course", etc.
   targetId   String?
-  details    Json?    // Additional context
-  createdAt  DateTime @default(now())
+  details    Json?             // Additional context
+  severity   AuditLogSeverity  @default(INFO) // INFO, WARNING, CRITICAL
+  category   String?           // "SECURITY", "SYSTEM", "ADMIN_ACTION", "USER_ACTION"
+  createdAt  DateTime          @default(now())
 
   @@map("audit_logs")
   @@schema("educy")

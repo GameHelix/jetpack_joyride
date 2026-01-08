@@ -17,6 +17,8 @@ type AuditLog = {
   targetType: string | null
   targetId: string | null
   details: any
+  severity: string
+  category: string | null
   createdAt: string
 }
 
@@ -27,7 +29,7 @@ type Pagination = {
   totalPages: number
 }
 
-export default function AuditLogsPage() {
+export default function SecurityLogsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [logs, setLogs] = useState<AuditLog[]>([])
@@ -42,16 +44,9 @@ export default function AuditLogsPage() {
 
   // Filter states
   const [search, setSearch] = useState('')
-  const [actionFilter, setActionFilter] = useState('')
-  const [targetTypeFilter, setTargetTypeFilter] = useState('')
-  const [severityFilter, setSeverityFilter] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [availableActions, setAvailableActions] = useState<string[]>([])
-  const [availableTargetTypes, setAvailableTargetTypes] = useState<string[]>([])
 
-  // Redirect if not authenticated or not admin/moderator
   useEffect(() => {
     if (status === 'loading') return
     if (!session?.user) {
@@ -63,12 +58,11 @@ export default function AuditLogsPage() {
     }
   }, [session, status, router])
 
-  // Fetch audit logs
   useEffect(() => {
     if (session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') {
       fetchLogs()
     }
-  }, [session, pagination.page, search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate])
+  }, [session, pagination.page, search, startDate, endDate])
 
   const fetchLogs = async () => {
     try {
@@ -76,12 +70,9 @@ export default function AuditLogsPage() {
       const params = new URLSearchParams({
         page: pagination.page.toString(),
         limit: pagination.limit.toString(),
+        category: 'SECURITY', // Only security-related logs
       })
       if (search) params.append('search', search)
-      if (actionFilter) params.append('action', actionFilter)
-      if (targetTypeFilter) params.append('targetType', targetTypeFilter)
-      if (severityFilter) params.append('severity', severityFilter)
-      if (categoryFilter) params.append('category', categoryFilter)
       if (startDate) params.append('startDate', new Date(startDate).toISOString())
       if (endDate) params.append('endDate', new Date(endDate).toISOString())
 
@@ -91,21 +82,11 @@ export default function AuditLogsPage() {
       if (data.success) {
         setLogs(data.logs)
         setPagination(data.pagination)
-
-        // Extract unique actions and target types
-        const actions = new Set<string>()
-        const targetTypes = new Set<string>()
-        data.logs.forEach((log: AuditLog) => {
-          if (log.action) actions.add(log.action)
-          if (log.targetType) targetTypes.add(log.targetType)
-        })
-        setAvailableActions(Array.from(actions).sort())
-        setAvailableTargetTypes(Array.from(targetTypes).sort())
       } else {
         setError(data.error)
       }
     } catch (err) {
-      setError('Failed to fetch audit logs')
+      setError('Failed to fetch security logs')
     } finally {
       setLoading(false)
     }
@@ -113,11 +94,7 @@ export default function AuditLogsPage() {
 
   const handleExport = async (format: 'csv' | 'json') => {
     try {
-      const params = new URLSearchParams({ format })
-      if (actionFilter) params.append('action', actionFilter)
-      if (targetTypeFilter) params.append('targetType', targetTypeFilter)
-      if (severityFilter) params.append('severity', severityFilter)
-      if (categoryFilter) params.append('category', categoryFilter)
+      const params = new URLSearchParams({ format, category: 'SECURITY' })
       if (startDate) params.append('startDate', new Date(startDate).toISOString())
       if (endDate) params.append('endDate', new Date(endDate).toISOString())
 
@@ -128,7 +105,7 @@ export default function AuditLogsPage() {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`
+        a.download = `security-logs-${new Date().toISOString().split('T')[0]}.csv`
         document.body.appendChild(a)
         a.click()
         window.URL.revokeObjectURL(url)
@@ -139,7 +116,7 @@ export default function AuditLogsPage() {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.json`
+        a.download = `security-logs-${new Date().toISOString().split('T')[0]}.json`
         document.body.appendChild(a)
         a.click()
         window.URL.revokeObjectURL(url)
@@ -153,10 +130,6 @@ export default function AuditLogsPage() {
 
   const resetFilters = () => {
     setSearch('')
-    setActionFilter('')
-    setTargetTypeFilter('')
-    setSeverityFilter('')
-    setCategoryFilter('')
     setStartDate('')
     setEndDate('')
     setPagination({ ...pagination, page: 1 })
@@ -169,17 +142,8 @@ export default function AuditLogsPage() {
       case 'WARNING':
         return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
       default:
-        return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
     }
-  }
-
-  const getActionBadgeColor = (action: string) => {
-    if (action.includes('CREATED')) return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-    if (action.includes('UPDATED') || action.includes('CHANGED')) return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-    if (action.includes('DELETED')) return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-    if (action.includes('APPROVED')) return 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200'
-    if (action.includes('REJECTED')) return 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200'
-    return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
   }
 
   if (status === 'loading' || loading) {
@@ -188,7 +152,7 @@ export default function AuditLogsPage() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading audit logs...</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading security logs...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -202,10 +166,10 @@ export default function AuditLogsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Audit Logs
+              Security & Access Logs
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              System activity and security logs
+              User authentication, logins, and security events
             </p>
           </div>
           <div className="flex gap-2">
@@ -224,11 +188,36 @@ export default function AuditLogsPage() {
           </div>
         </div>
 
+        {/* Info Banner */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                Security Logs
+              </h3>
+              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+                <p>This page shows authentication and security-related events including:</p>
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  <li>User logins and logouts</li>
+                  <li>Failed login attempts</li>
+                  <li>Password changes</li>
+                  <li>Session management</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Total Logs</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Total Security Logs</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {pagination.total.toLocaleString()}
               </p>
@@ -248,7 +237,7 @@ export default function AuditLogsPage() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Active Filters</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {[search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate].filter(Boolean).length}
+                {[search, startDate, endDate].filter(Boolean).length}
               </p>
             </div>
           </div>
@@ -266,7 +255,7 @@ export default function AuditLogsPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -279,90 +268,9 @@ export default function AuditLogsPage() {
                   setSearch(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                placeholder="Search logs..."
+                placeholder="Search users or events..."
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
               />
-            </div>
-
-            {/* Action Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Action
-              </label>
-              <select
-                value={actionFilter}
-                onChange={(e) => {
-                  setActionFilter(e.target.value)
-                  setPagination({ ...pagination, page: 1 })
-                }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">All Actions</option>
-                {availableActions.map((action) => (
-                  <option key={action} value={action}>{action}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Target Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Target Type
-              </label>
-              <select
-                value={targetTypeFilter}
-                onChange={(e) => {
-                  setTargetTypeFilter(e.target.value)
-                  setPagination({ ...pagination, page: 1 })
-                }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">All Types</option>
-                {availableTargetTypes.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Severity Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Severity
-              </label>
-              <select
-                value={severityFilter}
-                onChange={(e) => {
-                  setSeverityFilter(e.target.value)
-                  setPagination({ ...pagination, page: 1 })
-                }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">All Severities</option>
-                <option value="INFO">INFO</option>
-                <option value="WARNING">WARNING</option>
-                <option value="CRITICAL">CRITICAL</option>
-              </select>
-            </div>
-
-            {/* Category Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Category
-              </label>
-              <select
-                value={categoryFilter}
-                onChange={(e) => {
-                  setCategoryFilter(e.target.value)
-                  setPagination({ ...pagination, page: 1 })
-                }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">All Categories</option>
-                <option value="SECURITY">Security</option>
-                <option value="SYSTEM">System</option>
-                <option value="ADMIN_ACTION">Admin Action</option>
-                <option value="USER_ACTION">User Action</option>
-              </select>
             </div>
 
             {/* Start Date */}
@@ -399,11 +307,11 @@ export default function AuditLogsPage() {
           </div>
         </div>
 
-        {/* Audit Logs Table */}
+        {/* Security Logs Table */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
           {logs.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">No audit logs found</p>
+              <p className="text-gray-500 dark:text-gray-400">No security logs found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -417,16 +325,10 @@ export default function AuditLogsPage() {
                       User
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Action
+                      Event
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Severity
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Target
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Details
@@ -454,11 +356,7 @@ export default function AuditLogsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getActionBadgeColor(
-                            log.action
-                          )}`}
-                        >
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                           {log.action}
                         </span>
                       </td>
@@ -470,25 +368,6 @@ export default function AuditLogsPage() {
                         >
                           {log.severity}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {log.category && (
-                          <span className="text-sm text-gray-600 dark:text-gray-400">
-                            {log.category}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {log.targetType && (
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {log.targetType}
-                            {log.targetId && (
-                              <div className="text-xs text-gray-500 dark:text-gray-500">
-                                ID: {log.targetId.substring(0, 8)}...
-                              </div>
-                            )}
-                          </div>
-                        )}
                       </td>
                       <td className="px-6 py-4">
                         {log.details && (
