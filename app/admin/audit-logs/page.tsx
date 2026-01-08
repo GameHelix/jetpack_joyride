@@ -17,6 +17,8 @@ type AuditLog = {
   targetType: string | null
   targetId: string | null
   details: any
+  severity: string
+  category: string | null
   createdAt: string
 }
 

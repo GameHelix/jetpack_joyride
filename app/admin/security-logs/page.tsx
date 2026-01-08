@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
 
-type AuditLog = {
+type SecurityLog = {
   id: string
   userId: string | null
   user: {
@@ -32,7 +32,7 @@ type Pagination = {
 export default function SecurityLogsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [logs, setLogs] = useState<AuditLog[]>([])
+  const [logs, setLogs] = useState<SecurityLog[]>([])
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
     limit: 50,
