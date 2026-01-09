@@ -164,12 +164,20 @@ export default function UsersManagement() {
               Manage user accounts and roles
             </p>
           </div>
-          <Link
-            href="/admin/users/create"
-            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
-          >
-            + Create User
-          </Link>
+          <div className="flex gap-3">
+            <Link
+              href="/admin/users/import"
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg font-medium"
+            >
+              📊 Bulk Import
+            </Link>
+            <Link
+              href="/admin/users/create"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
+            >
+              + Create User
+            </Link>
+          </div>
         </div>
 
         {/* Users Table */}

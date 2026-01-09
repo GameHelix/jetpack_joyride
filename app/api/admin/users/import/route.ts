@@ -1,0 +1,244 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getCurrentUser } from '@/lib/rbac'
+import { prisma } from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
+import * as XLSX from 'xlsx'
+import { auditLog } from '@/lib/audit'
+
+export const dynamic = 'force-dynamic'
+
+type UserRow = {
+  name: string
+  email: string
+  password: string
+  role: 'ADMIN' | 'MODERATOR' | 'INSTRUCTOR' | 'STUDENT'
+}
+
+type ImportError = {
+  row: number
+  email: string
+  error: string
+}
+
+// POST /api/admin/users/import - Bulk import users from Excel/CSV file
+export async function POST(request: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    // Only admins can import users
+    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+      return NextResponse.json(
+        { success: false, message: 'Forbidden: Only admins can import users' },
+        { status: 403 }
+      )
+    }
+
+    // Parse the uploaded file
+    const formData = await request.formData()
+    const file = formData.get('file') as File
+
+    if (!file) {
+      return NextResponse.json(
+        { success: false, message: 'No file uploaded' },
+        { status: 400 }
+      )
+    }
+
+    // Read file buffer
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    // Parse Excel/CSV file
+    let workbook: XLSX.WorkBook
+    try {
+      workbook = XLSX.read(buffer, { type: 'buffer' })
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, message: 'Failed to parse file. Please ensure it is a valid Excel or CSV file.' },
+        { status: 400 }
+      )
+    }
+
+    // Get the first sheet
+    const sheetName = workbook.SheetNames[0]
+    const sheet = workbook.Sheets[sheetName]
+
+    // Convert to JSON
+    const data: any[] = XLSX.utils.sheet_to_json(sheet)
+
+    if (data.length === 0) {
+      return NextResponse.json(
+        { success: false, message: 'The file is empty or has no valid data' },
+        { status: 400 }
+      )
+    }
+
+    // Validate and process users
+    const validUsers: UserRow[] = []
+    const errors: ImportError[] = []
+    const validRoles = ['ADMIN', 'MODERATOR', 'INSTRUCTOR', 'STUDENT']
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i]
+      const rowNumber = i + 2 // +2 because Excel rows start at 1 and we have a header
+
+      // Validate required fields
+      if (!row.name || !row.email || !row.password || !row.role) {
+        errors.push({
+          row: rowNumber,
+          email: row.email || 'Unknown',
+          error: 'Missing required fields (name, email, password, or role)',
+        })
+        continue
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(row.email)) {
+        errors.push({
+          row: rowNumber,
+          email: row.email,
+          error: 'Invalid email format',
+        })
+        continue
+      }
+
+      // Validate role
+      const roleUpper = row.role.toString().toUpperCase()
+      if (!validRoles.includes(roleUpper)) {
+        errors.push({
+          row: rowNumber,
+          email: row.email,
+          error: `Invalid role "${row.role}". Must be one of: ${validRoles.join(', ')}`,
+        })
+        continue
+      }
+
+      // Validate password length
+      if (row.password.length < 6) {
+        errors.push({
+          row: rowNumber,
+          email: row.email,
+          error: 'Password must be at least 6 characters long',
+        })
+        continue
+      }
+
+      validUsers.push({
+        name: row.name.toString().trim(),
+        email: row.email.toString().trim().toLowerCase(),
+        password: row.password.toString(),
+        role: roleUpper as any,
+      })
+    }
+
+    // Check for duplicate emails in the file
+    const emailCounts = new Map<string, number>()
+    validUsers.forEach((user, index) => {
+      const count = emailCounts.get(user.email) || 0
+      emailCounts.set(user.email, count + 1)
+
+      if (count > 0) {
+        errors.push({
+          row: index + 2,
+          email: user.email,
+          error: 'Duplicate email in file',
+        })
+      }
+    })
+
+    // Remove duplicates from valid users
+    const uniqueValidUsers = validUsers.filter(
+      (user, index) => emailCounts.get(user.email) === 1 || validUsers.findIndex(u => u.email === user.email) === index
+    )
+
+    // Import valid users
+    let imported = 0
+    const importErrors: ImportError[] = []
+
+    for (const userData of uniqueValidUsers) {
+      try {
+        // Check if user already exists
+        const existingUser = await prisma.user.findUnique({
+          where: { email: userData.email },
+        })
+
+        if (existingUser) {
+          importErrors.push({
+            row: validUsers.findIndex(u => u.email === userData.email) + 2,
+            email: userData.email,
+            error: 'Email already exists in database',
+          })
+          continue
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(userData.password, 10)
+
+        // Create user
+        await prisma.user.create({
+          data: {
+            name: userData.name,
+            email: userData.email,
+            hashedPassword,
+            role: userData.role,
+          },
+        })
+
+        imported++
+      } catch (error) {
+        console.error('Error importing user:', error)
+        importErrors.push({
+          row: validUsers.findIndex(u => u.email === userData.email) + 2,
+          email: userData.email,
+          error: 'Failed to create user in database',
+        })
+      }
+    }
+
+    // Combine all errors
+    const allErrors = [...errors, ...importErrors]
+    const failed = allErrors.length
+
+    // Create audit log
+    await auditLog.userCreated(user.id, 'BULK_IMPORT', {
+      imported,
+      failed,
+      totalRows: data.length,
+    })
+
+    // Return results
+    if (imported === 0 && failed > 0) {
+      return NextResponse.json({
+        success: false,
+        message: `Import failed. All ${failed} users had errors.`,
+        imported: 0,
+        failed,
+        errors: allErrors,
+      })
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: imported === uniqueValidUsers.length
+        ? `Successfully imported all ${imported} users`
+        : `Imported ${imported} users with ${failed} errors`,
+      imported,
+      failed,
+      errors: allErrors.length > 0 ? allErrors : undefined,
+    })
+  } catch (error) {
+    console.error('Bulk import error:', error)
+    return NextResponse.json(
+      { success: false, message: 'Failed to process bulk import' },
+      { status: 500 }
+    )
+  }
+}
