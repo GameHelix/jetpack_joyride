@@ -148,7 +148,30 @@ export async function DELETE(
       )
     }
 
-    // Delete user (cascading deletes will handle related records)
+    // Check for dependencies that would prevent deletion
+    const [createdCourses, instructorSections, createdAssignments] = await Promise.all([
+      prisma.course.count({ where: { createdById: params.id } }),
+      prisma.section.count({ where: { instructorId: params.id } }),
+      prisma.assignment.count({ where: { createdById: params.id } }),
+    ])
+
+    // Prevent deletion if user has created important records
+    const dependencies = []
+    if (createdCourses > 0) dependencies.push(`${createdCourses} course(s)`)
+    if (instructorSections > 0) dependencies.push(`${instructorSections} section(s)`)
+    if (createdAssignments > 0) dependencies.push(`${createdAssignments} assignment(s)`)
+
+    if (dependencies.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Cannot delete user: they have created ${dependencies.join(', ')}. Please reassign or delete these records first.`,
+        },
+        { status: 400 }
+      )
+    }
+
+    // Delete user (cascading deletes will handle enrollments, submissions, files, notifications)
     await prisma.user.delete({
       where: { id: params.id },
     })
