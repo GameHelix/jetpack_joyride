@@ -7,11 +7,11 @@ const workbook = XLSX.utils.book_new()
 
 // Define the template data with headers and example rows
 const data = [
-  ['name', 'email', 'password', 'role'],
-  ['John Doe', 'john.doe@example.com', 'password123', 'STUDENT'],
-  ['Jane Smith', 'jane.smith@example.com', 'password123', 'INSTRUCTOR'],
-  ['Mike Johnson', 'mike.johnson@example.com', 'password123', 'STUDENT'],
-  ['Sarah Williams', 'sarah.williams@example.com', 'password123', 'MODERATOR'],
+  ['name', 'email', 'role'],
+  ['John Doe', 'john.doe@example.com', 'STUDENT'],
+  ['Jane Smith', 'jane.smith@example.com', 'INSTRUCTOR'],
+  ['Mike Johnson', 'mike.johnson@example.com', 'STUDENT'],
+  ['Sarah Williams', 'sarah.williams@example.com', 'MODERATOR'],
 ]
 
 // Create worksheet from the data
@@ -21,7 +21,6 @@ const worksheet = XLSX.utils.aoa_to_sheet(data)
 worksheet['!cols'] = [
   { wch: 20 },  // name
   { wch: 30 },  // email
-  { wch: 15 },  // password
   { wch: 12 },  // role
 ]
 

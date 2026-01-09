@@ -4,13 +4,14 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import * as XLSX from 'xlsx'
 import { auditLog } from '@/lib/audit'
+import { generatePassword } from '@/lib/password'
+import { sendWelcomeEmail } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 
 type UserRow = {
   name: string
   email: string
-  password: string
   role: 'ADMIN' | 'MODERATOR' | 'INSTRUCTOR' | 'STUDENT'
 }
 
@@ -90,11 +91,11 @@ export async function POST(request: NextRequest) {
       const rowNumber = i + 2 // +2 because Excel rows start at 1 and we have a header
 
       // Validate required fields
-      if (!row.name || !row.email || !row.password || !row.role) {
+      if (!row.name || !row.email || !row.role) {
         errors.push({
           row: rowNumber,
           email: row.email || 'Unknown',
-          error: 'Missing required fields (name, email, password, or role)',
+          error: 'Missing required fields (name, email, or role)',
         })
         continue
       }
@@ -121,20 +122,9 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      // Validate password length
-      if (row.password.length < 6) {
-        errors.push({
-          row: rowNumber,
-          email: row.email,
-          error: 'Password must be at least 6 characters long',
-        })
-        continue
-      }
-
       validUsers.push({
         name: row.name.toString().trim(),
         email: row.email.toString().trim().toLowerCase(),
-        password: row.password.toString(),
         role: roleUpper as any,
       })
     }
@@ -161,6 +151,7 @@ export async function POST(request: NextRequest) {
 
     // Import valid users
     let imported = 0
+    let emailsSent = 0
     const importErrors: ImportError[] = []
 
     for (const userData of uniqueValidUsers) {
@@ -179,8 +170,11 @@ export async function POST(request: NextRequest) {
           continue
         }
 
+        // Generate random password
+        const generatedPassword = generatePassword(12)
+
         // Hash password
-        const hashedPassword = await bcrypt.hash(userData.password, 10)
+        const hashedPassword = await bcrypt.hash(generatedPassword, 10)
 
         // Create user
         await prisma.user.create({
@@ -191,6 +185,20 @@ export async function POST(request: NextRequest) {
             role: userData.role,
           },
         })
+
+        // Send welcome email with credentials
+        try {
+          await sendWelcomeEmail({
+            to: userData.email,
+            userName: userData.name,
+            temporaryPassword: generatedPassword,
+            role: userData.role,
+          })
+          emailsSent++
+        } catch (emailError) {
+          console.error('Failed to send welcome email:', emailError)
+          // Don't fail the import if email fails, just log it
+        }
 
         imported++
       } catch (error) {
@@ -221,17 +229,25 @@ export async function POST(request: NextRequest) {
         message: `Import failed. All ${failed} users had errors.`,
         imported: 0,
         failed,
+        emailsSent: 0,
         errors: allErrors,
       })
     }
 
+    const emailMessage = emailsSent === imported
+      ? 'Welcome emails sent to all users.'
+      : emailsSent > 0
+        ? `Welcome emails sent to ${emailsSent} of ${imported} users.`
+        : 'Note: Email sending failed for all users. Passwords were generated but not sent.'
+
     return NextResponse.json({
       success: true,
       message: imported === uniqueValidUsers.length
-        ? `Successfully imported all ${imported} users`
-        : `Imported ${imported} users with ${failed} errors`,
+        ? `Successfully imported all ${imported} users. ${emailMessage}`
+        : `Imported ${imported} users with ${failed} errors. ${emailMessage}`,
       imported,
       failed,
+      emailsSent,
       errors: allErrors.length > 0 ? allErrors : undefined,
     })
   } catch (error) {

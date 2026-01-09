@@ -1,5 +1,5 @@
-name,email,password,role
-John Doe,john.doe@example.com,password123,STUDENT
-Jane Smith,jane.smith@example.com,password123,INSTRUCTOR
-Mike Johnson,mike.johnson@example.com,password123,STUDENT
-Sarah Williams,sarah.williams@example.com,password123,MODERATOR
+name,email,role
+John Doe,john.doe@example.com,STUDENT
+Jane Smith,jane.smith@example.com,INSTRUCTOR
+Mike Johnson,mike.johnson@example.com,STUDENT
+Sarah Williams,sarah.williams@example.com,MODERATOR

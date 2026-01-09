@@ -148,7 +148,7 @@ export default function BulkUserImportPage() {
                     Download the template file below and fill it with user data
                   </li>
                   <li>
-                    Required columns: <strong>name</strong>, <strong>email</strong>, <strong>password</strong>, <strong>role</strong>
+                    Required columns: <strong>name</strong>, <strong>email</strong>, <strong>role</strong>
                   </li>
                   <li>
                     Valid roles: <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">ADMIN</code>,
@@ -157,7 +157,10 @@ export default function BulkUserImportPage() {
                     <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded ml-1">STUDENT</code>
                   </li>
                   <li>
-                    Passwords will be securely hashed before storing in the database
+                    <strong>Passwords are automatically generated</strong> - secure random passwords will be created for each user
+                  </li>
+                  <li>
+                    <strong>Welcome emails are sent automatically</strong> - each user will receive their login credentials via email
                   </li>
                   <li>
                     Duplicate emails will be skipped and reported in the results
@@ -171,13 +174,34 @@ export default function BulkUserImportPage() {
           </div>
         </div>
 
+        {/* Security Notice */}
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-6 w-6 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-lg font-medium text-green-800 dark:text-green-200">
+                Secure Password Management
+              </h3>
+              <p className="mt-2 text-sm text-green-700 dark:text-green-300">
+                For security reasons, you do not need to provide passwords in the Excel file.
+                The system will automatically generate secure, random passwords for each user and
+                send them via email. Users will be prompted to change their password on first login.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Template Download */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Download Template
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Download this template file, fill it with your user data, and upload it below.
+            Download this template file, fill it with user data (name, email, role), and upload it below.
           </p>
           <a
             href="/templates/bulk-user-import-template.xlsx"
