@@ -8,10 +8,9 @@ const workbook = XLSX.utils.book_new()
 // Define the template data with headers and example rows
 const data = [
   ['name', 'email', 'role'],
+  ['Ismat Samadov', 'ismetsemedov@gmail.com', 'STUDENT'],
   ['John Doe', 'john.doe@example.com', 'STUDENT'],
   ['Jane Smith', 'jane.smith@example.com', 'INSTRUCTOR'],
-  ['Mike Johnson', 'mike.johnson@example.com', 'STUDENT'],
-  ['Sarah Williams', 'sarah.williams@example.com', 'MODERATOR'],
 ]
 
 // Create worksheet from the data
