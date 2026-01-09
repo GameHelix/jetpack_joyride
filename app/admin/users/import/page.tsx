@@ -201,8 +201,14 @@ export default function BulkUserImportPage() {
             Download Template
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Download this template file, fill it with user data (name, email, role), and upload it below.
+            Download this template file, <strong>replace the example emails with real user emails</strong>, and upload it below.
           </p>
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded p-3 mb-4">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+              ⚠️ <strong>Important:</strong> The template contains example emails like "student@yourdomain.com".
+              You must replace these with real, unique email addresses before uploading.
+            </p>
+          </div>
           <a
             href="/templates/bulk-user-import-template.xlsx"
             download="bulk-user-import-template.xlsx"
@@ -316,17 +322,37 @@ export default function BulkUserImportPage() {
 
                   {result.errors && result.errors.length > 0 && (
                     <div className="mt-3">
-                      <p className="font-medium mb-2">Errors:</p>
+                      <p className="font-medium mb-2">
+                        Errors ({result.errors.length}):
+                        {result.errors.filter(e => e.error.includes('already exists')).length > 0 && (
+                          <span className="ml-2 text-xs font-normal">
+                            ({result.errors.filter(e => e.error.includes('already exists')).length} already exist)
+                          </span>
+                        )}
+                      </p>
                       <div className="max-h-60 overflow-y-auto space-y-2">
                         {result.errors.map((error, index) => (
                           <div key={index} className="p-2 bg-white dark:bg-gray-800 rounded text-xs">
                             <p>
                               <strong>Row {error.row}:</strong> {error.email}
                             </p>
-                            <p className="text-red-600 dark:text-red-400 mt-1">{error.error}</p>
+                            <p className={`mt-1 ${
+                              error.error.includes('already exists')
+                                ? 'text-orange-600 dark:text-orange-400'
+                                : 'text-red-600 dark:text-red-400'
+                            }`}>
+                              {error.error}
+                            </p>
                           </div>
                         ))}
                       </div>
+                      {result.errors.filter(e => e.error.includes('already exists')).length === result.errors.length && (
+                        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded">
+                          <p className="text-xs text-blue-700 dark:text-blue-300">
+                            💡 <strong>Tip:</strong> All errors are due to existing users. Remove these emails from your file or use different email addresses for testing.
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

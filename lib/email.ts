@@ -33,13 +33,30 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     })
 
     if (error) {
-      console.error('Resend email error:', error)
-      throw new Error(`Failed to send email: ${error.message}`)
+      console.error('Resend API error:', {
+        message: error.message,
+        name: error.name,
+        code: (error as any).statusCode || (error as any).code,
+        fullError: error,
+      })
+
+      // Create error with more context
+      const enhancedError = new Error(`Resend API error: ${error.message}`) as any
+      enhancedError.resendError = error
+      enhancedError.statusCode = (error as any).statusCode
+      throw enhancedError
     }
 
     return data
-  } catch (error) {
-    console.error('Email sending error:', error)
+  } catch (error: any) {
+    // If this is not already a Resend error, log it
+    if (!error.resendError) {
+      console.error('Email sending error (non-Resend):', {
+        message: error?.message,
+        name: error?.name,
+        stack: error?.stack,
+      })
+    }
     throw error
   }
 }

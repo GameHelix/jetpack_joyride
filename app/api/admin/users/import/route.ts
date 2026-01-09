@@ -188,15 +188,25 @@ export async function POST(request: NextRequest) {
 
         // Send welcome email with credentials
         try {
-          await sendWelcomeEmail({
+          console.log(`📧 Attempting to send welcome email to: ${userData.email}`)
+          console.log(`   FROM: ${process.env.RESEND_FROM_EMAIL}`)
+          console.log(`   API Key present: ${process.env.RESEND_API_KEY ? 'Yes' : 'No'}`)
+
+          const result = await sendWelcomeEmail({
             to: userData.email,
             userName: userData.name,
             temporaryPassword: generatedPassword,
             role: userData.role,
           })
+
+          console.log(`✅ Welcome email sent successfully to: ${userData.email}`)
+          console.log(`   Email ID: ${result?.id || 'unknown'}`)
           emailsSent++
-        } catch (emailError) {
-          console.error('Failed to send welcome email:', emailError)
+        } catch (emailError: any) {
+          console.error(`❌ Failed to send welcome email to ${userData.email}`)
+          console.error(`   Error type: ${emailError?.name || 'Unknown'}`)
+          console.error(`   Error message: ${emailError?.message || 'No message'}`)
+          console.error(`   Full error:`, JSON.stringify(emailError, null, 2))
           // Don't fail the import if email fails, just log it
         }
 
@@ -224,13 +234,19 @@ export async function POST(request: NextRequest) {
 
     // Return results
     if (imported === 0 && failed > 0) {
+      // Check if all errors are due to existing users
+      const allExistingUsers = allErrors.every(e => e.error.includes('already exists'))
+
       return NextResponse.json({
         success: false,
-        message: `Import failed. All ${failed} users had errors.`,
+        message: allExistingUsers
+          ? `All ${failed} users already exist in the database. No new users were imported.`
+          : `Import failed. All ${failed} users had errors.`,
         imported: 0,
         failed,
         emailsSent: 0,
         errors: allErrors,
+        allExistingUsers,
       })
     }
 

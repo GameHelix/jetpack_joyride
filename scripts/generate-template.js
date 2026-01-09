@@ -6,11 +6,12 @@ const path = require('path')
 const workbook = XLSX.utils.book_new()
 
 // Define the template data with headers and example rows
+// NOTE: Replace example emails with real emails before uploading
 const data = [
   ['name', 'email', 'role'],
-  ['Ismat Samadov', 'ismetsemedov@gmail.com', 'STUDENT'],
-  ['John Doe', 'john.doe@example.com', 'STUDENT'],
-  ['Jane Smith', 'jane.smith@example.com', 'INSTRUCTOR'],
+  ['Example Student', 'student@yourdomain.com', 'STUDENT'],
+  ['Example Instructor', 'instructor@yourdomain.com', 'INSTRUCTOR'],
+  ['Example Moderator', 'moderator@yourdomain.com', 'MODERATOR'],
 ]
 
 // Create worksheet from the data
