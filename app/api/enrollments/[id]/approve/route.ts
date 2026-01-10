@@ -16,8 +16,8 @@ export async function POST(
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only instructors, moderators, and admins can approve enrollments
-    if (user.role !== 'INSTRUCTOR' && user.role !== 'MODERATOR' && user.role !== 'ADMIN') {
+    // Only instructors and admins can approve enrollments
+    if (user.role !== 'INSTRUCTOR' && user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }

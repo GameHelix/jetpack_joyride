@@ -53,21 +53,21 @@ export default function AuditLogsPage() {
   const [availableActions, setAvailableActions] = useState<string[]>([])
   const [availableTargetTypes, setAvailableTargetTypes] = useState<string[]>([])
 
-  // Redirect if not authenticated or not admin/moderator
+  // Redirect if not authenticated or not admin
   useEffect(() => {
     if (status === 'loading') return
     if (!session?.user) {
       router.push('/auth/signin')
       return
     }
-    if (session.user.role !== 'ADMIN' && session.user.role !== 'MODERATOR') {
+    if (session.user.role !== 'ADMIN') {
       router.push('/unauthorized')
     }
   }, [session, status, router])
 
   // Fetch audit logs
   useEffect(() => {
-    if (session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') {
+    if (session?.user?.role === 'ADMIN') {
       fetchLogs()
     }
   }, [session, pagination.page, search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate])

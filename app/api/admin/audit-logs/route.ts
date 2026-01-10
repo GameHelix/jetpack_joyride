@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Only admins and moderators can view audit logs
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    // Only admins can view audit logs
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can view audit logs' },
+        { success: false, error: 'Forbidden: Only admins can view audit logs' },
         { status: 403 }
       )
     }

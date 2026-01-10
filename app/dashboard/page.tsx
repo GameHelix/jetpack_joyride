@@ -16,7 +16,7 @@ export default async function DashboardPage() {
     case RoleName.INSTRUCTOR:
       redirect('/instructor')
     case RoleName.MODERATOR:
-      redirect('/moderator')
+      redirect('/admin')
     case RoleName.STUDENT:
       redirect('/student')
     default:

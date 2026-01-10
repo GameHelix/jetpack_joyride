@@ -54,10 +54,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Only admins and moderators can create rooms
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    // Only admins can create rooms
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can create rooms' },
+        { success: false, error: 'Forbidden: Only admins can create rooms' },
         { status: 403 }
       )
     }

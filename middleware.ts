@@ -18,12 +18,6 @@ export default withAuth(
       return NextResponse.redirect(new URL('/unauthorized', req.url))
     }
 
-    if (path.startsWith('/moderator') &&
-        token?.role !== RoleName.MODERATOR &&
-        token?.role !== RoleName.ADMIN) {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
-    }
-
     if (path.startsWith('/student') &&
         token?.role !== RoleName.STUDENT &&
         token?.role !== RoleName.ADMIN) {
@@ -47,7 +41,6 @@ export const config = {
   matcher: [
     '/admin/:path*',
     '/instructor/:path*',
-    '/moderator/:path*',
     '/student/:path*',
     '/dashboard/:path*',
     '/api/admin/:path*',

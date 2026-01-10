@@ -42,14 +42,14 @@ export default function RoomsManagement() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Redirect if not authenticated or not admin/moderator
+  // Redirect if not authenticated or not admin
   useEffect(() => {
     if (status === 'loading') return
     if (!session?.user) {
       router.push('/auth/signin')
       return
     }
-    if (session.user.role !== 'ADMIN' && session.user.role !== 'MODERATOR') {
+    if (session.user.role !== 'ADMIN') {
       router.push('/unauthorized')
     }
   }, [session, status, router])

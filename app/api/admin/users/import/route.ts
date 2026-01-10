@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only admins can import users
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, message: 'Forbidden: Only admins can import users' },
         { status: 403 }

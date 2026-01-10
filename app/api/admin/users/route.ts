@@ -79,10 +79,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Only admins and moderators can create users
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    // Only admins can create users
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can create users' },
+        { success: false, error: 'Forbidden: Only admins can create users' },
         { status: 403 }
       )
     }

@@ -31,11 +31,7 @@ const navigationByRole: Record<
     { name: 'Assignments', href: '/instructor/assignments', icon: '📝' },
     { name: 'Schedule', href: '/instructor/schedule', icon: '📅' },
   ],
-  MODERATOR: [
-    { name: 'Dashboard', href: '/moderator', icon: '📊' },
-    { name: 'Enrollments', href: '/moderator/enrollments', icon: '✅' },
-    { name: 'Courses', href: '/moderator/courses', icon: '📚' },
-  ],
+  MODERATOR: [],
   STUDENT: [
     { name: 'Dashboard', href: '/student', icon: '📊' },
     { name: 'Courses', href: '/student/courses', icon: '📚' },

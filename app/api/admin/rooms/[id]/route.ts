@@ -27,10 +27,10 @@ export async function PUT(
       )
     }
 
-    // Only admins and moderators can update rooms
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    // Only admins can update rooms
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can update rooms' },
+        { success: false, error: 'Forbidden: Only admins can update rooms' },
         { status: 403 }
       )
     }
@@ -125,10 +125,10 @@ export async function DELETE(
       )
     }
 
-    // Only admins and moderators can delete rooms
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    // Only admins can delete rooms
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can delete rooms' },
+        { success: false, error: 'Forbidden: Only admins can delete rooms' },
         { status: 403 }
       )
     }

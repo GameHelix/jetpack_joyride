@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Only admins and moderators can view analytics
+    // Only admins can view analytics
     if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
       return NextResponse.json(
-        { success: false, error: 'Forbidden: Only admins and moderators can view analytics' },
+        { success: false, error: 'Forbidden: Only admins can view analytics' },
         { status: 403 }
       )
     }
