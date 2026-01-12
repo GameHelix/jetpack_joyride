@@ -61,6 +61,14 @@ enum AuditLogSeverity {
   @@schema("educy")
 }
 
+enum FileStatus {
+  PENDING   // Upload URL generated but not yet uploaded
+  UPLOADED  // File successfully uploaded to R2
+  FAILED    // Upload failed or cancelled
+
+  @@schema("educy")
+}
+
 model User {
   id                String         @id @default(uuid())
   email             String         @unique
@@ -118,6 +126,9 @@ model Section {
   enrollments  Enrollment[]
   assignments  Assignment[]
 
+  @@index([term])
+  @@index([instructorId])
+  @@index([courseId, term])
   @@map("sections")
   @@schema("educy")
 }
@@ -181,6 +192,8 @@ model Enrollment {
   enrolledAt DateTime         @default(now())
 
   @@unique([userId, sectionId])
+  @@index([status])
+  @@index([sectionId, status])
   @@map("enrollments")
   @@schema("educy")
 }
@@ -201,6 +214,8 @@ model Assignment {
   // Relations
   submissions      Submission[]
 
+  @@index([sectionId])
+  @@index([dueDate])
   @@map("assignments")
   @@schema("educy")
 }
@@ -214,6 +229,7 @@ model Submission {
   fileKey      String?   // R2 storage key
   text         String?
   submittedAt  DateTime  @default(now())
+  isLate       Boolean   @default(false)
   grade        Float?
   feedback     String?
   gradedAt     DateTime?
@@ -224,15 +240,19 @@ model Submission {
 }
 
 model File {
-  id         String   @id @default(uuid())
+  id         String     @id @default(uuid())
   ownerId    String
-  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  key        String   @unique // R2 storage key
+  owner      User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  key        String     @unique // R2 storage key
   filename   String
   mimeType   String
   sizeBytes  Int
-  uploadedAt DateTime @default(now())
+  status     FileStatus @default(PENDING)
+  uploadedAt DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
+  @@index([ownerId])
+  @@index([status])
   @@map("files")
   @@schema("educy")
 }
@@ -246,6 +266,7 @@ model Notification {
   readAt    DateTime?
   createdAt DateTime         @default(now())
 
+  @@index([userId, readAt])
   @@map("notifications")
   @@schema("educy")
 }
@@ -262,6 +283,10 @@ model AuditLog {
   category   String?           // "SECURITY", "SYSTEM", "ADMIN_ACTION", "USER_ACTION"
   createdAt  DateTime          @default(now())
 
+  @@index([action])
+  @@index([severity])
+  @@index([userId])
+  @@index([createdAt])
   @@map("audit_logs")
   @@schema("educy")
 }

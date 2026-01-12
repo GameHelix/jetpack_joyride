@@ -35,28 +35,48 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        lastLogin: true,
-        _count: {
-          select: {
-            enrollments: true,
-            instructorSections: true,
-            createdCourses: true,
+    // Pagination parameters
+    const { searchParams } = new URL(request.url)
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50'))) // Cap at 100
+    const skip = (page - 1) * limit
+
+    // Fetch paginated users and total count in parallel
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+          lastLogin: true,
+          _count: {
+            select: {
+              enrollments: true,
+              instructorSections: true,
+              createdCourses: true,
+            },
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.user.count(),
+    ])
 
     return NextResponse.json({
       success: true,
       users,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
     })
   } catch (error) {
     console.error('Users fetch error:', error)

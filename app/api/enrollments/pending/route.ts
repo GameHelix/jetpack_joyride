@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only instructors and admins can view pending enrollments
-    if (user.role !== 'INSTRUCTOR' && user.role !== 'ADMIN') {
+    // Only instructors, moderators, and admins can view pending enrollments
+    if (user.role !== 'INSTRUCTOR' && user.role !== 'MODERATOR' && user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }

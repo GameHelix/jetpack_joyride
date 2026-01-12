@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     // Generate signed upload URL
     const uploadUrl = await generateUploadUrl(fileKey, data.contentType)
 
-    // Create file record in database
+    // Create file record in database with PENDING status
     const file = await prisma.file.create({
       data: {
         ownerId: user.id,
@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
         filename: data.filename,
         mimeType: data.contentType,
         sizeBytes: data.sizeBytes,
+        status: 'PENDING', // Will be updated to UPLOADED after successful upload
       },
     })
 

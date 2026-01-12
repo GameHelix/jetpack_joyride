@@ -26,6 +26,35 @@ export async function POST(
     const body = await request.json()
     const data = createSubmissionSchema.parse(body)
 
+    // Verify file ownership if fileKey is provided
+    if (data.fileKey) {
+      const file = await prisma.file.findUnique({
+        where: { key: data.fileKey },
+      })
+
+      if (!file) {
+        return NextResponse.json(
+          { success: false, error: 'File not found' },
+          { status: 404 }
+        )
+      }
+
+      if (file.ownerId !== user.id) {
+        return NextResponse.json(
+          { success: false, error: 'You do not own this file' },
+          { status: 403 }
+        )
+      }
+
+      // Check if file upload was confirmed
+      if (file.status !== 'UPLOADED') {
+        return NextResponse.json(
+          { success: false, error: 'File upload is not yet confirmed. Please complete the upload first.' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Get assignment
     const assignment = await prisma.assignment.findUnique({
       where: { id: params.id },
@@ -56,6 +85,11 @@ export async function POST(
       )
     }
 
+    // Check if submission is late
+    const now = new Date()
+    const dueDate = new Date(assignment.dueDate)
+    const isLate = now > dueDate
+
     // Create submission (unique constraint will prevent duplicates)
     const submission = await prisma.submission.create({
       data: {
@@ -63,6 +97,7 @@ export async function POST(
         studentId: user.id,
         fileKey: data.fileKey,
         text: data.text,
+        isLate,
       },
       include: {
         assignment: {
@@ -97,10 +132,20 @@ export async function POST(
       },
     })
 
+    // Prepare response with late warning if applicable
+    const message = isLate
+      ? 'Assignment submitted successfully (LATE)'
+      : 'Assignment submitted successfully'
+
+    const warning = isLate
+      ? 'This submission is past the due date and may be subject to late penalties'
+      : undefined
+
     return NextResponse.json({
       success: true,
       submission,
-      message: 'Assignment submitted successfully',
+      message,
+      ...(warning && { warning }),
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

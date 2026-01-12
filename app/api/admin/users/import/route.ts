@@ -154,7 +154,11 @@ export async function POST(request: NextRequest) {
     let emailsSent = 0
     const importErrors: ImportError[] = []
 
-    for (const userData of uniqueValidUsers) {
+    // Helper to add delay between emails (rate limiting)
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+    for (let i = 0; i < uniqueValidUsers.length; i++) {
+      const userData = uniqueValidUsers[i]
       try {
         // Check if user already exists
         const existingUser = await prisma.user.findUnique({
@@ -202,6 +206,11 @@ export async function POST(request: NextRequest) {
           console.log(`✅ Welcome email sent successfully to: ${userData.email}`)
           console.log(`   Email ID: ${result?.id || 'unknown'}`)
           emailsSent++
+
+          // Rate limiting: Wait 600ms between emails (< 2 emails/sec limit)
+          if (i < uniqueValidUsers.length - 1) {
+            await delay(600)
+          }
         } catch (emailError: any) {
           console.error(`❌ Failed to send welcome email to ${userData.email}`)
           console.error(`   Error type: ${emailError?.name || 'Unknown'}`)
