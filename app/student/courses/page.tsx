@@ -1,61 +1,132 @@
-import { getCurrentUser } from '@/lib/rbac'
-import { prisma } from '@/lib/prisma'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard-layout'
 
+interface Course {
+  id: string
+  code: string
+  title: string
+  description: string | null
+  sections: Section[]
+}
 
-export default async function StudentCoursesPage() {
-  const user = await getCurrentUser()
+interface Section {
+  id: string
+  term: string
+  capacity: number
+  instructor: {
+    name: string
+  }
+  _count: {
+    enrollments: number
+  }
+}
 
-  if (!user) {
+interface Enrollment {
+  id: string
+  section: {
+    id: string
+    term: string
+    capacity: number
+    instructor: {
+      name: string
+      email: string
+    }
+    course: {
+      id: string
+      code: string
+      title: string
+      description: string | null
+    }
+    _count: {
+      enrollments: number
+    }
+  }
+}
+
+export default function StudentCoursesPage() {
+  const { data: session, status } = useSession()
+  const [enrolledCourses, setEnrolledCourses] = useState<Enrollment[]>([])
+  const [availableCourses, setAvailableCourses] = useState<Course[]>([])
+  const [loading, setLoading] = useState(true)
+  const [enrolling, setEnrolling] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchCourses()
+    }
+  }, [status])
+
+  const fetchCourses = async () => {
+    try {
+      const [enrolledRes, availableRes] = await Promise.all([
+        fetch('/api/student/enrollments'),
+        fetch('/api/student/courses/available'),
+      ])
+
+      const enrolledData = await enrolledRes.json()
+      const availableData = await availableRes.json()
+
+      if (enrolledData.success) {
+        setEnrolledCourses(enrolledData.enrollments || [])
+      }
+
+      if (availableData.success) {
+        setAvailableCourses(availableData.courses || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch courses:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEnroll = async (sectionId: string) => {
+    setEnrolling(sectionId)
+    try {
+      const response = await fetch('/api/enrollments/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sectionId }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        alert('Enrollment request submitted successfully! Waiting for instructor approval.')
+        fetchCourses() // Refresh the course list
+      } else {
+        alert(data.error || 'Failed to submit enrollment request')
+      }
+    } catch (error) {
+      console.error('Enrollment error:', error)
+      alert('Failed to submit enrollment request')
+    } finally {
+      setEnrolling(null)
+    }
+  }
+
+  if (status === 'loading' || loading) {
+    return (
+      <DashboardLayout role="STUDENT">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!session?.user) {
     redirect('/auth/signin')
   }
 
-  // Get enrolled courses
-  const enrolledCourses = await prisma.enrollment.findMany({
-    where: { userId: user.id, status: 'ENROLLED' },
-    include: {
-      section: {
-        include: {
-          course: true,
-          instructor: { select: { name: true, email: true } },
-          _count: {
-            select: { enrollments: true },
-          },
-        },
-      },
-    },
-  })
-
-  // Get available courses (not enrolled)
-  const availableCourses = await prisma.course.findMany({
-    where: {
-      visibility: true,
-      sections: {
-        some: {
-          enrollments: {
-            none: {
-              userId: user.id,
-              status: { in: ['ENROLLED', 'PENDING'] },
-            },
-          },
-        },
-      },
-    },
-    include: {
-      sections: {
-        include: {
-          instructor: { select: { name: true } },
-          _count: {
-            select: { enrollments: true },
-          },
-        },
-      },
-    },
-  })
-
   return (
-    <DashboardLayout role={user.role}>
+    <DashboardLayout role={session.user.role}>
       <div className="space-y-8">
         {/* Enrolled Courses */}
         <div>
@@ -152,10 +223,11 @@ export default async function StudentCoursesPage() {
                             </p>
                           </div>
                           <button
-                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-xs font-medium"
-                            disabled={section._count.enrollments >= section.capacity}
+                            onClick={() => handleEnroll(section.id)}
+                            disabled={section._count.enrollments >= section.capacity || enrolling === section.id}
+                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            {section._count.enrollments >= section.capacity ? 'Full' : 'Enroll'}
+                            {enrolling === section.id ? 'Enrolling...' : section._count.enrollments >= section.capacity ? 'Full' : 'Enroll'}
                           </button>
                         </div>
                       ))}

@@ -78,6 +78,8 @@ model User {
   profileAvatarUrl  String?
   createdAt         DateTime       @default(now())
   lastLogin         DateTime?
+  resetToken        String?        @unique
+  resetTokenExpiry  DateTime?
 
   // Relations
   instructorSections Section[]      @relation("InstructorSections")

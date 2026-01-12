@@ -172,12 +172,14 @@ export default async function CourseDetailPage({
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Lessons
             </h2>
-            <Link
-              href={`/instructor/courses/${course.id}/lessons/new`}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
-            >
-              + Add Lesson
-            </Link>
+            {section && (
+              <Link
+                href={`/instructor/courses/${section.id}/lessons/new`}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
+              >
+                + Add Lesson
+              </Link>
+            )}
           </div>
           <div className="p-6">
             {!section || section.lessons.length === 0 ? (
@@ -213,12 +215,14 @@ export default async function CourseDetailPage({
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Assignments
             </h2>
-            <Link
-              href={`/instructor/courses/${course.id}/assignments/new`}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
-            >
-              + Create Assignment
-            </Link>
+            {section && (
+              <Link
+                href={`/instructor/courses/${section.id}/assignments/new`}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
+              >
+                + Create Assignment
+              </Link>
+            )}
           </div>
           <div className="p-6">
             {!section || section.assignments.length === 0 ? (

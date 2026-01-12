@@ -100,7 +100,7 @@ export default async function InstructorCoursesPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <Link
-                        href={`/instructor/courses/${section.id}`}
+                        href={`/instructor/courses/${section.course.id}`}
                         className="group"
                       >
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
@@ -181,7 +181,7 @@ export default async function InstructorCoursesPage() {
                     </div>
                     <div className="ml-4 flex space-x-2">
                       <Link
-                        href={`/instructor/courses/${section.id}`}
+                        href={`/instructor/courses/${section.course.id}`}
                         className="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
                       >
                         Manage
