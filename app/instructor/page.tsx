@@ -205,7 +205,7 @@ export default async function InstructorDashboard() {
                 {sections.map((section) => (
                   <Link
                     key={section.id}
-                    href={`/instructor/courses/${section.id}`}
+                    href={`/instructor/courses/${section.course.id}`}
                     className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-500 dark:hover:border-blue-400 transition group"
                   >
                     <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
