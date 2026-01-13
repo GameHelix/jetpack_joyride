@@ -268,7 +268,7 @@ export default function AuditLogsPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {/* Search */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -282,7 +282,7 @@ export default function AuditLogsPage() {
                   setPagination({ ...pagination, page: 1 })
                 }}
                 placeholder="Search logs..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               />
             </div>
 
@@ -297,7 +297,7 @@ export default function AuditLogsPage() {
                   setActionFilter(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Actions</option>
                 {availableActions.map((action) => (
@@ -317,7 +317,7 @@ export default function AuditLogsPage() {
                   setTargetTypeFilter(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Types</option>
                 {availableTargetTypes.map((type) => (
@@ -337,7 +337,7 @@ export default function AuditLogsPage() {
                   setSeverityFilter(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Severities</option>
                 <option value="INFO">INFO</option>
@@ -357,7 +357,7 @@ export default function AuditLogsPage() {
                   setCategoryFilter(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Categories</option>
                 <option value="SECURITY">Security</option>
@@ -379,7 +379,7 @@ export default function AuditLogsPage() {
                   setStartDate(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               />
             </div>
 
@@ -395,7 +395,7 @@ export default function AuditLogsPage() {
                   setEndDate(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               />
             </div>
           </div>
