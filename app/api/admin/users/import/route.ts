@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
-import bcrypt from 'bcryptjs'
 import * as XLSX from 'xlsx'
 import { auditLog } from '@/lib/audit'
-import { generatePassword } from '@/lib/password'
-import { sendWelcomeEmail } from '@/lib/email'
+import { sendWelcomeWithSetupEmail } from '@/lib/email'
+import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
 
@@ -264,13 +263,24 @@ export async function POST(request: NextRequest) {
       (user, index) => emailCounts.get(user.email) === 1 || validUsers.findIndex(u => u.email === user.email) === index
     )
 
-    // Import valid users
+    // ============================================
+    // TWO-PHASE IMPORT (Issue #36, #41)
+    // Phase 1: Create all users with reset tokens
+    // Phase 2: Send emails and activate
+    // ============================================
+
+    console.log('🔄 Starting two-phase import...')
+
     let imported = 0
     let emailsSent = 0
     const importErrors: ImportError[] = []
+    const createdUsers: Array<{ id: string; email: string; name: string; resetToken: string; role: string }> = []
 
     // Helper to add delay between emails (rate limiting)
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+    // PHASE 1: Create all users in database with PENDING status
+    console.log('📝 Phase 1: Creating user accounts...')
 
     for (let i = 0; i < uniqueValidUsers.length; i++) {
       const userData = uniqueValidUsers[i]
@@ -290,61 +300,96 @@ export async function POST(request: NextRequest) {
           continue
         }
 
-        // Generate random password
-        const generatedPassword = generatePassword(12)
+        // Generate reset token for password setup
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        const resetTokenExpiry = new Date(Date.now() + 7 * 24 * 3600000) // 7 days
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(generatedPassword, 10)
-
-        // Create user
-        await prisma.user.create({
+        // Create user with PENDING status
+        // No password yet - user will set it via reset link
+        const createdUser = await prisma.user.create({
           data: {
             name: userData.name,
             email: userData.email,
-            hashedPassword,
+            hashedPassword: null, // No password yet
             role: userData.role,
+            status: 'PENDING', // User is pending until they set password
+            resetToken,
+            resetTokenExpiry,
+            welcomeEmailSent: false,
           },
         })
 
-        // Send welcome email with credentials
-        try {
-          console.log(`📧 Attempting to send welcome email to: ${userData.email}`)
-          console.log(`   FROM: ${process.env.RESEND_FROM_EMAIL}`)
-          console.log(`   API Key present: ${process.env.RESEND_API_KEY ? 'Yes' : 'No'}`)
-
-          const result = await sendWelcomeEmail({
-            to: userData.email,
-            userName: userData.name,
-            temporaryPassword: generatedPassword,
-            role: userData.role,
-          })
-
-          console.log(`✅ Welcome email sent successfully to: ${userData.email}`)
-          console.log(`   Email ID: ${result?.id || 'unknown'}`)
-          emailsSent++
-
-          // Rate limiting: Wait between emails to avoid hitting provider limits
-          if (i < uniqueValidUsers.length - 1) {
-            await delay(EMAIL_RATE_LIMIT_MS)
-          }
-        } catch (emailError: any) {
-          console.error(`❌ Failed to send welcome email to ${userData.email}`)
-          console.error(`   Error type: ${emailError?.name || 'Unknown'}`)
-          console.error(`   Error message: ${emailError?.message || 'No message'}`)
-          console.error(`   Full error:`, JSON.stringify(emailError, null, 2))
-          // Don't fail the import if email fails, just log it
-        }
+        createdUsers.push({
+          id: createdUser.id,
+          email: createdUser.email,
+          name: createdUser.name,
+          resetToken,
+          role: userData.role,
+        })
 
         imported++
-      } catch (error) {
-        console.error('Error importing user:', error)
+        console.log(`✅ Created user ${i + 1}/${uniqueValidUsers.length}: ${userData.email}`)
+      } catch (error: any) {
+        console.error(`❌ Failed to create user: ${userData.email}`, error)
         importErrors.push({
           row: validUsers.findIndex(u => u.email === userData.email) + 2,
           email: userData.email,
           error: 'Failed to create user in database',
+          suggestion: error.message || 'Database error occurred',
         })
       }
     }
+
+    console.log(`✅ Phase 1 complete: Created ${imported} users`)
+
+    // PHASE 2: Send welcome emails with password setup links
+    console.log('📧 Phase 2: Sending welcome emails...')
+
+    for (let i = 0; i < createdUsers.length; i++) {
+      const userInfo = createdUsers[i]
+
+      try {
+        const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+        const resetUrl = `${baseUrl}/auth/reset-password?token=${userInfo.resetToken}`
+
+        console.log(`📧 Sending welcome email to: ${userInfo.email} (${i + 1}/${createdUsers.length})`)
+
+        const result = await sendWelcomeWithSetupEmail({
+          to: userInfo.email,
+          userName: userInfo.name,
+          setupUrl: resetUrl,
+          role: userInfo.role,
+        })
+
+        // Mark user as ACTIVE and email as sent
+        await prisma.user.update({
+          where: { id: userInfo.id },
+          data: {
+            status: 'ACTIVE',
+            welcomeEmailSent: true,
+            welcomeEmailSentAt: new Date(),
+          },
+        })
+
+        console.log(`✅ Welcome email sent: ${userInfo.email}`)
+        console.log(`   Email ID: ${result?.id || 'unknown'}`)
+        emailsSent++
+
+        // Rate limiting: Wait between emails to avoid hitting provider limits
+        if (i < createdUsers.length - 1) {
+          await delay(EMAIL_RATE_LIMIT_MS)
+        }
+      } catch (emailError: any) {
+        console.error(`❌ Failed to send welcome email to ${userInfo.email}`)
+        console.error(`   Error: ${emailError?.message || 'Unknown error'}`)
+
+        // User stays PENDING - can resend email later via #37 feature
+        // Password setup link is still valid for 7 days
+      }
+    }
+
+    console.log(`✅ Phase 2 complete: Sent ${emailsSent} welcome emails`)
+    console.log(`ℹ️  Users with failed emails remain PENDING and can be activated later`)
 
     // Combine all errors
     const allErrors = [...errors, ...importErrors]
@@ -375,11 +420,16 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    const emailMessage = emailsSent === imported
-      ? 'Welcome emails sent to all users.'
-      : emailsSent > 0
-        ? `Welcome emails sent to ${emailsSent} of ${imported} users.`
-        : 'Note: Email sending failed for all users. Passwords were generated but not sent.'
+    const pendingUsers = imported - emailsSent
+
+    let emailMessage = ''
+    if (emailsSent === imported) {
+      emailMessage = 'All users activated - welcome emails sent successfully.'
+    } else if (emailsSent > 0) {
+      emailMessage = `${emailsSent} users activated, ${pendingUsers} users pending (email failed - can resend later).`
+    } else {
+      emailMessage = `All ${imported} users created but emails failed to send. Users are PENDING and need welcome emails resent.`
+    }
 
     return NextResponse.json({
       success: true,
@@ -389,7 +439,9 @@ export async function POST(request: NextRequest) {
       imported,
       failed,
       emailsSent,
+      pendingUsers,
       errors: allErrors.length > 0 ? allErrors : undefined,
+      warning: pendingUsers > 0 ? `${pendingUsers} users remain PENDING - they need welcome emails resent to activate their accounts.` : undefined,
     })
   } catch (error) {
     console.error('Bulk import error:', error)

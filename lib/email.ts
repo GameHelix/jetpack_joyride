@@ -535,3 +535,91 @@ export async function sendPasswordResetEmail(params: {
     }),
   })
 }
+
+/**
+ * Email template for welcome email with password setup link (bulk import)
+ */
+export function getWelcomeWithSetupEmailHTML(params: {
+  userName: string
+  email: string
+  setupUrl: string
+  role: string
+}) {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Educy - Set Up Your Account</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #5C2482 0%, #7B3FA3 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+    <h1 style="color: white; margin: 0; font-size: 28px;">🎓 Welcome to Educy!</h1>
+  </div>
+
+  <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
+    <p style="font-size: 16px; margin-bottom: 20px;">Hi ${params.userName},</p>
+
+    <p style="font-size: 16px; margin-bottom: 20px;">Your account has been created for the Educy learning platform! To get started, you'll need to set up your password.</p>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #5C2482; margin: 20px 0;">
+      <p style="margin: 5px 0; color: #6b7280;"><strong>Email:</strong></p>
+      <p style="margin: 5px 0 15px 0; color: #1f2937; font-family: 'Courier New', monospace; background: #f3f4f6; padding: 8px; border-radius: 4px;">${params.email}</p>
+
+      <p style="margin: 15px 0 5px 0; color: #6b7280;"><strong>Role:</strong></p>
+      <p style="margin: 5px 0; color: #1f2937;">${params.role}</p>
+    </div>
+
+    <p style="font-size: 16px; margin: 20px 0;">Click the button below to set up your password and activate your account:</p>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="${params.setupUrl}" style="display: inline-block; background: linear-gradient(135deg, #F95B0E 0%, #d94f0c 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">Set Up Your Password</a>
+    </div>
+
+    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 20px 0;">
+      <p style="margin: 0; color: #92400e; font-size: 14px;">
+        <strong>⚠️ Important:</strong> This link will expire in 7 days. Please set up your password before then to access your account.
+      </p>
+    </div>
+
+    <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+      If the button doesn't work, copy and paste this link into your browser:
+    </p>
+    <p style="font-size: 12px; color: #6b7280; word-break: break-all; background: #f3f4f6; padding: 10px; border-radius: 4px; font-family: 'Courier New', monospace;">
+      ${params.setupUrl}
+    </p>
+
+    <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
+      If you have any questions or need assistance, please contact your course administrator.
+    </p>
+
+    <p style="font-size: 14px; color: #6b7280; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+      This is an automated notification from your course management system.
+    </p>
+  </div>
+</body>
+</html>
+  `
+}
+
+/**
+ * Send welcome email with password setup link (for bulk import)
+ */
+export async function sendWelcomeWithSetupEmail(params: {
+  to: string
+  userName: string
+  setupUrl: string
+  role: string
+}) {
+  return sendEmail({
+    to: params.to,
+    subject: 'Welcome to Educy - Set Up Your Account',
+    html: getWelcomeWithSetupEmailHTML({
+      userName: params.userName,
+      email: params.to,
+      setupUrl: params.setupUrl,
+      role: params.role,
+    }),
+  })
+}
