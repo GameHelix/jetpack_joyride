@@ -1,159 +1,137 @@
-'use client'
+'use client';
 
-import { useState, Suspense } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import { useEffect, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { MdEmail, MdLock } from 'react-icons/md';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import Link from 'next/link';
 
-function SignInForm() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+export default function SignInPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+  useEffect(() => {
+    if (session?.user) {
+      router.push('/dashboard');
+    }
+  }, [session, router]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
     try {
       const result = await signIn('credentials', {
+        redirect: false,
         email,
         password,
-        redirect: false,
-      })
+      });
 
       if (result?.error) {
-        setError('Invalid email or password')
-      } else {
-        router.push(callbackUrl)
-        router.refresh()
+        setError('Invalid email or password');
+      } else if (result?.ok) {
+        router.push('/dashboard');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-            Educy
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Sign in to your account
-          </p>
-        </div>
+    <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+      {/* LEFT SIDE */}
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-no-repeat bg-center bg-cover rounded-br-[100px]"
+           style={{ backgroundImage: "url('/assets/rectangle_left.png')" }}>
+        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Login" />
+      </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Email Address
-              </label>
+      {/* RIGHT SIDE */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
+
+        <h1 className="text-[#5C2482] text-4xl font-semibold mb-10">
+          Welcome!
+        </h1>
+
+        <form onSubmit={handleLogin} className="w-full max-w-md flex flex-col gap-6">
+
+          {error && (
+            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* EMAIL */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#5C2482] font-medium">Email</label>
+            <div className="relative flex items-center">
+              <MdEmail className="absolute left-3 text-[#5C2482] text-xl" />
               <input
-                id="email"
                 type="email"
+                placeholder="Enter Email"
+                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-4 text-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition"
-                placeholder="you@example.com"
               />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/auth/forgot-password"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
-                  Demo Accounts
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-400">
-              <p><strong>Admin:</strong> admin@educy.com / admin123</p>
-              <p><strong>Instructor:</strong> alice.instructor@educy.com / instructor123</p>
-              <p><strong>Student:</strong> bob.student@educy.com / student123</p>
             </div>
           </div>
-        </div>
 
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-          <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">
-            ← Back to home
-          </Link>
-        </p>
+          {/* PASSWORD */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#5C2482] font-medium">Password</label>
+            <div className="relative flex items-center">
+              <MdLock className="absolute left-3 text-[#5C2482] text-xl" />
+
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter Password"
+                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-10 text-black"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              {showPassword ? (
+                <AiOutlineEye
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <AiOutlineEyeInvisible
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+            </div>
+
+            <Link
+              href="/auth/forgot-password"
+              className="text-right text-sm text-gray-400 cursor-pointer hover:text-indigo-600"
+            >
+              Forget Password?
+            </Link>
+          </div>
+
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-3/5 mx-auto bg-[#F95B0E] hover:bg-[#d94f0c] text-white h-12 rounded-xl text-lg font-medium mt-4 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+
+        </form>
       </div>
     </div>
-  )
-}
-
-export default function SignInPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
-        </div>
-      </div>
-    }>
-      <SignInForm />
-    </Suspense>
-  )
+  );
 }
