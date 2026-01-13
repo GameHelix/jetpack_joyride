@@ -9,6 +9,10 @@ import { sendWelcomeEmail } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 
+// Maximum users per import to prevent timeouts
+const MAX_IMPORT_BATCH_SIZE = 100
+const EMAIL_RATE_LIMIT_MS = 600 // 600ms between emails (max ~1.6 emails/sec)
+
 type UserRow = {
   name: string
   email: string
@@ -19,6 +23,7 @@ type ImportError = {
   row: number
   email: string
   error: string
+  suggestion?: string
 }
 
 // POST /api/admin/users/import - Bulk import users from Excel/CSV file
@@ -40,6 +45,36 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       )
     }
+
+    // ============================================
+    // PRE-IMPORT VALIDATION (Issue #38)
+    // ============================================
+    console.log('🔍 Pre-import validation starting...')
+
+    // 1. Check email service configuration
+    if (!process.env.RESEND_API_KEY) {
+      console.error('❌ RESEND_API_KEY not configured')
+      return NextResponse.json({
+        success: false,
+        message: 'Email service not configured. Cannot send welcome emails.',
+        error: 'RESEND_API_KEY environment variable is not set. Please configure it in your deployment settings before importing users.',
+        suggestion: 'Add RESEND_API_KEY to your environment variables and redeploy.',
+      }, { status: 500 })
+    }
+
+    if (!process.env.RESEND_FROM_EMAIL) {
+      console.error('❌ RESEND_FROM_EMAIL not configured')
+      return NextResponse.json({
+        success: false,
+        message: 'Email sender not configured. Cannot send welcome emails.',
+        error: 'RESEND_FROM_EMAIL environment variable is not set.',
+        suggestion: 'Add RESEND_FROM_EMAIL to your environment variables and redeploy.',
+      }, { status: 500 })
+    }
+
+    console.log('✅ Email service configuration validated')
+    console.log(`   FROM: ${process.env.RESEND_FROM_EMAIL}`)
+    console.log(`   API Key: ${process.env.RESEND_API_KEY.substring(0, 8)}...`)
 
     // Parse the uploaded file
     const formData = await request.formData()
@@ -75,11 +110,53 @@ export async function POST(request: NextRequest) {
     const data: any[] = XLSX.utils.sheet_to_json(sheet)
 
     if (data.length === 0) {
-      return NextResponse.json(
-        { success: false, message: 'The file is empty or has no valid data' },
-        { status: 400 }
-      )
+      return NextResponse.json({
+        success: false,
+        message: 'The file is empty or has no valid data',
+        error: 'No rows found in the Excel/CSV file. Make sure the first row contains headers (name, email, role) and subsequent rows contain user data.',
+        suggestion: 'Download the template file and fill it with user data.',
+      }, { status: 400 })
     }
+
+    // 2. Check batch size limit (Issue #40)
+    if (data.length > MAX_IMPORT_BATCH_SIZE) {
+      console.error(`❌ File has ${data.length} users, exceeds limit of ${MAX_IMPORT_BATCH_SIZE}`)
+      return NextResponse.json({
+        success: false,
+        message: `File contains too many users (${data.length} rows)`,
+        error: `Maximum ${MAX_IMPORT_BATCH_SIZE} users per import to prevent timeouts.`,
+        suggestion: `Split your file into smaller batches of ${MAX_IMPORT_BATCH_SIZE} users or less.`,
+        rowCount: data.length,
+        maxAllowed: MAX_IMPORT_BATCH_SIZE,
+      }, { status: 400 })
+    }
+
+    console.log(`✅ File validated: ${data.length} rows to process`)
+
+    // 3. Check for required columns
+    if (data.length > 0) {
+      const firstRow = data[0]
+      const hasName = 'name' in firstRow
+      const hasEmail = 'email' in firstRow
+      const hasRole = 'role' in firstRow
+
+      if (!hasName || !hasEmail || !hasRole) {
+        const missing = []
+        if (!hasName) missing.push('name')
+        if (!hasEmail) missing.push('email')
+        if (!hasRole) missing.push('role')
+
+        return NextResponse.json({
+          success: false,
+          message: 'Missing required columns in Excel file',
+          error: `Required columns not found: ${missing.join(', ')}`,
+          suggestion: 'Make sure the first row has column headers: name, email, role (case-sensitive)',
+          foundColumns: Object.keys(firstRow),
+        }, { status: 400 })
+      }
+    }
+
+    console.log('✅ Required columns validated (name, email, role)')
 
     // Validate and process users
     const validUsers: UserRow[] = []
@@ -90,23 +167,45 @@ export async function POST(request: NextRequest) {
       const row = data[i]
       const rowNumber = i + 2 // +2 because Excel rows start at 1 and we have a header
 
-      // Validate required fields
+      // Validate required fields (Issue #42 - Better error messages)
       if (!row.name || !row.email || !row.role) {
+        const missingFields = []
+        if (!row.name) missingFields.push('name')
+        if (!row.email) missingFields.push('email')
+        if (!row.role) missingFields.push('role')
+
         errors.push({
           row: rowNumber,
-          email: row.email || 'Unknown',
-          error: 'Missing required fields (name, email, or role)',
+          email: row.email || 'Not provided',
+          error: `Missing required field(s): ${missingFields.join(', ')}`,
+          suggestion: 'All three fields (name, email, role) are required for each user',
         })
         continue
       }
 
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(row.email)) {
+      const emailStr = row.email.toString().trim()
+
+      if (!emailRegex.test(emailStr)) {
+        let suggestion = 'Email must be in format: user@domain.com'
+
+        // Provide specific suggestions based on common errors
+        if (!emailStr.includes('@')) {
+          suggestion = 'Email is missing @ symbol'
+        } else if (!emailStr.includes('.')) {
+          suggestion = 'Email is missing domain extension (.com, .org, etc)'
+        } else if (emailStr.startsWith('@')) {
+          suggestion = 'Email is missing username before @'
+        } else if (emailStr.endsWith('@')) {
+          suggestion = 'Email is missing domain after @'
+        }
+
         errors.push({
           row: rowNumber,
-          email: row.email,
+          email: emailStr,
           error: 'Invalid email format',
+          suggestion,
         })
         continue
       }
@@ -114,10 +213,21 @@ export async function POST(request: NextRequest) {
       // Validate role
       const roleUpper = row.role.toString().toUpperCase()
       if (!validRoles.includes(roleUpper)) {
+        // Suggest closest match
+        let suggestion = `Must be one of: ${validRoles.join(', ')}`
+        if (roleUpper.includes('TEACH')) {
+          suggestion = 'Did you mean INSTRUCTOR?'
+        } else if (roleUpper.includes('STUDENT') || roleUpper === 'PUPIL') {
+          suggestion = 'Use STUDENT (uppercase)'
+        } else if (roleUpper.includes('MOD')) {
+          suggestion = 'Did you mean MODERATOR?'
+        }
+
         errors.push({
           row: rowNumber,
           email: row.email,
-          error: `Invalid role "${row.role}". Must be one of: ${validRoles.join(', ')}`,
+          error: `Invalid role "${row.role}"`,
+          suggestion,
         })
         continue
       }
@@ -131,15 +241,20 @@ export async function POST(request: NextRequest) {
 
     // Check for duplicate emails in the file
     const emailCounts = new Map<string, number>()
+    const firstOccurrence = new Map<string, number>()
+
     validUsers.forEach((user, index) => {
       const count = emailCounts.get(user.email) || 0
       emailCounts.set(user.email, count + 1)
 
-      if (count > 0) {
+      if (count === 0) {
+        firstOccurrence.set(user.email, index + 2) // Store first row number
+      } else if (count > 0) {
         errors.push({
           row: index + 2,
           email: user.email,
           error: 'Duplicate email in file',
+          suggestion: `Email already appears in row ${firstOccurrence.get(user.email)}. Each email must be unique.`,
         })
       }
     })
@@ -170,6 +285,7 @@ export async function POST(request: NextRequest) {
             row: validUsers.findIndex(u => u.email === userData.email) + 2,
             email: userData.email,
             error: 'Email already exists in database',
+            suggestion: `User with this email already exists (Name: ${existingUser.name}, Role: ${existingUser.role}). Use a different email or update the existing user.`,
           })
           continue
         }
@@ -207,9 +323,9 @@ export async function POST(request: NextRequest) {
           console.log(`   Email ID: ${result?.id || 'unknown'}`)
           emailsSent++
 
-          // Rate limiting: Wait 600ms between emails (< 2 emails/sec limit)
+          // Rate limiting: Wait between emails to avoid hitting provider limits
           if (i < uniqueValidUsers.length - 1) {
-            await delay(600)
+            await delay(EMAIL_RATE_LIMIT_MS)
           }
         } catch (emailError: any) {
           console.error(`❌ Failed to send welcome email to ${userData.email}`)

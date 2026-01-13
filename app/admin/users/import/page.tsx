@@ -11,10 +11,13 @@ type ImportResult = {
   message: string
   imported?: number
   failed?: number
+  error?: string
+  suggestion?: string
   errors?: Array<{
     row: number
     email: string
     error: string
+    suggestion?: string
   }>
 }
 
@@ -166,6 +169,9 @@ export default function BulkUserImportPage() {
                     Duplicate emails will be skipped and reported in the results
                   </li>
                   <li>
+                    <strong>Maximum 100 users per import</strong> - For larger batches, split into multiple files
+                  </li>
+                  <li>
                     Upload the completed file (supports .xlsx, .xls, or .csv formats)
                   </li>
                 </ol>
@@ -310,6 +316,19 @@ export default function BulkUserImportPage() {
                 }`}>
                   <p>{result.message}</p>
 
+                  {/* Show detailed error and suggestion if provided */}
+                  {result.error && (
+                    <div className="mt-3 p-3 bg-white rounded border border-red-300">
+                      <p className="font-medium text-red-800">Error Details:</p>
+                      <p className="mt-1 text-red-700">{result.error}</p>
+                      {result.suggestion && (
+                        <p className="mt-2 text-blue-700">
+                          <strong>💡 Suggestion:</strong> {result.suggestion}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   {result.imported !== undefined && result.failed !== undefined && (
                     <div className="mt-3 p-3 bg-white rounded border border-green-200">
                       <p className="font-medium">Import Summary:</p>
@@ -332,8 +351,8 @@ export default function BulkUserImportPage() {
                       </p>
                       <div className="max-h-60 overflow-y-auto space-y-2">
                         {result.errors.map((error, index) => (
-                          <div key={index} className="p-2 bg-white rounded text-xs">
-                            <p>
+                          <div key={index} className="p-3 bg-white rounded text-xs border border-gray-200">
+                            <p className="font-medium text-gray-800">
                               <strong>Row {error.row}:</strong> {error.email}
                             </p>
                             <p className={`mt-1 ${
@@ -341,8 +360,13 @@ export default function BulkUserImportPage() {
                                 ? 'text-orange-600'
                                 : 'text-red-600'
                             }`}>
-                              {error.error}
+                              ❌ {error.error}
                             </p>
+                            {error.suggestion && (
+                              <p className="mt-2 text-blue-600">
+                                💡 {error.suggestion}
+                              </p>
+                            )}
                           </div>
                         ))}
                       </div>
