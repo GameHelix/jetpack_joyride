@@ -51,8 +51,7 @@ export default function SignInPage() {
     <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
 
       {/* LEFT SIDE */}
-      <div className="w-1/2 hidden md:flex items-center justify-center bg-no-repeat bg-center bg-cover rounded-br-[100px]"
-           style={{ backgroundImage: "url('/assets/rectangle_left.png')" }}>
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
         <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Login" />
       </div>
 
