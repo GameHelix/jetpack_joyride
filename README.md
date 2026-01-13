@@ -56,7 +56,7 @@ Educy is a comprehensive course management platform designed for data science ed
 
 ### System Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TB
     subgraph "Client Layer"
         A[Web Browser] --> B[Next.js Frontend]
@@ -99,11 +99,11 @@ graph TB
     style L fill:#F7B731
     style M fill:#5F27CD
     style N fill:#00D2D3
-\`\`\`
+```
 
 ### Data Flow
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant U as User
     participant F as Frontend
@@ -130,11 +130,11 @@ sequenceDiagram
     API->>Email: Send Email (async)
     API-->>F: Response
     F-->>U: Render Page
-\`\`\`
+```
 
 ### Role-Based Access Control
 
-\`\`\`mermaid
+```mermaid
 graph LR
     A[Request] --> B{Authenticated?}
     B -->|No| C[401 Unauthorized]
@@ -155,7 +155,7 @@ graph LR
     style F fill:#F39C12
     style G fill:#3498DB
     style H fill:#9B59B6
-\`\`\`
+```
 
 ---
 
@@ -169,7 +169,7 @@ graph LR
 
 ### Installation
 
-\`\`\`bash
+```bash
 # 1. Clone repository
 git clone <repository-url>
 cd educy
@@ -193,7 +193,7 @@ npm run build
 
 # 7. Start development server
 npm run dev
-\`\`\`
+```
 
 ### Access Application
 
@@ -208,7 +208,7 @@ Open `http://localhost:3000`
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 educy/
 ├── app/                          # Next.js 14 App Router
 │   ├── admin/                    # Admin pages
@@ -324,7 +324,7 @@ educy/
 ├── package.json                # Dependencies
 ├── tsconfig.json               # TypeScript configuration
 └── tailwind.config.ts          # Tailwind CSS configuration
-\`\`\`
+```
 
 ---
 
@@ -332,7 +332,7 @@ educy/
 
 ### Core Technologies
 
-\`\`\`mermaid
+```mermaid
 graph TB
     subgraph "Frontend"
         A[Next.js 14<br/>App Router]
@@ -375,7 +375,7 @@ graph TB
     style I fill:#F6821F,color:#ffffff
     style J fill:#000000,color:#ffffff
     style K fill:#4285F4,color:#ffffff
-\`\`\`
+```
 
 ### Detailed Stack
 
@@ -412,7 +412,7 @@ graph TB
 
 Create a `.env` file in the root directory:
 
-\`\`\`env
+```env
 # =============================================================================
 # DATABASE CONFIGURATION
 # =============================================================================
@@ -453,7 +453,7 @@ GEMINI_API_KEY="your-gemini-api-key"
 RESEND_API_KEY="re_your-resend-api-key"
 RESEND_FROM_EMAIL="noreply@yourdomain.com"
 CONTACT_NOTIFICATION_EMAIL="admin@yourdomain.com"
-\`\`\`
+```
 
 ### Service Setup Instructions
 
@@ -466,14 +466,14 @@ CONTACT_NOTIFICATION_EMAIL="admin@yourdomain.com"
 
 #### 2. Authentication (NextAuth)
 
-\`\`\`bash
+```bash
 # Generate secure secret
 openssl rand -base64 32
 
 # Add to .env
 NEXTAUTH_SECRET="<generated-secret>"
 NEXTAUTH_URL="http://localhost:3000"
-\`\`\`
+```
 
 #### 3. File Storage (Cloudflare R2) - FREE 10GB/month
 
@@ -502,7 +502,7 @@ NEXTAUTH_URL="http://localhost:3000"
 
 ### Complete API Reference
 
-\`\`\`mermaid
+```mermaid
 graph LR
     A[API Routes] --> B[Admin APIs]
     A --> C[Course APIs]
@@ -528,7 +528,7 @@ graph LR
     style B fill:#E74C3C,color:#fff
     style C fill:#3498DB,color:#fff
     style D fill:#F39C12,color:#fff
-\`\`\`
+```
 
 ### Admin APIs
 
@@ -686,7 +686,7 @@ graph LR
 
 ### Entity Relationship Diagram
 
-\`\`\`mermaid
+```mermaid
 erDiagram
     USER ||--o{ ENROLLMENT : creates
     USER ||--o{ COURSE : instructs
@@ -754,7 +754,7 @@ erDiagram
         string sectionId FK
         enum status
     }
-\`\`\`
+```
 
 ### Database Models
 
@@ -788,7 +788,7 @@ erDiagram
 
 ### User Management Flow
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant A as Admin
     participant S as System
@@ -807,11 +807,11 @@ sequenceDiagram
     S-->>A: Success Response
     U->>S: First Login
     S->>U: Prompt Password Change
-\`\`\`
+```
 
 ### Assignment Submission Flow
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant S as Student
     participant F as Frontend
@@ -837,7 +837,7 @@ sequenceDiagram
     Email->>I: New Submission Email
     API-->>F: Success
     F-->>S: Confirmation
-\`\`\`
+```
 
 ### Core Features List
 
@@ -896,7 +896,7 @@ sequenceDiagram
 
 ### Test Coverage
 
-\`\`\`mermaid
+```mermaid
 pie title Test Coverage by Component
     "Authentication" : 100
     "User Management" : 100
@@ -905,7 +905,7 @@ pie title Test Coverage by Component
     "Course Management" : 85
     "Assignments" : 85
     "Overall" : 92
-\`\`\`
+```
 
 ### Test Scripts
 
@@ -919,7 +919,7 @@ pie title Test Coverage by Component
 
 ### Run Tests
 
-\`\`\`bash
+```bash
 # Quick verification (no server needed)
 ./tests/static-verification.sh
 
@@ -936,7 +936,7 @@ npx tsx scripts/test-fixes.ts
 
 # Run everything
 ./tests/run-all-tests.sh
-\`\`\`
+```
 
 ### Test Results
 
@@ -954,7 +954,7 @@ See [Test Report](./docs/TEST_REPORT.md) and [Testing Documentation](./docs/test
 
 ### Vercel Deployment (Recommended)
 
-\`\`\`mermaid
+```mermaid
 graph LR
     A[Local Git] -->|git push| B[GitHub]
     B -->|Auto Deploy| C[Vercel]
@@ -967,16 +967,16 @@ graph LR
 
     style C fill:#000000,color:#ffffff
     style E fill:#4ECDC4,color:#000000
-\`\`\`
+```
 
 ### Deployment Steps
 
 1. **Push to GitHub**
-   \`\`\`bash
+   ```bash
    git add .
    git commit -m "Ready for deployment"
    git push origin main
-   \`\`\`
+   ```
 
 2. **Connect to Vercel**
    - Go to [vercel.com](https://vercel.com)
@@ -994,10 +994,10 @@ graph LR
    - Verify deployment
 
 5. **Run Database Migrations**
-   \`\`\`bash
+   ```bash
    # In Vercel, add build command:
    npx prisma generate && npx prisma migrate deploy && npm run build
-   \`\`\`
+   ```
 
 ### Production Checklist
 
@@ -1016,7 +1016,7 @@ graph LR
 
 ### Documentation Structure
 
-\`\`\`
+```
 docs/
 ├── PLATFORM_GUIDE.md                   # Complete platform documentation
 ├── DOCUMENTATION_INDEX.md              # Documentation map & navigation
@@ -1026,7 +1026,7 @@ docs/
     ├── TESTING_GUIDE.md                # How to run tests
     ├── COMPREHENSIVE_TEST_REPORT.md    # Test analysis & results
     └── LIVE_TEST_RESULTS.md            # Service verification report
-\`\`\`
+```
 
 ### Quick Links
 
@@ -1048,7 +1048,7 @@ docs/
 
 Access the platform with these credentials:
 
-\`\`\`
+```
 Admin Portal:
   Email: admin@educy.com
   Password: admin123
@@ -1063,7 +1063,7 @@ Student Portal:
   Email: bob.student@educy.com
   Password: student123
   Access: Enroll, submit, view grades
-\`\`\`
+```
 
 ---
 
@@ -1165,7 +1165,7 @@ For issues, questions, or contributions:
 
 ---
 
-\`\`\`
+```
 Built with Next.js 14 • TypeScript • Tailwind CSS
 Powered by Neon • Cloudflare • Google AI • Resend
-\`\`\`
+```
