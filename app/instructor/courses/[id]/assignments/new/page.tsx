@@ -70,8 +70,14 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
         throw new Error(data.error || 'Failed to create assignment')
       }
 
-      // Redirect back to course page
-      router.push(`/instructor/courses/${params.id}`)
+      // Redirect back to course page using the courseId from the response
+      const courseId = data.assignment?.section?.course?.id || data.assignment?.section?.courseId
+      if (courseId) {
+        router.push(`/instructor/courses/${courseId}`)
+      } else {
+        // Fallback: go back
+        router.back()
+      }
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
