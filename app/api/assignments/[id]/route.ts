@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireInstructor } from '@/lib/rbac'
+import { requireInstructor, getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
@@ -19,7 +19,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await requireInstructor()
+    const user = await getCurrentUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
 
     const assignment = await prisma.assignment.findUnique({
       where: { id: params.id },
@@ -32,6 +39,12 @@ export async function GET(
                 id: true,
                 name: true,
                 email: true,
+              },
+            },
+            enrollments: {
+              where: {
+                userId: user.id,
+                status: 'ENROLLED',
               },
             },
           },
@@ -57,17 +70,35 @@ export async function GET(
       )
     }
 
-    // Check access
-    if (assignment.section.instructorId !== user.id && user.role !== 'ADMIN') {
+    // Check access - allow instructor, admin, or enrolled students
+    const isInstructor = assignment.section.instructorId === user.id
+    const isAdmin = user.role === 'ADMIN'
+    const isEnrolledStudent = assignment.section.enrollments.length > 0
+
+    if (!isInstructor && !isAdmin && !isEnrolledStudent) {
       return NextResponse.json(
-        { success: false, error: 'Forbidden' },
+        { success: false, error: 'Forbidden: You do not have access to this assignment' },
         { status: 403 }
       )
+    }
+
+    // If student, include their submission
+    let studentSubmission = null
+    if (user.role === 'STUDENT') {
+      studentSubmission = await prisma.submission.findUnique({
+        where: {
+          assignmentId_studentId: {
+            assignmentId: params.id,
+            studentId: user.id,
+          },
+        },
+      })
     }
 
     return NextResponse.json({
       success: true,
       assignment,
+      submission: studentSubmission,
     })
   } catch (error) {
     console.error('Assignment fetch error:', error)
