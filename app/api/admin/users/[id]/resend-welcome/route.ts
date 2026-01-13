@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { sendWelcomeWithSetupEmail } from '@/lib/email'
-import { auditLog } from '@/lib/audit'
+import { createAuditLog } from '@/lib/audit'
 import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
@@ -113,7 +113,7 @@ export async function POST(
       })
 
       // Create audit log
-      await auditLog.create({
+      await createAuditLog({
         userId: currentUser.id,
         action: 'WELCOME_EMAIL_RESENT',
         targetType: 'User',
@@ -146,7 +146,7 @@ export async function POST(
       console.error(`   Error: ${emailError?.message || 'Unknown error'}`)
 
       // Create audit log for failed attempt
-      await auditLog.create({
+      await createAuditLog({
         userId: currentUser.id,
         action: 'WELCOME_EMAIL_RESEND_FAILED',
         targetType: 'User',
