@@ -130,6 +130,29 @@ export default function SignInPage() {
           </button>
 
         </form>
+
+        {/* Demo Credentials */}
+        <div className="w-full max-w-md mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
+          <h3 className="text-[#5C2482] font-semibold mb-3 text-center">Demo Accounts</h3>
+          <div className="space-y-2 text-sm text-gray-700">
+            <div className="flex justify-between items-center p-2 bg-white rounded">
+              <span className="font-medium">Admin:</span>
+              <span className="text-gray-600">admin@educy.com / admin123</span>
+            </div>
+            <div className="flex justify-between items-center p-2 bg-white rounded">
+              <span className="font-medium">Instructor:</span>
+              <span className="text-gray-600">alice.instructor@educy.com / instructor123</span>
+            </div>
+            <div className="flex justify-between items-center p-2 bg-white rounded">
+              <span className="font-medium">Moderator:</span>
+              <span className="text-gray-600">moderator@educy.com / moderator123</span>
+            </div>
+            <div className="flex justify-between items-center p-2 bg-white rounded">
+              <span className="font-medium">Student:</span>
+              <span className="text-gray-600">bob.student@educy.com / student123</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

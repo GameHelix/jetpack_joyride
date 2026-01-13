@@ -3,6 +3,8 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { MdLock } from 'react-icons/md'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 function ResetPasswordForm() {
   const router = useRouter()
@@ -11,6 +13,8 @@ function ResetPasswordForm() {
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -67,137 +71,128 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <div className="max-w-md w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-              Educy
-            </h1>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-            <div className="text-red-500 text-5xl mb-4">❌</div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Invalid Reset Link
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              This password reset link is invalid or has expired.
-            </p>
-            <Link
-              href="/auth/forgot-password"
-              className="inline-block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
-            >
-              Request New Link
-            </Link>
-          </div>
-
-          <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-            <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">
-              ← Back to home
-            </Link>
+      <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
+        <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
+          <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Error" />
+        </div>
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
+          <div className="text-red-500 text-6xl mb-6">❌</div>
+          <h1 className="text-[#5C2482] text-3xl font-semibold mb-4">Invalid Reset Link</h1>
+          <p className="text-gray-600 text-center mb-8 max-w-md">
+            This password reset link is invalid or has expired.
           </p>
+          <Link
+            href="/auth/forgot-password"
+            className="bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-8 py-3 rounded-xl text-lg font-medium transition"
+          >
+            Request New Link
+          </Link>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-            Educy
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Reset your password
-          </p>
-        </div>
+    <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
+      {/* LEFT SIDE */}
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
+        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Reset Password" />
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Reset Password
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Enter your new password below
-            </p>
-          </div>
+      {/* RIGHT SIDE */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
+        <h1 className="text-[#5C2482] text-4xl font-semibold mb-4">
+          Reset Password
+        </h1>
+        <p className="text-gray-600 text-center mb-10 max-w-md">
+          Enter your new password below
+        </p>
 
+        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
           {message && (
-            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-              <p className="text-green-600 dark:text-green-400 text-sm">{message}</p>
+            <div className="text-green-600 bg-green-50 px-4 py-3 rounded-lg text-sm border border-green-200">
+              {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm">
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                New Password
-              </label>
+          {/* NEW PASSWORD */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#5C2482] font-medium">New Password</label>
+            <div className="relative flex items-center">
+              <MdLock className="absolute left-3 text-[#5C2482] text-xl" />
               <input
-                type="password"
-                id="password"
-                required
-                minLength={8}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter new password"
+                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-10 text-black"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="Enter new password (min 8 characters)"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
                 required
                 minLength={8}
+              />
+              {showPassword ? (
+                <AiOutlineEye
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <AiOutlineEyeInvisible
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* CONFIRM PASSWORD */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#5C2482] font-medium">Confirm Password</label>
+            <div className="relative flex items-center">
+              <MdLock className="absolute left-3 text-[#5C2482] text-xl" />
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirm new password"
+                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-10 text-black"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="Confirm new password"
+                required
+                minLength={8}
               />
+              {showConfirmPassword ? (
+                <AiOutlineEye
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowConfirmPassword(false)}
+                />
+              ) : (
+                <AiOutlineEyeInvisible
+                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
+                  onClick={() => setShowConfirmPassword(true)}
+                />
+              )}
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/auth/signin"
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Back to Sign In
-            </Link>
           </div>
-        </div>
 
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-          <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">
-            ← Back to home
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-3/5 mx-auto bg-[#F95B0E] hover:bg-[#d94f0c] text-white h-12 rounded-xl text-lg font-medium mt-4 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Resetting...' : 'Reset Password'}
+          </button>
+
+          <Link
+            href="/auth/signin"
+            className="text-center text-sm text-gray-500 hover:text-[#5C2482] transition"
+          >
+            ← Back to Sign In
           </Link>
-        </p>
+        </form>
       </div>
     </div>
   )
@@ -206,10 +201,10 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#5C2482] to-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5C2482] mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     }>

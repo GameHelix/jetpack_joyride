@@ -2,35 +2,40 @@ import Link from 'next/link'
 
 export default function UnauthorizedPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-            Educy
-          </h1>
-        </div>
+    <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
+      {/* LEFT SIDE */}
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
+        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Unauthorized" />
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-          <div className="text-6xl mb-4">🚫</div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Access Denied
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            You don't have permission to access this page.
-          </p>
+      {/* RIGHT SIDE */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
+        <div className="w-full max-w-md text-center space-y-8">
+          <div className="text-8xl mb-6">🚫</div>
+
+          <div>
+            <h1 className="text-[#5C2482] text-4xl font-semibold mb-4">
+              Access Denied
+            </h1>
+            <p className="text-gray-600 text-lg">
+              You don't have permission to access this page.
+            </p>
+          </div>
+
           <Link
             href="/dashboard"
-            className="inline-block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+            className="inline-block w-3/5 bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-8 py-3 rounded-xl font-medium text-lg transition"
           >
             Go to Dashboard
           </Link>
-        </div>
 
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-          <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">
+          <Link
+            href="/"
+            className="block text-sm text-gray-500 hover:text-[#5C2482] transition"
+          >
             ← Back to home
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   )

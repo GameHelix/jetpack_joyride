@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { MdEmail } from 'react-icons/md'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -40,82 +41,66 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-            Educy
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Reset your password
-          </p>
-        </div>
+    <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
+      {/* LEFT SIDE */}
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
+        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Reset Password" />
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Forgot Password?
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Enter your email address and we'll send you instructions to reset your password.
-            </p>
-          </div>
+      {/* RIGHT SIDE */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
+        <h1 className="text-[#5C2482] text-4xl font-semibold mb-4">
+          Forgot Password?
+        </h1>
+        <p className="text-gray-600 text-center mb-10 max-w-md">
+          Enter your email address and we'll send you instructions to reset your password.
+        </p>
 
+        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
           {message && (
-            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-              <p className="text-green-600 dark:text-green-400 text-sm">{message}</p>
+            <div className="text-green-600 bg-green-50 px-4 py-3 rounded-lg text-sm border border-green-200">
+              {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm">
+              {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Email Address
-              </label>
+          {/* EMAIL */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[#5C2482] font-medium">Email</label>
+            <div className="relative flex items-center">
+              <MdEmail className="absolute left-3 text-[#5C2482] text-xl" />
               <input
                 type="email"
-                id="email"
-                required
+                placeholder="Enter Email"
+                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-4 text-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="your.email@example.com"
+                required
               />
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              {loading ? 'Sending...' : 'Send Reset Link'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/auth/signin"
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Back to Sign In
-            </Link>
           </div>
-        </div>
 
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-          <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">
-            ← Back to home
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-3/5 mx-auto bg-[#F95B0E] hover:bg-[#d94f0c] text-white h-12 rounded-xl text-lg font-medium mt-4 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Sending...' : 'Send Reset Link'}
+          </button>
+
+          <Link
+            href="/auth/signin"
+            className="text-center text-sm text-gray-500 hover:text-[#5C2482] transition"
+          >
+            ← Back to Sign In
           </Link>
-        </p>
+        </form>
       </div>
     </div>
   )
