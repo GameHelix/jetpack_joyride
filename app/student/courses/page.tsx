@@ -51,6 +51,7 @@ export default function StudentCoursesPage() {
   const { data: session, status } = useSession()
   const [enrolledCourses, setEnrolledCourses] = useState<Enrollment[]>([])
   const [availableCourses, setAvailableCourses] = useState<Course[]>([])
+  const [pendingSections, setPendingSections] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [enrolling, setEnrolling] = useState<string | null>(null)
 
@@ -62,13 +63,15 @@ export default function StudentCoursesPage() {
 
   const fetchCourses = async () => {
     try {
-      const [enrolledRes, availableRes] = await Promise.all([
+      const [enrolledRes, availableRes, pendingRes] = await Promise.all([
         fetch('/api/student/enrollments'),
         fetch('/api/student/courses/available'),
+        fetch('/api/enrollments/my-requests'),
       ])
 
       const enrolledData = await enrolledRes.json()
       const availableData = await availableRes.json()
+      const pendingData = await pendingRes.json()
 
       if (enrolledData.success) {
         setEnrolledCourses(enrolledData.enrollments || [])
@@ -76,6 +79,16 @@ export default function StudentCoursesPage() {
 
       if (availableData.success) {
         setAvailableCourses(availableData.courses || [])
+      }
+
+      // Track pending section IDs
+      if (pendingData.success && pendingData.enrollments) {
+        const pending = new Set(
+          pendingData.enrollments
+            .filter((e: any) => e.status === 'PENDING')
+            .map((e: any) => e.sectionId)
+        )
+        setPendingSections(pending)
       }
     } catch (error) {
       console.error('Failed to fetch courses:', error)
@@ -224,10 +237,24 @@ export default function StudentCoursesPage() {
                           </div>
                           <button
                             onClick={() => handleEnroll(section.id)}
-                            disabled={section._count.enrollments >= section.capacity || enrolling === section.id}
-                            className="px-3 py-1 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-lg transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={
+                              section._count.enrollments >= section.capacity ||
+                              enrolling === section.id ||
+                              pendingSections.has(section.id)
+                            }
+                            className={`px-3 py-1 text-white rounded-lg transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
+                              pendingSections.has(section.id)
+                                ? 'bg-yellow-500'
+                                : 'bg-[#F95B0E] hover:bg-[#d94f0c]'
+                            }`}
                           >
-                            {enrolling === section.id ? 'Enrolling...' : section._count.enrollments >= section.capacity ? 'Full' : 'Enroll'}
+                            {enrolling === section.id
+                              ? 'Enrolling...'
+                              : pendingSections.has(section.id)
+                              ? 'Pending Approval'
+                              : section._count.enrollments >= section.capacity
+                              ? 'Full'
+                              : 'Enroll'}
                           </button>
                         </div>
                       ))}
