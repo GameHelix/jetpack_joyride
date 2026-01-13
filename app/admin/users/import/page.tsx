@@ -280,8 +280,8 @@ export default function BulkUserImportPage() {
         {result && (
           <div className={`rounded-xl shadow p-6 ${
             result.success
-              ? 'bg-green-50 border border-green-200
-              : 'bg-red-50 border border-red-200
+              ? 'bg-green-50 border border-green-200'
+              : 'bg-red-50 border border-red-200'
           }`}>
             <div className="flex items-start">
               <div className="flex-shrink-0">
@@ -298,15 +298,15 @@ export default function BulkUserImportPage() {
               <div className="ml-3 flex-1">
                 <h3 className={`text-lg font-medium ${
                   result.success
-                    ? 'text-green-800
-                    : 'text-red-800
+                    ? 'text-green-800'
+                    : 'text-red-800'
                 }`}>
                   {result.success ? 'Import Successful' : 'Import Failed'}
                 </h3>
                 <div className={`mt-2 text-sm ${
                   result.success
-                    ? 'text-green-700
-                    : 'text-red-700
+                    ? 'text-green-700'
+                    : 'text-red-700'
                 }`}>
                   <p>{result.message}</p>
 
@@ -338,8 +338,8 @@ export default function BulkUserImportPage() {
                             </p>
                             <p className={`mt-1 ${
                               error.error.includes('already exists')
-                                ? 'text-orange-600
-                                : 'text-red-600
+                                ? 'text-orange-600'
+                                : 'text-red-600'
                             }`}>
                               {error.error}
                             </p>

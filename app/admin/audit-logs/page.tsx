@@ -167,21 +167,21 @@ export default function AuditLogsPage() {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'CRITICAL':
-        return 'bg-red-100 text-red-800
+        return 'bg-red-100 text-red-800'
       case 'WARNING':
-        return 'bg-yellow-100 text-yellow-800
+        return 'bg-yellow-100 text-yellow-800'
       default:
-        return 'bg-blue-100 text-blue-800
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
   const getActionBadgeColor = (action: string) => {
-    if (action.includes('CREATED')) return 'bg-green-100 text-green-800
-    if (action.includes('UPDATED') || action.includes('CHANGED')) return 'bg-blue-100 text-blue-800
-    if (action.includes('DELETED')) return 'bg-red-100 text-red-800
-    if (action.includes('APPROVED')) return 'bg-purple-100 text-purple-800
-    if (action.includes('REJECTED')) return 'bg-orange-100 text-orange-800
-    return 'bg-gray-100 text-gray-800
+    if (action.includes('CREATED')) return 'bg-green-100 text-green-800'
+    if (action.includes('UPDATED') || action.includes('CHANGED')) return 'bg-gray-100 text-gray-800'
+    if (action.includes('DELETED')) return 'bg-red-100 text-red-800'
+    if (action.includes('APPROVED')) return 'bg-green-100 text-green-800'
+    if (action.includes('REJECTED')) return 'bg-orange-100 text-orange-800'
+    return 'bg-gray-100 text-gray-800'
   }
 
   if (status === 'loading' || loading) {

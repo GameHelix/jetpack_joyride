@@ -138,11 +138,11 @@ export default function SecurityLogsPage() {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'CRITICAL':
-        return 'bg-red-100 text-red-800
+        return 'bg-red-100 text-red-800'
       case 'WARNING':
-        return 'bg-yellow-100 text-yellow-800
+        return 'bg-yellow-100 text-yellow-800'
       default:
-        return 'bg-gray-100 text-gray-800
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
