@@ -21,12 +21,25 @@ type ImportResult = {
   }>
 }
 
+type ProgressState = {
+  phase: 'validation' | 'creating_users' | 'sending_emails' | 'complete' | null
+  current: number
+  total: number
+  currentUser: string
+  status: string
+  success: number
+  failed: number
+  timeElapsed: number
+  message: string
+}
+
 export default function BulkUserImportPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [result, setResult] = useState<ImportResult | null>(null)
+  const [progress, setProgress] = useState<ProgressState | null>(null)
 
   if (status === 'loading') {
     return (
@@ -83,30 +96,102 @@ export default function BulkUserImportPage() {
 
     setUploading(true)
     setResult(null)
+    setProgress({
+      phase: null,
+      current: 0,
+      total: 0,
+      currentUser: '',
+      status: 'Starting...',
+      success: 0,
+      failed: 0,
+      timeElapsed: 0,
+      message: 'Initializing import...'
+    })
 
     try {
       const formData = new FormData()
       formData.append('file', file)
 
-      const response = await fetch('/api/admin/users/import', {
+      const response = await fetch('/api/admin/users/import-stream', {
         method: 'POST',
         body: formData,
       })
 
-      const data = await response.json()
-      setResult(data)
+      if (!response.ok || !response.body) {
+        throw new Error('Failed to start import')
+      }
 
-      if (data.success) {
+      // Read the streaming response
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        // Decode the chunk and add to buffer
+        buffer += decoder.decode(value, { stream: true })
+
+        // Process all complete SSE messages in buffer
+        const lines = buffer.split('\n\n')
+        buffer = lines.pop() || '' // Keep incomplete message in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.substring(6))
+
+              if (data.type === 'progress' || data.type === 'phase') {
+                setProgress({
+                  phase: data.phase || null,
+                  current: data.current || 0,
+                  total: data.total || 0,
+                  currentUser: data.currentUser || '',
+                  status: data.status || data.message || '',
+                  success: data.success || 0,
+                  failed: data.failed || 0,
+                  timeElapsed: data.timeElapsed || 0,
+                  message: data.message || ''
+                })
+              } else if (data.type === 'complete') {
+                setResult({
+                  success: true,
+                  message: data.message || 'Import completed successfully',
+                  imported: data.success,
+                  failed: data.failed,
+                  errors: data.errors
+                })
+                setProgress(null)
+              } else if (data.type === 'error') {
+                setResult({
+                  success: false,
+                  message: data.message || 'Import failed',
+                  error: data.message,
+                  errors: data.errors
+                })
+                setProgress(null)
+              }
+            } catch (e) {
+              console.error('Failed to parse SSE message:', e)
+            }
+          }
+        }
+      }
+
+      // Clear file after successful completion
+      if (result?.success) {
         setFile(null)
-        // Reset file input
         const fileInput = document.getElementById('file-input') as HTMLInputElement
         if (fileInput) fileInput.value = ''
       }
     } catch (error) {
+      console.error('Upload error:', error)
       setResult({
         success: false,
         message: 'Failed to upload file. Please try again.',
       })
+      setProgress(null)
     } finally {
       setUploading(false)
     }
@@ -281,6 +366,85 @@ export default function BulkUserImportPage() {
             </button>
           </div>
         </div>
+
+        {/* Progress Indicator */}
+        {progress && uploading && (
+          <div className="bg-white rounded-xl shadow p-6 border-2 border-[#5C2482]">
+            <div className="space-y-4">
+              {/* Phase Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5C2482]"></div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#5C2482]">
+                      {progress.phase === 'validation' && '🔍 Validating File'}
+                      {progress.phase === 'creating_users' && '👥 Creating User Accounts'}
+                      {progress.phase === 'sending_emails' && '📧 Sending Welcome Emails'}
+                      {!progress.phase && '⏳ Starting Import'}
+                    </h3>
+                    <p className="text-sm text-gray-600">{progress.message}</p>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {Math.ceil(progress.timeElapsed / 1000)}s elapsed
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              {progress.total > 0 && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium text-gray-700">
+                      {progress.current} / {progress.total} users
+                    </span>
+                    <span className="text-[#5C2482] font-semibold">
+                      {Math.round((progress.current / progress.total) * 100)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div
+                      className="bg-gradient-to-r from-[#5C2482] to-[#F95B0E] h-3 rounded-full transition-all duration-300 ease-out"
+                      style={{ width: `${(progress.current / progress.total) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+
+              {/* Current User */}
+              {progress.currentUser && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                  <p className="text-sm text-gray-700">
+                    <span className="font-medium">Current:</span>{' '}
+                    <span className="text-[#5C2482]">{progress.currentUser}</span>
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">{progress.status}</p>
+                </div>
+              )}
+
+              {/* Counters */}
+              {(progress.success > 0 || progress.failed > 0) && (
+                <div className="flex gap-4 pt-2">
+                  {progress.success > 0 && (
+                    <div className="flex items-center gap-2 text-green-600">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">{progress.success} succeeded</span>
+                    </div>
+                  )}
+                  {progress.failed > 0 && (
+                    <div className="flex items-center gap-2 text-orange-600">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">{progress.failed} pending</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Results */}
         {result && (
