@@ -1,133 +1,91 @@
-'use client';
+import Link from 'next/link'
 
-import { useEffect, useState } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { MdEmail, MdLock } from 'react-icons/md';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-
-export default function SignInPage() {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (session?.user) {
-      router.push('/dashboard');
-    }
-  }, [session, router]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const result = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-      });
-
-      if (result?.error) {
-        setError('Invalid email or password');
-      } else if (result?.ok) {
-        router.push('/dashboard');
-      }
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+      <div className="max-w-4xl w-full">
+        <div className="text-center mb-12">
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            Educy
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400">
+            Modern Course Management Platform
+          </p>
+        </div>
 
-      {/* LEFT SIDE */}
-      <div className="w-1/2 hidden md:flex items-center justify-center bg-no-repeat bg-center bg-cover rounded-br-[100px]"
-           style={{ backgroundImage: "url('/assets/rectangle_left.png')" }}>
-        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Login" />
-      </div>
-
-      {/* RIGHT SIDE */}
-      <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
-
-        <h1 className="text-[#5C2482] text-4xl font-semibold mb-10">
-          Welcome!
-        </h1>
-
-        <form onSubmit={handleLogin} className="w-full max-w-md flex flex-col gap-6">
-
-          {error && (
-            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm">
-              {error}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12">
+          <div className="text-center space-y-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Welcome to Educy
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+                A comprehensive course management system designed for educational institutions.
+                Manage courses, track assignments, and engage with AI-powered features.
+              </p>
             </div>
-          )}
 
-          {/* EMAIL */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[#5C2482] font-medium">Email</label>
-            <div className="relative flex items-center">
-              <MdEmail className="absolute left-3 text-[#5C2482] text-xl" />
-              <input
-                type="email"
-                placeholder="Enter Email"
-                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-4 text-black"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <div className="grid md:grid-cols-3 gap-6 py-8">
+              <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
+                <div className="text-4xl mb-3">📚</div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">Course Management</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Create and manage courses, sections, and lessons with ease
+                </p>
+              </div>
+
+              <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl">
+                <div className="text-4xl mb-3">🤖</div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">AI-Powered</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Get AI tutoring, grading assistance, and concept explanations
+                </p>
+              </div>
+
+              <div className="p-6 bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-xl">
+                <div className="text-4xl mb-3">📊</div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">Analytics</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Track progress, submissions, and performance metrics
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Link
+                href="/auth/signin"
+                className="block w-full md:w-auto md:inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+              >
+                Sign In to Your Account
+              </Link>
+
+              <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Demo Accounts for Testing:
+                </p>
+                <div className="grid md:grid-cols-3 gap-4 text-xs">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <p className="font-semibold text-gray-900 dark:text-white">Admin</p>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">admin@educy.com</p>
+                  </div>
+                  <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <p className="font-semibold text-gray-900 dark:text-white">Instructor</p>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">alice.instructor@educy.com</p>
+                  </div>
+                  <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <p className="font-semibold text-gray-900 dark:text-white">Student</p>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">bob.student@educy.com</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* PASSWORD */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[#5C2482] font-medium">Password</label>
-            <div className="relative flex items-center">
-              <MdLock className="absolute left-3 text-[#5C2482] text-xl" />
-
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter Password"
-                className="w-full h-12 border border-gray-300 rounded-xl pl-10 pr-10 text-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              {showPassword ? (
-                <AiOutlineEye
-                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
-                  onClick={() => setShowPassword(false)}
-                />
-              ) : (
-                <AiOutlineEyeInvisible
-                  className="absolute right-3 text-[#5C2482] text-xl cursor-pointer"
-                  onClick={() => setShowPassword(true)}
-                />
-              )}
-            </div>
-
-            <p className="text-right text-sm text-gray-400 cursor-pointer hover:text-indigo-600">
-              Forget Password?
-            </p>
-          </div>
-
-          {/* BUTTON */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-3/5 mx-auto bg-[#F95B0E] hover:bg-[#d94f0c] text-white h-12 rounded-xl text-lg font-medium mt-4 transition"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-
-        </form>
+        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          Built with Next.js, TypeScript, and Tailwind CSS
+        </p>
       </div>
     </div>
-  );
+  )
 }
