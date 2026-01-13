@@ -83,10 +83,10 @@ export default function StudentCoursesPage() {
 
       // Track pending section IDs
       if (pendingData.success && pendingData.enrollments) {
-        const pending = new Set(
+        const pending = new Set<string>(
           pendingData.enrollments
             .filter((e: any) => e.status === 'PENDING')
-            .map((e: any) => e.sectionId)
+            .map((e: any) => e.sectionId as string)
         )
         setPendingSections(pending)
       }
