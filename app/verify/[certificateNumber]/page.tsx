@@ -208,13 +208,11 @@ export default function VerifyCertificatePage({ params }: { params: { certificat
                   </div>
 
                   {/* Center: Title */}
-                  <div className="text-center flex-1 px-8">
-                    <div className="inline-block">
-                      <h1 className="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#5C2482] via-purple-600 to-[#F95B0E] mb-1">
-                        Certificate of Achievement
-                      </h1>
-                      <div className="h-0.5 bg-gradient-to-r from-[#5C2482] via-purple-400 to-[#F95B0E] rounded-full"></div>
-                    </div>
+                  <div className="text-center flex-1 px-2">
+                    <h1 className="text-xl font-serif font-bold bg-gradient-to-r from-[#5C2482] via-purple-600 to-[#F95B0E] bg-clip-text text-transparent whitespace-nowrap">
+                      Certificate of Achievement
+                    </h1>
+                    <div className="h-0.5 w-full max-w-sm mx-auto bg-gradient-to-r from-[#5C2482] via-purple-400 to-[#F95B0E] rounded-full mt-1"></div>
                   </div>
 
                   {/* Right: Date & ID */}
@@ -234,10 +232,10 @@ export default function VerifyCertificatePage({ params }: { params: { certificat
                     {/* Certifies Statement */}
                     <div>
                       <p className="text-sm text-gray-600 mb-1.5">This is to certify that</p>
-                      <h2 className="text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] mb-1">
+                      <h2 className="text-2xl font-serif font-bold bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] bg-clip-text text-transparent">
                         {certificate.studentName}
                       </h2>
-                      <p className="text-sm text-gray-600">has successfully completed</p>
+                      <p className="text-sm text-gray-600 mt-1">has successfully completed</p>
                     </div>
 
                     {/* Course Information Box */}
