@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard-layout'
 import { format } from 'date-fns'
+import { ConfirmationDialog, InputDialog } from '@/components/confirmation-dialog'
 
 interface Enrollment {
   id: string
@@ -30,6 +31,17 @@ export default function ModeratorEnrollments() {
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState<string | null>(null)
 
+  // Dialog states
+  const [approveDialog, setApproveDialog] = useState<{ isOpen: boolean; enrollmentId: string | null }>({
+    isOpen: false,
+    enrollmentId: null,
+  })
+  const [rejectDialog, setRejectDialog] = useState<{ isOpen: boolean; enrollmentId: string | null }>({
+    isOpen: false,
+    enrollmentId: null,
+  })
+  const [rejectReason, setRejectReason] = useState('')
+
   useEffect(() => {
     fetchEnrollments()
   }, [])
@@ -48,18 +60,18 @@ export default function ModeratorEnrollments() {
     }
   }
 
-  const handleApprove = async (enrollmentId: string) => {
-    if (!confirm('Are you sure you want to approve this enrollment?')) return
+  const handleApprove = async () => {
+    if (!approveDialog.enrollmentId) return
 
-    setProcessing(enrollmentId)
+    setProcessing(approveDialog.enrollmentId)
     try {
-      const response = await fetch(`/api/enrollments/${enrollmentId}/approve`, {
+      const response = await fetch(`/api/enrollments/${approveDialog.enrollmentId}/approve`, {
         method: 'POST',
       })
 
       if (response.ok) {
-        setEnrollments(enrollments.filter(e => e.id !== enrollmentId))
-        alert('Enrollment approved successfully')
+        setEnrollments(enrollments.filter(e => e.id !== approveDialog.enrollmentId))
+        setApproveDialog({ isOpen: false, enrollmentId: null })
       } else {
         const data = await response.json()
         alert(`Failed to approve: ${data.error}`)
@@ -72,21 +84,21 @@ export default function ModeratorEnrollments() {
     }
   }
 
-  const handleReject = async (enrollmentId: string) => {
-    const reason = prompt('Enter reason for rejection (optional):')
-    if (reason === null) return // User cancelled
+  const handleReject = async (reason: string) => {
+    if (!rejectDialog.enrollmentId) return
 
-    setProcessing(enrollmentId)
+    setProcessing(rejectDialog.enrollmentId)
     try {
-      const response = await fetch(`/api/enrollments/${enrollmentId}/reject`, {
+      const response = await fetch(`/api/enrollments/${rejectDialog.enrollmentId}/reject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason }),
       })
 
       if (response.ok) {
-        setEnrollments(enrollments.filter(e => e.id !== enrollmentId))
-        alert('Enrollment rejected successfully')
+        setEnrollments(enrollments.filter(e => e.id !== rejectDialog.enrollmentId))
+        setRejectDialog({ isOpen: false, enrollmentId: null })
+        setRejectReason('')
       } else {
         const data = await response.json()
         alert(`Failed to reject: ${data.error}`)
@@ -166,14 +178,14 @@ export default function ModeratorEnrollments() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                       <button
-                        onClick={() => handleApprove(enrollment.id)}
+                        onClick={() => setApproveDialog({ isOpen: true, enrollmentId: enrollment.id })}
                         disabled={processing === enrollment.id}
                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-[#F95B0E] hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {processing === enrollment.id ? 'Processing...' : 'Approve'}
                       </button>
                       <button
-                        onClick={() => handleReject(enrollment.id)}
+                        onClick={() => setRejectDialog({ isOpen: true, enrollmentId: enrollment.id })}
                         disabled={processing === enrollment.id}
                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -187,6 +199,40 @@ export default function ModeratorEnrollments() {
           </div>
         )}
       </div>
+
+      {/* Approval Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={approveDialog.isOpen}
+        onClose={() => setApproveDialog({ isOpen: false, enrollmentId: null })}
+        onConfirm={handleApprove}
+        title="Approve Enrollment"
+        message="Are you sure you want to approve this enrollment request? The student will receive an email notification and gain access to the course."
+        confirmText="Approve"
+        cancelText="Cancel"
+        confirmButtonClass="bg-[#F95B0E] hover:bg-[#d94f0c]"
+        isProcessing={processing !== null}
+      />
+
+      {/* Rejection Input Dialog */}
+      <InputDialog
+        isOpen={rejectDialog.isOpen}
+        onClose={() => {
+          setRejectDialog({ isOpen: false, enrollmentId: null })
+          setRejectReason('')
+        }}
+        onConfirm={handleReject}
+        title="Reject Enrollment"
+        message="Please provide a reason for rejection (optional). The student will receive this feedback via email."
+        placeholder="Enter reason for rejection..."
+        confirmText="Reject"
+        cancelText="Cancel"
+        confirmButtonClass="bg-red-600 hover:bg-red-700"
+        isProcessing={processing !== null}
+        inputValue={rejectReason}
+        onInputChange={setRejectReason}
+        isTextarea={true}
+        required={false}
+      />
     </DashboardLayout>
   )
 }
