@@ -47,14 +47,35 @@ export async function POST(request: NextRequest) {
 
     // Send password reset email
     try {
+      console.log('📧 Attempting to send password reset email to:', user.email)
+      console.log('🔗 Reset URL:', resetUrl)
+      console.log('🌍 Environment:', {
+        RESEND_API_KEY: process.env.RESEND_API_KEY ? '✅ Set' : '❌ Missing',
+        RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL || 'Using default',
+        NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'Using default',
+      })
+
       await sendPasswordResetEmail({
         to: user.email,
         userName: user.name,
         resetUrl,
       })
-    } catch (emailError) {
-      console.error('Failed to send password reset email:', emailError)
+
+      console.log('✅ Password reset email sent successfully to:', user.email)
+    } catch (emailError: any) {
+      console.error('❌ Failed to send password reset email:', {
+        email: user.email,
+        error: emailError?.message,
+        name: emailError?.name,
+        resendError: emailError?.resendError,
+        statusCode: emailError?.statusCode,
+        fullError: emailError,
+      })
       // Don't fail the request if email fails - token is still valid
+      // But in development, we might want to see the error
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Full email error stack:', emailError)
+      }
     }
 
     // Create audit log
