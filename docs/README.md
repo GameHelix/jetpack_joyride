@@ -7,11 +7,28 @@ Welcome to the Educy development documentation! This directory contains comprehe
 ```
 docs/
 ├── README.md (you are here)
+├── business/
+│   ├── EXECUTIVE_PRESENTATION.md - Full presentation for decision-makers
+│   ├── EXECUTIVE_SUMMARY.md - One-page business overview
+│   └── BUSINESS_ANALYSIS.md - Market analysis and strategy
 ├── design-system/
 │   ├── DESIGN_SYSTEM.md - Complete design guide
-│   └── COMPONENT_LIBRARY.md - Copy-paste components
-└── development/
-    └── TROUBLESHOOTING.md - Common issues & fixes
+│   ├── COMPONENT_LIBRARY.md - Copy-paste components
+│   └── BRAND_BOOK.md - Brand guidelines and identity
+├── development/
+│   ├── TROUBLESHOOTING.md - Common issues & fixes
+│   └── PLATFORM_GUIDE.md - Architecture and deployment
+├── reports/
+│   ├── ISSUES_REPORT.md - Issues analysis
+│   └── TEST_REPORT.md - Test results
+├── bug-fixes/
+│   └── ISSUE_2_RESOLUTION.md - Bug fix documentation
+├── features/
+│   └── LOGGING_ANALYTICS_UPDATE.md - Feature updates
+├── tests/
+│   └── [Testing documentation]
+└── archive/
+    └── DOCUMENTATION_INDEX.md - Old documentation index
 ```
 
 ## 📚 Documentation Files
@@ -68,9 +85,27 @@ This section documents actual bugs we've fixed (like invisible white text on for
 
 ---
 
+#### 3. [design-system/BRAND_BOOK.md](./design-system/BRAND_BOOK.md)
+**Comprehensive brand guidelines and identity**
+
+**When to use:**
+- Understanding Educy's brand identity
+- Creating marketing materials
+- Ensuring brand consistency
+- Designing new features that align with brand
+
+**Key sections:**
+- **Brand Overview** - Mission, vision, values
+- **Color Psychology** - Why purple (wisdom/trust) and orange (energy/action)
+- **Typography System** - Font hierarchy and usage
+- **Visual Style** - Principles and guidelines
+- **Voice & Tone** - Communication style
+
+---
+
 ### 🛠️ Development
 
-#### 3. [development/TROUBLESHOOTING.md](./development/TROUBLESHOOTING.md)
+#### 4. [development/TROUBLESHOOTING.md](./development/TROUBLESHOOTING.md)
 **Solutions to common development issues**
 
 **When to use:**
@@ -87,6 +122,88 @@ This section documents actual bugs we've fixed (like invisible white text on for
 - **Build & Deploy Issues** - Module errors, environment variables
 
 **Quick diagnostics included!**
+
+---
+
+#### 5. [development/PLATFORM_GUIDE.md](./development/PLATFORM_GUIDE.md)
+**Complete platform architecture and deployment guide**
+
+**When to use:**
+- Understanding the platform architecture
+- Planning deployment
+- Setting up development environment
+- Learning about tech stack
+
+**Key sections:**
+- **Technology Stack** - Frontend, backend, services
+- **Core Features** - User management, courses, assignments
+- **Security Features** - Authentication, authorization, audit
+- **Production Deployment** - Environment setup, deployment steps
+- **API Documentation** - Endpoints and usage
+
+---
+
+### 💼 Business Documentation
+
+#### 6. [business/EXECUTIVE_PRESENTATION.md](./business/EXECUTIVE_PRESENTATION.md)
+**Complete presentation for course owners and decision-makers**
+
+**When to use:**
+- Pitching to prospective customers
+- Investor presentations
+- Business development meetings
+- Understanding business value proposition
+
+**Key sections:**
+- **Problem Statement** - Current challenges in course management
+- **Solution Overview** - How Educy solves these problems
+- **Key Features as Benefits** - ROI-focused feature description
+- **Real-World Scenarios** - How Educy works in practice
+- **Competitive Advantages** - Why Educy wins
+- **Financial Impact** - Quantified time savings and cost reduction
+
+**12 presentation slides ready to use!**
+
+---
+
+#### 7. [business/EXECUTIVE_SUMMARY.md](./business/EXECUTIVE_SUMMARY.md)
+**One-page business overview**
+
+**When to use:**
+- Quick pitch to decision-makers
+- Sales meetings (15-30 minutes)
+- Email introduction to prospects
+- Executive briefings
+
+**Key sections:**
+- **The Problem** - Manual process pain points
+- **The Solution** - Educy's value proposition
+- **Business Impact** - Time savings, error reduction, revenue enablement
+- **ROI Summary** - 7,800%-11,900% ROI, <1 week payback
+- **Call to Action** - Next steps for prospects
+
+**Perfect for busy executives!**
+
+---
+
+#### 8. [business/BUSINESS_ANALYSIS.md](./business/BUSINESS_ANALYSIS.md)
+**Comprehensive market analysis and business strategy**
+
+**When to use:**
+- Investor due diligence
+- Strategic planning
+- Business development strategy
+- Understanding market positioning
+
+**Key sections:**
+- **Market Analysis** - TAM ($7.4B), growth trends, segments
+- **Product-Market Fit** - Problem-solution alignment
+- **Business Model** - Revenue streams, unit economics
+- **Competitive Landscape** - vs. LMS, enterprise systems, spreadsheets
+- **Go-To-Market Strategy** - Phases, tactics, metrics
+- **Financial Projections** - 5-year revenue and growth
+
+**Deep dive into business strategy!**
 
 ---
 
@@ -267,19 +384,49 @@ Found a missing pattern or new common mistake?
 
 ## 🔗 Quick Links
 
+### Business Documentation
+- [Executive Presentation](./business/EXECUTIVE_PRESENTATION.md) - Full pitch deck
+- [Executive Summary](./business/EXECUTIVE_SUMMARY.md) - One-page overview
+- [Business Analysis](./business/BUSINESS_ANALYSIS.md) - Market and strategy
+- [LICENSE](../LICENSE.md) - Usage rights and restrictions
+
 ### Design System
 - [Color Palette](./design-system/DESIGN_SYSTEM.md#color-palette)
 - [Form Components](./design-system/DESIGN_SYSTEM.md#form-components)
 - [Common Pitfalls](./design-system/DESIGN_SYSTEM.md#common-pitfalls)
+- [Brand Book](./design-system/BRAND_BOOK.md) - Brand guidelines
 - [Complete Form Example](./design-system/COMPONENT_LIBRARY.md#complete-form-example)
 - [Button Examples](./design-system/COMPONENT_LIBRARY.md#buttons)
 - [Modal Examples](./design-system/COMPONENT_LIBRARY.md#modals)
 
 ### Development
+- [Platform Guide](./development/PLATFORM_GUIDE.md) - Architecture and deployment
 - [Troubleshooting Guide](./development/TROUBLESHOOTING.md)
 - [Form Issues](./development/TROUBLESHOOTING.md#form--input-issues)
 - [Styling Issues](./development/TROUBLESHOOTING.md#styling-issues)
 - [Build Issues](./development/TROUBLESHOOTING.md#build--deploy-issues)
+
+---
+
+## ⚖️ License & Usage
+
+**IMPORTANT:** This codebase is provided for **demonstration and evaluation purposes only**.
+
+### You MAY:
+- ✅ View the code for educational purposes
+- ✅ Review to understand Educy's capabilities
+- ✅ Demonstrate to potential customers/investors
+- ✅ Use for personal learning (non-commercial)
+
+### You MAY NOT (Without Permission):
+- ❌ Deploy for commercial use
+- ❌ Use in production for your institution
+- ❌ Create competing products
+- ❌ Redistribute or modify for commercial purposes
+
+**For commercial licensing:** See [LICENSE.md](../LICENSE.md) for full terms or contact us to obtain a commercial license.
+
+**This is demonstration software for a startup product.** All rights reserved.
 
 ---
 
