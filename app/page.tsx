@@ -1,6 +1,11 @@
+'use client'
+
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function LandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -8,12 +13,13 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-[#5C2482]">Educy</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#5C2482]">Educy</h1>
             </div>
+
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-700 hover:text-[#5C2482] transition">Features</a>
               <a href="#how-it-works" className="text-gray-700 hover:text-[#5C2482] transition">How It Works</a>
-              <a href="#pricing" className="text-gray-700 hover:text-[#5C2482] transition">Pricing</a>
               <Link
                 href="/auth/signin"
                 className="bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-6 py-2 rounded-lg font-medium transition"
@@ -21,7 +27,51 @@ export default function LandingPage() {
                 Get Started
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <div className="flex flex-col space-y-4">
+                <a
+                  href="#features"
+                  className="text-gray-700 hover:text-[#5C2482] transition px-4 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Features
+                </a>
+                <a
+                  href="#how-it-works"
+                  className="text-gray-700 hover:text-[#5C2482] transition px-4 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  How It Works
+                </a>
+                <Link
+                  href="/auth/signin"
+                  className="bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-4 py-2 rounded-lg font-medium transition text-center mx-4"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -33,10 +83,10 @@ export default function LandingPage() {
               <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                 <span className="text-sm font-medium">🚀 Trusted by 500+ Educational Institutions</span>
               </div>
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight">
                 Stop Drowning in Spreadsheets. Start Teaching.
               </h1>
-              <p className="text-xl text-purple-100 mb-8 leading-relaxed">
+              <p className="text-lg sm:text-xl text-purple-100 mb-8 leading-relaxed">
                 Educy automates the administrative chaos so you can focus on what matters:
                 <span className="font-semibold text-white"> delivering exceptional education.</span>
               </p>
@@ -95,10 +145,10 @@ export default function LandingPage() {
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-4">
               Running a Course Shouldn't Feel Like This
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Traditional course management is broken. You're spending more time on paperwork than teaching.
             </p>
           </div>
@@ -138,10 +188,10 @@ export default function LandingPage() {
       <section className="py-20 px-4 bg-gradient-to-br from-[#5C2482] to-purple-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 px-4">
               Educy Turns Chaos Into Clarity
             </h2>
-            <p className="text-xl text-purple-100 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-purple-100 max-w-3xl mx-auto px-4">
               One platform to manage everything. Automated workflows. Real-time insights. Happy students.
             </p>
           </div>
@@ -181,10 +231,10 @@ export default function LandingPage() {
       <section id="features" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-4">
               Everything You Need to Run World-Class Courses
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg sm:text-xl text-gray-600 px-4">
               Built for educators, loved by students
             </p>
           </div>
@@ -260,10 +310,10 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-4">
               From Chaos to Organized in 3 Simple Steps
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg sm:text-xl text-gray-600 px-4">
               Launch your first course in under 10 minutes
             </p>
           </div>
@@ -321,7 +371,7 @@ export default function LandingPage() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-4">
               Built for Every Role in Your Institution
             </h2>
           </div>
@@ -469,118 +519,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-xl text-gray-600">
-              Start free. Scale as you grow. No hidden fees.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white border-2 border-gray-200 p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
-              <div className="text-4xl font-bold text-gray-900 mb-4">Free</div>
-              <p className="text-gray-600 mb-6">Perfect for trying out</p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Up to 50 students
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  2 courses
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Basic features
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Email support
-                </li>
-              </ul>
-              <Link
-                href="/auth/signin"
-                className="block w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-900 px-6 py-3 rounded-xl font-semibold transition"
-              >
-                Start Free
-              </Link>
-            </div>
-
-            <div className="bg-gradient-to-br from-[#5C2482] to-purple-700 p-8 rounded-2xl text-white transform scale-105 shadow-2xl">
-              <div className="bg-[#F95B0E] inline-block px-3 py-1 rounded-full text-xs font-bold mb-2">
-                MOST POPULAR
-              </div>
-              <h3 className="text-2xl font-bold mb-2">Professional</h3>
-              <div className="text-4xl font-bold mb-4">$99<span className="text-lg">/mo</span></div>
-              <p className="text-purple-200 mb-6">For growing institutions</p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <span className="text-green-300 mr-2">✓</span>
-                  Unlimited students
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-300 mr-2">✓</span>
-                  Unlimited courses
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-300 mr-2">✓</span>
-                  All features
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-300 mr-2">✓</span>
-                  Priority support
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-300 mr-2">✓</span>
-                  AI features
-                </li>
-              </ul>
-              <Link
-                href="/auth/signin"
-                className="block w-full text-center bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-6 py-3 rounded-xl font-semibold transition"
-              >
-                Start 14-Day Trial
-              </Link>
-            </div>
-
-            <div className="bg-white border-2 border-gray-200 p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
-              <div className="text-4xl font-bold text-gray-900 mb-4">Custom</div>
-              <p className="text-gray-600 mb-6">For large institutions</p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Everything in Pro
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Custom integrations
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Dedicated support
-                </li>
-                <li className="flex items-center text-gray-700">
-                  <span className="text-green-500 mr-2">✓</span>
-                  SLA guarantee
-                </li>
-              </ul>
-              <Link
-                href="/auth/signin"
-                className="block w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-900 px-6 py-3 rounded-xl font-semibold transition"
-              >
-                Contact Sales
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Final CTA */}
       <section className="py-20 px-4 bg-gradient-to-br from-[#5C2482] via-purple-700 to-[#7B3FA3]">
@@ -641,9 +579,6 @@ export default function LandingPage() {
               <div className="text-xs text-gray-500">Student experience</div>
             </div>
           </div>
-          <p className="text-center mt-4 text-sm text-gray-500">
-            Password for all demo accounts: <span className="font-mono bg-gray-200 px-2 py-1 rounded">demo1234</span>
-          </p>
         </div>
       </section>
 
@@ -661,7 +596,7 @@ export default function LandingPage() {
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
                 <li><a href="#features" className="hover:text-white transition">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition">Pricing</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition">How It Works</a></li>
                 <li><a href="#" className="hover:text-white transition">Security</a></li>
                 <li><a href="#" className="hover:text-white transition">Roadmap</a></li>
               </ul>
