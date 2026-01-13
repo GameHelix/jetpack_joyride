@@ -102,6 +102,8 @@ model User {
   notifications      Notification[]
   auditLogs          AuditLog[]
   createdAssignments Assignment[]
+  certificates       Certificate[]
+  issuedCertificates Certificate[]  @relation("CertificateIssuer")
 
   @@map("users")
   @@schema("educy")
@@ -139,6 +141,7 @@ model Section {
   lessons      Lesson[]
   enrollments  Enrollment[]
   assignments  Assignment[]
+  certificates Certificate[]
 
   @@index([term])
   @@index([instructorId])
@@ -197,13 +200,14 @@ model Schedule {
 }
 
 model Enrollment {
-  id         String           @id @default(uuid())
-  userId     String
-  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sectionId  String
-  section    Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  status     EnrollmentStatus @default(PENDING)
-  enrolledAt DateTime         @default(now())
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sectionId   String
+  section     Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  status      EnrollmentStatus @default(PENDING)
+  enrolledAt  DateTime         @default(now())
+  certificate Certificate?
 
   @@unique([userId, sectionId])
   @@index([status])
@@ -282,6 +286,27 @@ model Notification {
 
   @@index([userId, readAt])
   @@map("notifications")
+  @@schema("educy")
+}
+
+model Certificate {
+  id                String   @id @default(uuid())
+  certificateNumber String   @unique @default(uuid()) // Unique verification code
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sectionId         String
+  section           Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  enrollmentId      String   @unique
+  enrollment        Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  completionDate    DateTime @default(now())
+  issuedAt          DateTime @default(now())
+  issuedById        String?  // Admin/Instructor who issued it
+  issuedBy          User?    @relation("CertificateIssuer", fields: [issuedById], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([certificateNumber])
+  @@index([sectionId])
+  @@map("certificates")
   @@schema("educy")
 }
 
