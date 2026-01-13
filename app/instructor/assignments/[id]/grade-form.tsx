@@ -96,7 +96,7 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
             required
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="85"
           />
         </div>
@@ -108,7 +108,7 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
             type="text"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Great work!"
           />
         </div>

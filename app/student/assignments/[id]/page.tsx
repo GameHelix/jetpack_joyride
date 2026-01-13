@@ -218,7 +218,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
               <input
                 type="file"
                 onChange={handleFileChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 accept={assignment.allowedFileTypes.length > 0 ? assignment.allowedFileTypes.map(t => `.${t}`).join(',') : undefined}
               />
               {file && (
@@ -237,7 +237,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
                 rows={5}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 placeholder="Add any comments or notes about your submission..."
               />
             </div>
