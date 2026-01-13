@@ -60,37 +60,37 @@ export default async function StudentTimetablePage() {
     <DashboardLayout role={user.role}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             My Timetable
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <p className="text-gray-600 mt-2">
             Your weekly class schedule
           </p>
         </div>
 
         {/* Weekly Timetable */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-900">
+            <table className="min-w-full divide-y divide-purple-100">
+              <thead className="bg-purple-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
                     Day
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
                     Classes
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="bg-white divide-y divide-purple-100">
                 {DAYS.map((day, index) => (
-                  <tr key={day} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  <tr key={day} className="hover:bg-purple-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#5C2482]">
                       {DAY_NAMES[index]}
                     </td>
                     <td className="px-6 py-4">
                       {lessonsByDay[day].length === 0 ? (
-                        <span className="text-sm text-gray-400 dark:text-gray-500">
+                        <span className="text-sm text-gray-400">
                           No classes
                         </span>
                       ) : (
@@ -98,25 +98,25 @@ export default async function StudentTimetablePage() {
                           {lessonsByDay[day].map((lesson) => (
                             <div
                               key={lesson.id}
-                              className="flex items-start space-x-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+                              className="flex items-start space-x-4 p-3 bg-purple-50 rounded-xl border border-purple-200"
                             >
                               <div className="flex-shrink-0">
-                                <div className="text-sm font-medium text-blue-900 dark:text-blue-200">
+                                <div className="text-sm font-medium text-[#5C2482]">
                                   {lesson.startTime}
                                 </div>
-                                <div className="text-xs text-blue-700 dark:text-blue-300">
+                                <div className="text-xs text-[#7B3FA3]">
                                   {lesson.endTime}
                                 </div>
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                <p className="text-sm font-medium text-[#5C2482]">
                                   {lesson.title}
                                 </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <p className="text-sm text-gray-600 mt-1">
                                   {lesson.course.code} - {lesson.course.title}
                                 </p>
                                 {lesson.room && (
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  <p className="text-xs text-gray-500 mt-1">
                                     📍 {lesson.room.name}
                                     {lesson.room.location && ` (${lesson.room.location})`}
                                   </p>
@@ -135,8 +135,8 @@ export default async function StudentTimetablePage() {
         </div>
 
         {/* Calendar View Hint */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <p className="text-sm text-[#5C2482]">
             💡 <strong>Tip:</strong> You can export your timetable to your calendar app (Coming soon)
           </p>
         </div>

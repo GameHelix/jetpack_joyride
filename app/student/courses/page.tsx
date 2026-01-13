@@ -115,7 +115,7 @@ export default function StudentCoursesPage() {
     return (
       <DashboardLayout role="STUDENT">
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
+          <div className="text-gray-500">Loading...</div>
         </div>
       </DashboardLayout>
     )
@@ -130,14 +130,14 @@ export default function StudentCoursesPage() {
       <div className="space-y-8">
         {/* Enrolled Courses */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          <h1 className="text-3xl font-bold text-[#5C2482] mb-6">
             My Courses
           </h1>
 
           {enrolledCourses.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+            <div className="bg-white rounded-2xl shadow-lg border border-purple-100 p-8 text-center">
               <div className="text-6xl mb-4">📚</div>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-500">
                 You're not enrolled in any courses yet.
               </p>
             </div>
@@ -146,33 +146,33 @@ export default function StudentCoursesPage() {
               {enrolledCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition"
+                  className="bg-white rounded-2xl shadow-lg border border-purple-100 hover:shadow-xl transition"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <span className="inline-block px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+                        <span className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-[#5C2482] rounded-full">
                           {enrollment.section.course.code}
                         </span>
                       </div>
-                      <span className="text-green-600 dark:text-green-400 text-sm font-medium">
+                      <span className="text-green-600 text-sm font-medium">
                         Enrolled
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-xl font-bold text-[#5C2482] mb-2">
                       {enrollment.section.course.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                       {enrollment.section.course.description}
                     </p>
                     <div className="space-y-2 text-sm">
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="text-gray-600">
                         <strong>Instructor:</strong> {enrollment.section.instructor.name}
                       </p>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="text-gray-600">
                         <strong>Term:</strong> {enrollment.section.term}
                       </p>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="text-gray-600">
                         <strong>Students:</strong> {enrollment.section._count.enrollments}/{enrollment.section.capacity}
                       </p>
                     </div>
@@ -186,7 +186,7 @@ export default function StudentCoursesPage() {
         {/* Available Courses */}
         {availableCourses.length > 0 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-2xl font-semibold text-[#5C2482] mb-6">
               Available Courses
             </h2>
 
@@ -194,38 +194,38 @@ export default function StudentCoursesPage() {
               {availableCourses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition"
+                  className="bg-white rounded-2xl shadow-lg border border-purple-100 hover:shadow-xl transition"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full">
+                      <span className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-[#5C2482] rounded-full">
                         {course.code}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-xl font-bold text-[#5C2482] mb-2">
                       {course.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                       {course.description}
                     </p>
                     <div className="space-y-2 text-sm mb-4">
                       {course.sections.map((section) => (
                         <div
                           key={section.id}
-                          className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded"
+                          className="flex items-center justify-between p-2 bg-purple-50 rounded-lg"
                         >
                           <div>
-                            <p className="text-gray-700 dark:text-gray-300">
+                            <p className="text-gray-700">
                               {section.instructor.name}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                            <p className="text-xs text-gray-500">
                               {section.term} • {section._count.enrollments}/{section.capacity} students
                             </p>
                           </div>
                           <button
                             onClick={() => handleEnroll(section.id)}
                             disabled={section._count.enrollments >= section.capacity || enrolling === section.id}
-                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-lg transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {enrolling === section.id ? 'Enrolling...' : section._count.enrollments >= section.capacity ? 'Full' : 'Enroll'}
                           </button>

@@ -65,24 +65,24 @@ export default async function StudentDashboard() {
     <DashboardLayout role={user.role}>
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg p-8 text-white">
+        <div className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] rounded-2xl shadow-lg p-8 text-white">
           <h1 className="text-3xl font-bold mb-2">
             Welcome back, {user.name}!
           </h1>
-          <p className="text-blue-100">
+          <p className="text-purple-100">
             Here's what's happening in your courses today.
           </p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-[#5C2482]">
                   Enrolled Courses
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                <p className="text-3xl font-bold text-[#5C2482] mt-2">
                   {enrollments.length}
                 </p>
               </div>
@@ -90,13 +90,13 @@ export default async function StudentDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-[#5C2482]">
                   Pending Assignments
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                <p className="text-3xl font-bold text-[#5C2482] mt-2">
                   {upcomingAssignments.filter(a => a.submissions.length === 0).length}
                 </p>
               </div>
@@ -104,13 +104,13 @@ export default async function StudentDashboard() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-[#5C2482]">
                   Unread Notifications
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                <p className="text-3xl font-bold text-[#5C2482] mt-2">
                   {notifications.filter(n => !n.readAt).length}
                 </p>
               </div>
@@ -120,15 +120,15 @@ export default async function StudentDashboard() {
         </div>
 
         {/* Upcoming Assignments */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
+          <div className="px-6 py-4 border-b border-purple-100">
+            <h2 className="text-2xl font-semibold text-[#5C2482]">
               Upcoming Assignments
             </h2>
           </div>
           <div className="p-6">
             {upcomingAssignments.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+              <p className="text-gray-500 text-center py-8">
                 No upcoming assignments
               </p>
             ) : (
@@ -142,19 +142,19 @@ export default async function StudentDashboard() {
                   return (
                     <div
                       key={assignment.id}
-                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                      className="flex items-center justify-between p-4 border border-purple-100 rounded-xl hover:shadow-md transition"
                     >
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-900 dark:text-white">
+                        <h3 className="font-medium text-[#5C2482]">
                           {assignment.title}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-gray-600 mt-1">
                           {assignment.section.course.title}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-gray-600 mt-1">
                           Due: {assignment.dueDate.toLocaleDateString()}
                           {daysUntilDue <= 3 && !isSubmitted && (
-                            <span className="ml-2 text-red-600 dark:text-red-400 font-medium">
+                            <span className="ml-2 text-red-600 font-medium">
                               (Due in {daysUntilDue} {daysUntilDue === 1 ? 'day' : 'days'})
                             </span>
                           )}
@@ -162,13 +162,13 @@ export default async function StudentDashboard() {
                       </div>
                       <div className="flex items-center space-x-4">
                         {isSubmitted ? (
-                          <span className="px-3 py-1 text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">
+                          <span className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
                             Submitted
                           </span>
                         ) : (
                           <Link
                             href={`/student/assignments/${assignment.id}`}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+                            className="px-4 py-2 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition text-sm font-medium"
                           >
                             Submit
                           </Link>
@@ -183,21 +183,21 @@ export default async function StudentDashboard() {
         </div>
 
         {/* My Courses */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
+          <div className="px-6 py-4 border-b border-purple-100">
+            <h2 className="text-2xl font-semibold text-[#5C2482]">
               My Courses
             </h2>
           </div>
           <div className="p-6">
             {enrollments.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 dark:text-gray-400 mb-4">
+                <p className="text-gray-500 mb-4">
                   You're not enrolled in any courses yet.
                 </p>
                 <Link
                   href="/student/courses"
-                  className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                  className="inline-block px-6 py-3 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
                 >
                   Browse Courses
                 </Link>
@@ -207,15 +207,15 @@ export default async function StudentDashboard() {
                 {enrollments.map((enrollment) => (
                   <div
                     key={enrollment.id}
-                    className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition"
+                    className="border border-purple-100 rounded-xl p-4 hover:shadow-md transition"
                   >
-                    <h3 className="font-bold text-gray-900 dark:text-white">
+                    <h3 className="font-bold text-[#5C2482]">
                       {enrollment.section.course.title}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       {enrollment.section.course.code} • {enrollment.section.term}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <p className="text-sm text-gray-600 mt-2">
                       Instructor: {enrollment.section.instructor.name}
                     </p>
                   </div>
