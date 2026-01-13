@@ -135,7 +135,7 @@ export default function StudentCoursesPage() {
           </h1>
 
           {enrolledCourses.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg border border-purple-100 p-8 text-center">
+            <div className="bg-white rounded-xl shadow border border-gray-200 p-8 text-center">
               <div className="text-6xl mb-4">📚</div>
               <p className="text-gray-500">
                 You're not enrolled in any courses yet.
@@ -146,12 +146,12 @@ export default function StudentCoursesPage() {
               {enrolledCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
-                  className="bg-white rounded-2xl shadow-lg border border-purple-100 hover:shadow-xl transition"
+                  className="bg-white rounded-xl shadow border border-gray-200 hover:shadow-xl transition"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <span className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-[#5C2482] rounded-full">
+                        <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-[#5C2482] rounded-full">
                           {enrollment.section.course.code}
                         </span>
                       </div>
@@ -194,11 +194,11 @@ export default function StudentCoursesPage() {
               {availableCourses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white rounded-2xl shadow-lg border border-purple-100 hover:shadow-xl transition"
+                  className="bg-white rounded-xl shadow border border-gray-200 hover:shadow-xl transition"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <span className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-[#5C2482] rounded-full">
+                      <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-[#5C2482] rounded-full">
                         {course.code}
                       </span>
                     </div>
@@ -212,7 +212,7 @@ export default function StudentCoursesPage() {
                       {course.sections.map((section) => (
                         <div
                           key={section.id}
-                          className="flex items-center justify-between p-2 bg-purple-50 rounded-lg"
+                          className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
                         >
                           <div>
                             <p className="text-gray-700">

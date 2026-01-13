@@ -65,7 +65,7 @@ export default async function StudentDashboard() {
     <DashboardLayout role={user.role}>
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] rounded-2xl shadow-lg p-8 text-white">
+        <div className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] rounded-xl shadow-lg p-8 text-white">
           <h1 className="text-3xl font-bold mb-2">
             Welcome back, {user.name}!
           </h1>
@@ -76,7 +76,7 @@ export default async function StudentDashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-[#5C2482]">
@@ -90,7 +90,7 @@ export default async function StudentDashboard() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-[#5C2482]">
@@ -104,7 +104,7 @@ export default async function StudentDashboard() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-[#5C2482]">
@@ -120,8 +120,8 @@ export default async function StudentDashboard() {
         </div>
 
         {/* Upcoming Assignments */}
-        <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
-          <div className="px-6 py-4 border-b border-purple-100">
+        <div className="bg-white rounded-xl shadow border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-2xl font-semibold text-[#5C2482]">
               Upcoming Assignments
             </h2>
@@ -142,7 +142,7 @@ export default async function StudentDashboard() {
                   return (
                     <div
                       key={assignment.id}
-                      className="flex items-center justify-between p-4 border border-purple-100 rounded-xl hover:shadow-md transition"
+                      className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
                     >
                       <div className="flex-1">
                         <h3 className="font-medium text-[#5C2482]">
@@ -183,8 +183,8 @@ export default async function StudentDashboard() {
         </div>
 
         {/* My Courses */}
-        <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
-          <div className="px-6 py-4 border-b border-purple-100">
+        <div className="bg-white rounded-xl shadow border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-2xl font-semibold text-[#5C2482]">
               My Courses
             </h2>
@@ -207,7 +207,7 @@ export default async function StudentDashboard() {
                 {enrollments.map((enrollment) => (
                   <div
                     key={enrollment.id}
-                    className="border border-purple-100 rounded-xl p-4 hover:shadow-md transition"
+                    className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
                   >
                     <h3 className="font-bold text-[#5C2482]">
                       {enrollment.section.course.title}

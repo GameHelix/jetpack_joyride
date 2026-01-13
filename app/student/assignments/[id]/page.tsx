@@ -133,8 +133,8 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
       <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5C2482] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -148,10 +148,10 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
     <DashboardLayout role={session.user.role}>
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             Submit Assignment
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-gray-600">
             {assignment.section.course.code}: {assignment.section.course.title}
           </p>
         </div>
@@ -162,33 +162,33 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
         </div>
 
         {/* Assignment Details */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white rounded-xl shadow border border-gray-200 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-[#5C2482] mb-4">
             {assignment.title}
           </h2>
           {assignment.description && (
-            <p className="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-wrap">
+            <p className="text-gray-700 mb-4 whitespace-pre-wrap">
               {assignment.description}
             </p>
           )}
           <div className="flex items-center space-x-6 text-sm">
             <div>
-              <span className="text-gray-600 dark:text-gray-400">Due: </span>
-              <span className={isOverdue ? 'text-red-600 font-medium' : 'text-gray-900 dark:text-white'}>
+              <span className="text-gray-600">Due: </span>
+              <span className={isOverdue ? 'text-red-600 font-medium' : 'text-gray-900'}>
                 {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString()}
               </span>
             </div>
             {assignment.allowedFileTypes.length > 0 && (
               <div>
-                <span className="text-gray-600 dark:text-gray-400">Allowed: </span>
-                <span className="text-gray-900 dark:text-white">
+                <span className="text-gray-600">Allowed: </span>
+                <span className="text-gray-900">
                   {assignment.allowedFileTypes.join(', ')}
                 </span>
               </div>
             )}
             <div>
-              <span className="text-gray-600 dark:text-gray-400">Max size: </span>
-              <span className="text-gray-900 dark:text-white">
+              <span className="text-gray-600">Max size: </span>
+              <span className="text-gray-900">
                 {(assignment.maxSizeBytes / 1048576).toFixed(0)}MB
               </span>
             </div>
@@ -196,33 +196,33 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
         </div>
 
         {/* Submission Form */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow border border-gray-200 p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
                 {error}
               </div>
             )}
 
             {isOverdue && (
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400 px-4 py-3 rounded-lg">
+              <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg">
                 ⚠️ This assignment is overdue. Late submissions may receive reduced credit.
               </div>
             )}
 
             {/* File Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[#5C2482] mb-2">
                 Upload File {assignment.allowedFileTypes.length > 0 && '(Required)'}
               </label>
               <input
                 type="file"
                 onChange={handleFileChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 accept={assignment.allowedFileTypes.length > 0 ? assignment.allowedFileTypes.map(t => `.${t}`).join(',') : undefined}
               />
               {file && (
-                <p className="mt-2 text-sm text-green-600 dark:text-green-400">
+                <p className="mt-2 text-sm text-green-600">
                   ✓ Selected: {file.name} ({(file.size / 1048576).toFixed(2)}MB)
                 </p>
               )}
@@ -230,31 +230,31 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
 
             {/* Text Submission */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[#5C2482] mb-2">
                 Additional Notes (Optional)
               </label>
               <textarea
                 rows={5}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 placeholder="Add any comments or notes about your submission..."
               />
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading || uploading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                className="px-6 py-2 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
               >
                 {uploading ? 'Uploading...' : loading ? 'Submitting...' : 'Submit Assignment'}
               </button>

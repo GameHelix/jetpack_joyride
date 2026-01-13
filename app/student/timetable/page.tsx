@@ -69,10 +69,10 @@ export default async function StudentTimetablePage() {
         </div>
 
         {/* Weekly Timetable */}
-        <div className="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-purple-100">
-              <thead className="bg-purple-50">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
                     Day
@@ -82,9 +82,9 @@ export default async function StudentTimetablePage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-purple-100">
+              <tbody className="bg-white divide-y divide-gray-200">
                 {DAYS.map((day, index) => (
-                  <tr key={day} className="hover:bg-purple-50">
+                  <tr key={day} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#5C2482]">
                       {DAY_NAMES[index]}
                     </td>
@@ -98,7 +98,7 @@ export default async function StudentTimetablePage() {
                           {lessonsByDay[day].map((lesson) => (
                             <div
                               key={lesson.id}
-                              className="flex items-start space-x-4 p-3 bg-purple-50 rounded-xl border border-purple-200"
+                              className="flex items-start space-x-4 p-3 bg-gray-50 rounded-xl border border-gray-200"
                             >
                               <div className="flex-shrink-0">
                                 <div className="text-sm font-medium text-[#5C2482]">
@@ -135,7 +135,7 @@ export default async function StudentTimetablePage() {
         </div>
 
         {/* Calendar View Hint */}
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
           <p className="text-sm text-[#5C2482]">
             💡 <strong>Tip:</strong> You can export your timetable to your calendar app (Coming soon)
           </p>

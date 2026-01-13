@@ -101,8 +101,8 @@ export default async function StudentAssignmentsPage() {
 
         {/* Upcoming Assignments */}
         {upcoming.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
-            <div className="px-6 py-4 border-b border-purple-100">
+          <div className="bg-white rounded-xl shadow border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-2xl font-semibold text-[#5C2482]">
                 Upcoming Assignments
               </h2>
@@ -115,7 +115,7 @@ export default async function StudentAssignmentsPage() {
                 return (
                   <div
                     key={assignment.id}
-                    className="border border-purple-100 rounded-xl p-4 hover:shadow-md transition"
+                    className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -154,8 +154,8 @@ export default async function StudentAssignmentsPage() {
 
         {/* Submitted Assignments */}
         {submitted.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-lg border border-purple-100">
-            <div className="px-6 py-4 border-b border-purple-100">
+          <div className="bg-white rounded-xl shadow border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-2xl font-semibold text-[#5C2482]">
                 Submitted Assignments
               </h2>
@@ -166,7 +166,7 @@ export default async function StudentAssignmentsPage() {
                 return (
                   <div
                     key={assignment.id}
-                    className="border border-purple-100 rounded-xl p-4"
+                    className="border border-gray-200 rounded-xl p-4"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -187,7 +187,7 @@ export default async function StudentAssignmentsPage() {
                           )}
                         </div>
                         {submission.feedback && (
-                          <div className="mt-2 p-3 bg-purple-50 rounded-lg text-sm">
+                          <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm">
                             <p className="font-medium text-[#5C2482]">
                               Instructor Feedback:
                             </p>
@@ -218,7 +218,7 @@ export default async function StudentAssignmentsPage() {
 
         {/* Overdue Assignments */}
         {overdue.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-lg border-2 border-red-200">
+          <div className="bg-white rounded-xl shadow border-2 border-red-200">
             <div className="px-6 py-4 border-b border-red-200 bg-red-50">
               <h2 className="text-2xl font-semibold text-red-900">
                 Overdue Assignments
@@ -256,7 +256,7 @@ export default async function StudentAssignmentsPage() {
         )}
 
         {assignments.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg border border-purple-100 p-12 text-center">
+          <div className="bg-white rounded-xl shadow border border-gray-200 p-12 text-center">
             <div className="text-6xl mb-4">📝</div>
             <p className="text-gray-500">
               No assignments yet. Check back later!
