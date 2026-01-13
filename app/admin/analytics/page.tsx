@@ -98,7 +98,7 @@ export default function AnalyticsPage() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading analytics...</p>
+            <p className="mt-2 text-gray-600">Loading analytics...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -111,17 +111,17 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[#5C2482]">
               Platform Analytics
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-600">
               Comprehensive metrics and insights
             </p>
           </div>
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+            className="px-4 py-2 border border-gray-300 rounded-xl"
           >
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Users */}
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100 text-sm">Total Users</p>
@@ -146,7 +146,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Courses */}
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-100 text-sm">Total Courses</p>
@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Enrollments */}
-          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-100 text-sm">Enrollments</p>
@@ -170,7 +170,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Submissions */}
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-orange-100 text-sm">Submissions</p>
@@ -185,22 +185,22 @@ export default function AnalyticsPage() {
         {/* Detailed Metrics Row 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Users by Role */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Users by Role</h2>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-bold text-[#5C2482] mb-4">Users by Role</h2>
             <div className="space-y-3">
               {analytics.users.byRole.map((roleData) => {
                 const percentage = (roleData.count / analytics.users.total) * 100
                 return (
                   <div key={roleData.role}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600 dark:text-gray-400">{roleData.role}</span>
-                      <span className="text-gray-900 dark:text-white font-medium">
+                      <span className="text-gray-600">{roleData.role}</span>
+                      <span className="text-[#5C2482] font-medium">
                         {roleData.count} ({percentage.toFixed(1)}%)
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full"
+                        className="bg-[#F95B0E] h-2 rounded-full"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
@@ -211,24 +211,24 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Submissions Stats */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Submission Statistics</h2>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-bold text-[#5C2482] mb-4">Submission Statistics</h2>
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <span className="text-gray-700 dark:text-gray-300">Graded</span>
-                <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+              <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl">
+                <span className="text-gray-700">Graded</span>
+                <span className="text-2xl font-bold text-green-600">
                   {analytics.submissions.graded}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                <span className="text-gray-700 dark:text-gray-300">Pending</span>
-                <span className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-xl">
+                <span className="text-gray-700">Pending</span>
+                <span className="text-2xl font-bold text-yellow-600">
                   {analytics.submissions.pending}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <span className="text-gray-700 dark:text-gray-300">Average Grade</span>
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
+                <span className="text-gray-700">Average Grade</span>
+                <span className="text-2xl font-bold text-[#5C2482]">
                   {analytics.submissions.avgGrade.toFixed(1)}%
                 </span>
               </div>
@@ -237,36 +237,36 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Activity Metrics */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">System Activity</h2>
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-bold text-[#5C2482] mb-4">System Activity</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="text-center">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Total Activity</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-gray-600 text-sm">Total Activity</p>
+              <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.total.toLocaleString()}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Recent Activity</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-gray-600 text-sm">Recent Activity</p>
+              <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.recent.toLocaleString()}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Activity Types</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-gray-600 text-sm">Activity Types</p>
+              <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.byAction.length}
               </p>
             </div>
           </div>
 
           {/* Top Actions */}
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Top Actions</h3>
+          <h3 className="text-lg font-semibold text-[#5C2482] mb-3">Top Actions</h3>
           <div className="space-y-2">
             {analytics.activity.byAction.slice(0, 10).map((action, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                <span className="text-sm text-gray-700 dark:text-gray-300">{action.action}</span>
-                <span className="text-sm font-bold text-gray-900 dark:text-white">
+              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                <span className="text-sm text-gray-700">{action.action}</span>
+                <span className="text-sm font-bold text-[#5C2482]">
                   {action.count} times
                 </span>
               </div>
@@ -276,31 +276,31 @@ export default function AnalyticsPage() {
 
         {/* Most Active Users */}
         {analytics.activity.topUsers.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Most Active Users</h2>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-bold text-[#5C2482] mb-4">Most Active Users</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 dark:border-gray-700">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Rank</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Name</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Email</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Role</th>
-                    <th className="text-right py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Actions</th>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Rank</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Name</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Email</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Role</th>
+                    <th className="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {analytics.activity.topUsers.map((user, index) => (
-                    <tr key={index} className="border-b border-gray-100 dark:border-gray-700">
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">{index + 1}</td>
-                      <td className="py-3 px-4 text-gray-900 dark:text-white font-medium">{user.name}</td>
-                      <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{user.email}</td>
+                    <tr key={index} className="border-b border-gray-100">
+                      <td className="py-3 px-4 text-[#5C2482]">{index + 1}</td>
+                      <td className="py-3 px-4 text-[#5C2482] font-medium">{user.name}</td>
+                      <td className="py-3 px-4 text-gray-600">{user.email}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                           {user.role}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right text-gray-900 dark:text-white font-bold">
+                      <td className="py-3 px-4 text-right text-[#5C2482] font-bold">
                         {user.activityCount}
                       </td>
                     </tr>
@@ -313,38 +313,38 @@ export default function AnalyticsPage() {
 
         {/* Storage & Files */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Files</h3>
-            <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
+          <div className="bg-white rounded-xl shadow p-6">
+            <h3 className="text-lg font-semibold text-[#5C2482] mb-2">Total Files</h3>
+            <p className="text-4xl font-bold text-[#5C2482]">
               {analytics.files.total}
             </p>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Storage Used</h3>
-            <p className="text-4xl font-bold text-purple-600 dark:text-purple-400">
+          <div className="bg-white rounded-xl shadow p-6">
+            <h3 className="text-lg font-semibold text-[#5C2482] mb-2">Storage Used</h3>
+            <p className="text-4xl font-bold text-purple-600">
               {analytics.files.totalStorageMB} MB
             </p>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Notifications</h3>
-            <p className="text-4xl font-bold text-green-600 dark:text-green-400">
+          <div className="bg-white rounded-xl shadow p-6">
+            <h3 className="text-lg font-semibold text-[#5C2482] mb-2">Notifications</h3>
+            <p className="text-4xl font-bold text-green-600">
               {analytics.notifications.total}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            <p className="text-sm text-gray-600 mt-2">
               {analytics.notifications.unread} unread
             </p>
           </div>
         </div>
 
         {/* Enrollments by Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Enrollments by Status</h2>
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-bold text-[#5C2482] mb-4">Enrollments by Status</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {analytics.enrollments.byStatus.map((statusData) => (
-              <div key={statusData.status} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{statusData.status}</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{statusData.count}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+              <div key={statusData.status} className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-600 mb-1">{statusData.status}</p>
+                <p className="text-2xl font-bold text-[#5C2482]">{statusData.count}</p>
+                <p className="text-sm text-gray-500 mt-1">
                   {((statusData.count / analytics.enrollments.total) * 100).toFixed(1)}% of total
                 </p>
               </div>
@@ -354,8 +354,8 @@ export default function AnalyticsPage() {
 
         {/* Daily Activity Chart */}
         {analytics.activity.daily.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Daily Activity</h2>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-bold text-[#5C2482] mb-4">Daily Activity</h2>
             <div className="flex items-end justify-between h-48 gap-1">
               {analytics.activity.daily.map((day, index) => {
                 const maxCount = Math.max(...analytics.activity.daily.map(d => d.count))
@@ -363,11 +363,11 @@ export default function AnalyticsPage() {
                 return (
                   <div key={index} className="flex-1 flex flex-col items-center">
                     <div
-                      className="w-full bg-blue-500 dark:bg-blue-600 rounded-t hover:bg-blue-600 dark:hover:bg-blue-500 transition-all"
+                      className="w-full bg-blue-500 rounded-t hover:bg-[#F95B0E] transition-all"
                       style={{ height: `${height}%` }}
                       title={`${day.date}: ${day.count} actions`}
                     ></div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-2 transform -rotate-45 origin-top-left">
+                    <span className="text-xs text-gray-500 mt-2 transform -rotate-45 origin-top-left">
                       {new Date(day.date).getDate()}
                     </span>
                   </div>

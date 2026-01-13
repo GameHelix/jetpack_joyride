@@ -126,15 +126,15 @@ export default function UsersManagement() {
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'ADMIN':
-        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+        return 'bg-red-100 text-red-800
       case 'MODERATOR':
-        return 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200'
+        return 'bg-purple-100 text-purple-800
       case 'INSTRUCTOR':
-        return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+        return 'bg-blue-100 text-blue-800
       case 'STUDENT':
-        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+        return 'bg-green-100 text-green-800
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+        return 'bg-gray-100 text-gray-800
     }
   }
 
@@ -144,7 +144,7 @@ export default function UsersManagement() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading users...</p>
+            <p className="mt-2 text-gray-600">Loading users...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -157,23 +157,23 @@ export default function UsersManagement() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[#5C2482]">
               User Management
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-600">
               Manage user accounts and roles
             </p>
           </div>
           <div className="flex gap-3">
             <Link
               href="/admin/users/import"
-              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg font-medium"
+              className="px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition shadow-lg font-medium"
             >
               📊 Bulk Import
             </Link>
             <Link
               href="/admin/users/create"
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
             >
               + Create User
             </Link>
@@ -181,42 +181,42 @@ export default function UsersManagement() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-xl shadow overflow-hidden">
           {users.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">No users found</p>
+              <p className="text-gray-500">No users found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Activity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Joined
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={user.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          <div className="text-sm font-medium text-[#5C2482]">
                             {user.name}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-gray-500">
                             {user.email}
                           </div>
                         </div>
@@ -231,7 +231,7 @@ export default function UsersManagement() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="text-sm text-gray-600">
                           {user.role === 'STUDENT' && (
                             <span>{user._count.enrollments} enrollments</span>
                           )}
@@ -247,7 +247,7 @@ export default function UsersManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="text-sm text-gray-600">
                           {new Date(user.createdAt).toLocaleDateString()}
                         </div>
                       </td>
@@ -256,13 +256,13 @@ export default function UsersManagement() {
                           <>
                             <button
                               onClick={() => handleEditRole(user)}
-                              className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
+                              className="text-[#5C2482] hover:text-blue-900"
                             >
                               Edit Role
                             </button>
                             <button
                               onClick={() => handleDeleteUser(user)}
-                              className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
+                              className="text-red-600 hover:text-red-900"
                             >
                               Delete
                             </button>
@@ -284,32 +284,32 @@ export default function UsersManagement() {
       {/* Edit Role Modal */}
       {editingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-[#5C2482] mb-4">
               Change User Role
             </h2>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 rounded">
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                 {error}
               </div>
             )}
 
             <div className="mb-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <p className="text-sm text-gray-600 mb-2">
                 User: <strong>{editingUser.name}</strong> ({editingUser.email})
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-sm text-gray-600 mb-4">
                 Current role: <strong>{editingUser.role}</strong>
               </p>
 
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 New Role
               </label>
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
               >
                 <option value="STUDENT">Student</option>
                 <option value="INSTRUCTOR">Instructor</option>
@@ -326,7 +326,7 @@ export default function UsersManagement() {
                   setError(null)
                 }}
                 disabled={submitting}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -334,7 +334,7 @@ export default function UsersManagement() {
                 type="button"
                 onClick={handleSaveRole}
                 disabled={submitting || newRole === editingUser.role}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50"
               >
                 {submitting ? 'Saving...' : 'Save Changes'}
               </button>

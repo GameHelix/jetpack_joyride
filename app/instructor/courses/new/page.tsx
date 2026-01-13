@@ -58,18 +58,18 @@ export default function NewCoursePage() {
     <DashboardLayout role={session.user.role}>
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             Create New Course
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-gray-600">
             Set up a new course and create the first section
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
@@ -78,7 +78,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="code"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Course Code *
               </label>
@@ -90,11 +90,11 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, code: e.target.value.toUpperCase() })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., CS101"
                 maxLength={20}
               />
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-sm text-gray-500">
                 Unique identifier for the course
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Course Title *
               </label>
@@ -113,7 +113,7 @@ export default function NewCoursePage() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Introduction to Computer Science"
                 maxLength={200}
               />
@@ -123,7 +123,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -134,7 +134,7 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Provide a brief description of the course..."
               />
             </div>
@@ -143,7 +143,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="term"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Term/Semester *
               </label>
@@ -153,7 +153,7 @@ export default function NewCoursePage() {
                 required
                 value={formData.term}
                 onChange={(e) => setFormData({ ...formData, term: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Spring 2026, Fall 2026"
                 maxLength={50}
               />
@@ -163,7 +163,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="capacity"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Section Capacity *
               </label>
@@ -177,9 +177,9 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, capacity: parseInt(e.target.value) })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-sm text-gray-500">
                 Maximum number of students for the first section
               </p>
             </div>
@@ -193,29 +193,29 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, visibility: e.target.checked })
                 }
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-[#5C2482] border-gray-300 rounded focus:ring-blue-500"
               />
               <label
                 htmlFor="visibility"
-                className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="ml-2 text-sm font-medium text-gray-700"
               >
                 Make course visible to students
               </label>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                className="px-6 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
               >
                 {loading ? 'Creating...' : 'Create Course'}
               </button>

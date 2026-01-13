@@ -138,11 +138,11 @@ export default function SecurityLogsPage() {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'CRITICAL':
-        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+        return 'bg-red-100 text-red-800
       case 'WARNING':
-        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
+        return 'bg-yellow-100 text-yellow-800
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+        return 'bg-gray-100 text-gray-800
     }
   }
 
@@ -152,7 +152,7 @@ export default function SecurityLogsPage() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading security logs...</p>
+            <p className="mt-2 text-gray-600">Loading security logs...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -165,23 +165,23 @@ export default function SecurityLogsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[#5C2482]">
               Security & Access Logs
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-600">
               User authentication, logins, and security events
             </p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => handleExport('csv')}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
             >
               Export CSV
             </button>
             <button
               onClick={() => handleExport('json')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
             >
               Export JSON
             </button>
@@ -189,7 +189,7 @@ export default function SecurityLogsPage() {
         </div>
 
         {/* Info Banner */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
@@ -197,10 +197,10 @@ export default function SecurityLogsPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+              <h3 className="text-sm font-medium text-blue-800">
                 Security Logs
               </h3>
-              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+              <div className="mt-2 text-sm text-blue-700">
                 <p>This page shows authentication and security-related events including:</p>
                 <ul className="list-disc list-inside mt-1 space-y-1">
                   <li>User logins and logouts</li>
@@ -214,29 +214,29 @@ export default function SecurityLogsPage() {
         </div>
 
         {/* Stats */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Total Security Logs</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600">Total Security Logs</p>
+              <p className="text-2xl font-bold text-[#5C2482]">
                 {pagination.total.toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Current Page</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600">Current Page</p>
+              <p className="text-2xl font-bold text-[#5C2482]">
                 {pagination.page} / {pagination.totalPages}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Showing</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600">Showing</p>
+              <p className="text-2xl font-bold text-[#5C2482]">
                 {logs.length} logs
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Active Filters</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600">Active Filters</p>
+              <p className="text-2xl font-bold text-[#5C2482]">
                 {[search, startDate, endDate].filter(Boolean).length}
               </p>
             </div>
@@ -244,12 +244,12 @@ export default function SecurityLogsPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
+            <h2 className="text-lg font-semibold text-[#5C2482]">Filters</h2>
             <button
               onClick={resetFilters}
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-sm text-[#5C2482] hover:underline"
             >
               Reset All
             </button>
@@ -258,7 +258,7 @@ export default function SecurityLogsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search
               </label>
               <input
@@ -269,13 +269,13 @@ export default function SecurityLogsPage() {
                   setPagination({ ...pagination, page: 1 })
                 }}
                 placeholder="Search users or events..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
               />
             </div>
 
             {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Start Date
               </label>
               <input
@@ -285,13 +285,13 @@ export default function SecurityLogsPage() {
                   setStartDate(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
               />
             </div>
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 End Date
               </label>
               <input
@@ -301,62 +301,62 @@ export default function SecurityLogsPage() {
                   setEndDate(e.target.value)
                   setPagination({ ...pagination, page: 1 })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl"
               />
             </div>
           </div>
         </div>
 
         {/* Security Logs Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-xl shadow overflow-hidden">
           {logs.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">No security logs found</p>
+              <p className="text-gray-500">No security logs found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-900">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Timestamp
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Event
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Severity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Details
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <tr key={log.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 dark:text-white">
+                        <div className="text-sm text-[#5C2482]">
                           {new Date(log.createdAt).toLocaleString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          <div className="text-sm font-medium text-[#5C2482]">
                             {log.user?.name || 'System'}
                           </div>
                           {log.user && (
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-sm text-gray-500">
                               {log.user.email}
                             </div>
                           )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           {log.action}
                         </span>
                       </td>
@@ -372,10 +372,10 @@ export default function SecurityLogsPage() {
                       <td className="px-6 py-4">
                         {log.details && (
                           <details className="text-sm">
-                            <summary className="cursor-pointer text-blue-600 dark:text-blue-400 hover:underline">
+                            <summary className="cursor-pointer text-[#5C2482] hover:underline">
                               View details
                             </summary>
-                            <pre className="mt-2 p-2 bg-gray-100 dark:bg-gray-900 rounded text-xs overflow-auto max-w-md">
+                            <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto max-w-md">
                               {JSON.stringify(log.details, null, 2)}
                             </pre>
                           </details>
@@ -391,21 +391,21 @@ export default function SecurityLogsPage() {
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white dark:bg-gray-800 px-6 py-3 rounded-lg shadow">
+          <div className="flex items-center justify-between bg-white px-6 py-3 rounded-xl shadow">
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
               disabled={pagination.page === 1}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-gray-600">
               Page {pagination.page} of {pagination.totalPages}
             </span>
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
               disabled={pagination.page === pagination.totalPages}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>

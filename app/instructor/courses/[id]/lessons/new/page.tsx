@@ -91,18 +91,18 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
     <DashboardLayout role={session.user.role}>
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             Create New Lesson
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-gray-600">
             Schedule a new class session
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
@@ -111,7 +111,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Lesson Title *
               </label>
@@ -121,7 +121,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Introduction to Variables"
                 maxLength={200}
               />
@@ -131,7 +131,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -142,7 +142,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Brief description of the lesson..."
               />
             </div>
@@ -151,7 +151,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
             <div>
               <label
                 htmlFor="dayOfWeek"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Day of Week *
               </label>
@@ -162,7 +162,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 onChange={(e) =>
                   setFormData({ ...formData, dayOfWeek: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {DAYS_OF_WEEK.map((day) => (
                   <option key={day.value} value={day.value}>
@@ -177,7 +177,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
               <div>
                 <label
                   htmlFor="startTime"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Start Time *
                 </label>
@@ -189,14 +189,14 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                   onChange={(e) =>
                     setFormData({ ...formData, startTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="endTime"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   End Time *
                 </label>
@@ -208,7 +208,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                   onChange={(e) =>
                     setFormData({ ...formData, endTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
             <div>
               <label
                 htmlFor="roomId"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Room (Optional)
               </label>
@@ -227,7 +227,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 onChange={(e) =>
                   setFormData({ ...formData, roomId: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">No room assigned</option>
                 {rooms.map((room) => (
@@ -238,25 +238,25 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 ))}
               </select>
               {rooms.length === 0 && (
-                <p className="mt-1 text-sm text-yellow-600 dark:text-yellow-400">
+                <p className="mt-1 text-sm text-yellow-600">
                   No rooms available. Contact an administrator to add rooms.
                 </p>
               )}
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                className="px-6 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
               >
                 {loading ? 'Creating...' : 'Create Lesson'}
               </button>

@@ -31,7 +31,7 @@ export default function BulkUserImportPage() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading...</p>
+            <p className="mt-2 text-gray-600">Loading...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -115,23 +115,23 @@ export default function BulkUserImportPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[#5C2482]">
               Bulk User Import
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-600">
               Import multiple users from an Excel or CSV file
             </p>
           </div>
           <Link
             href="/admin/users"
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+            className="px-4 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition"
           >
             Back to Users
           </Link>
         </div>
 
         {/* Instructions */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <svg className="h-6 w-6 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
@@ -139,10 +139,10 @@ export default function BulkUserImportPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-lg font-medium text-blue-800 dark:text-blue-200">
+              <h3 className="text-lg font-medium text-blue-800">
                 Instructions
               </h3>
-              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+              <div className="mt-2 text-sm text-blue-700">
                 <ol className="list-decimal list-inside space-y-2">
                   <li>
                     Download the template file below and fill it with user data
@@ -151,10 +151,10 @@ export default function BulkUserImportPage() {
                     Required columns: <strong>name</strong>, <strong>email</strong>, <strong>role</strong>
                   </li>
                   <li>
-                    Valid roles: <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">ADMIN</code>,
-                    <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded ml-1">MODERATOR</code>,
-                    <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded ml-1">INSTRUCTOR</code>,
-                    <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded ml-1">STUDENT</code>
+                    Valid roles: <code className="bg-blue-100 px-1 rounded">ADMIN</code>,
+                    <code className="bg-blue-100 px-1 rounded ml-1">MODERATOR</code>,
+                    <code className="bg-blue-100 px-1 rounded ml-1">INSTRUCTOR</code>,
+                    <code className="bg-blue-100 px-1 rounded ml-1">STUDENT</code>
                   </li>
                   <li>
                     <strong>Passwords are automatically generated</strong> - secure random passwords will be created for each user
@@ -175,7 +175,7 @@ export default function BulkUserImportPage() {
         </div>
 
         {/* Security Notice */}
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <svg className="h-6 w-6 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -183,10 +183,10 @@ export default function BulkUserImportPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-lg font-medium text-green-800 dark:text-green-200">
+              <h3 className="text-lg font-medium text-green-800">
                 Secure Password Management
               </h3>
-              <p className="mt-2 text-sm text-green-700 dark:text-green-300">
+              <p className="mt-2 text-sm text-green-700">
                 For security reasons, you do not need to provide passwords in the Excel file.
                 The system will automatically generate secure, random passwords for each user and
                 send them via email. Users will be prompted to change their password on first login.
@@ -196,15 +196,15 @@ export default function BulkUserImportPage() {
         </div>
 
         {/* Template Download */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-semibold text-[#5C2482] mb-4">
             Download Template
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-gray-600 mb-4">
             Download this template file, <strong>replace the example emails with real user emails</strong>, and upload it below.
           </p>
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded p-3 mb-4">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+          <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
+            <p className="text-sm text-yellow-800">
               ⚠️ <strong>Important:</strong> The template contains example emails like "student@yourdomain.com".
               You must replace these with real, unique email addresses before uploading.
             </p>
@@ -212,27 +212,27 @@ export default function BulkUserImportPage() {
           <a
             href="/templates/bulk-user-import-template.xlsx"
             download="bulk-user-import-template.xlsx"
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            className="inline-flex items-center px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Download Template (Excel)
           </a>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-xs text-gray-500 mt-2">
             Excel file with example data and proper formatting
           </p>
         </div>
 
         {/* File Upload */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-semibold text-[#5C2482] mb-4">
             Upload File
           </h2>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Excel or CSV file
               </label>
               <input
@@ -240,16 +240,16 @@ export default function BulkUserImportPage() {
                 type="file"
                 accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
                 onChange={handleFileChange}
-                className="block w-full text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 focus:outline-none"
+                className="block w-full text-sm text-[#5C2482] border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none"
               />
             </div>
 
             {file && (
-              <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Selected file: <span className="font-medium text-gray-900 dark:text-white">{file.name}</span>
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-600">
+                  Selected file: <span className="font-medium text-[#5C2482]">{file.name}</span>
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   Size: {(file.size / 1024).toFixed(2)} KB
                 </p>
               </div>
@@ -258,10 +258,10 @@ export default function BulkUserImportPage() {
             <button
               onClick={handleUpload}
               disabled={!file || uploading}
-              className={`w-full px-4 py-3 rounded-lg transition font-medium ${
+              className={`w-full px-4 py-3 rounded-xl transition font-medium ${
                 !file || uploading
-                  ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-[#F95B0E] text-white hover:bg-[#d94f0c]'
               }`}
             >
               {uploading ? (
@@ -278,10 +278,10 @@ export default function BulkUserImportPage() {
 
         {/* Results */}
         {result && (
-          <div className={`rounded-lg shadow p-6 ${
+          <div className={`rounded-xl shadow p-6 ${
             result.success
-              ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-              : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+              ? 'bg-green-50 border border-green-200
+              : 'bg-red-50 border border-red-200
           }`}>
             <div className="flex items-start">
               <div className="flex-shrink-0">
@@ -298,20 +298,20 @@ export default function BulkUserImportPage() {
               <div className="ml-3 flex-1">
                 <h3 className={`text-lg font-medium ${
                   result.success
-                    ? 'text-green-800 dark:text-green-200'
-                    : 'text-red-800 dark:text-red-200'
+                    ? 'text-green-800
+                    : 'text-red-800
                 }`}>
                   {result.success ? 'Import Successful' : 'Import Failed'}
                 </h3>
                 <div className={`mt-2 text-sm ${
                   result.success
-                    ? 'text-green-700 dark:text-green-300'
-                    : 'text-red-700 dark:text-red-300'
+                    ? 'text-green-700
+                    : 'text-red-700
                 }`}>
                   <p>{result.message}</p>
 
                   {result.imported !== undefined && result.failed !== undefined && (
-                    <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded border border-green-200 dark:border-green-700">
+                    <div className="mt-3 p-3 bg-white rounded border border-green-200">
                       <p className="font-medium">Import Summary:</p>
                       <ul className="list-disc list-inside mt-1 space-y-1">
                         <li>Successfully imported: {result.imported} users</li>
@@ -332,14 +332,14 @@ export default function BulkUserImportPage() {
                       </p>
                       <div className="max-h-60 overflow-y-auto space-y-2">
                         {result.errors.map((error, index) => (
-                          <div key={index} className="p-2 bg-white dark:bg-gray-800 rounded text-xs">
+                          <div key={index} className="p-2 bg-white rounded text-xs">
                             <p>
                               <strong>Row {error.row}:</strong> {error.email}
                             </p>
                             <p className={`mt-1 ${
                               error.error.includes('already exists')
-                                ? 'text-orange-600 dark:text-orange-400'
-                                : 'text-red-600 dark:text-red-400'
+                                ? 'text-orange-600
+                                : 'text-red-600
                             }`}>
                               {error.error}
                             </p>
@@ -347,8 +347,8 @@ export default function BulkUserImportPage() {
                         ))}
                       </div>
                       {result.errors.filter(e => e.error.includes('already exists')).length === result.errors.length && (
-                        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded">
-                          <p className="text-xs text-blue-700 dark:text-blue-300">
+                        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                          <p className="text-xs text-blue-700">
                             💡 <strong>Tip:</strong> All errors are due to existing users. Remove these emails from your file or use different email addresses for testing.
                           </p>
                         </div>
@@ -361,7 +361,7 @@ export default function BulkUserImportPage() {
                   <div className="mt-4">
                     <Link
                       href="/admin/users"
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
+                      className="inline-flex items-center px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-sm"
                     >
                       View All Users
                       <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

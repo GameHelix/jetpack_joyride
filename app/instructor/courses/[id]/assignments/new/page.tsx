@@ -91,18 +91,18 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
     <DashboardLayout role={session.user.role}>
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             Create New Assignment
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-gray-600">
             Set up a new assignment for students
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
@@ -111,7 +111,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Assignment Title *
               </label>
@@ -121,7 +121,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Project 1: Portfolio Website"
                 maxLength={200}
               />
@@ -131,7 +131,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -142,7 +142,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Provide detailed instructions for the assignment..."
               />
             </div>
@@ -152,7 +152,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
               <div>
                 <label
                   htmlFor="dueDate"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Due Date *
                 </label>
@@ -165,14 +165,14 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                   onChange={(e) =>
                     setFormData({ ...formData, dueDate: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="dueTime"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Due Time *
                 </label>
@@ -184,14 +184,14 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                   onChange={(e) =>
                     setFormData({ ...formData, dueTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             {/* Allowed File Types */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Allowed File Types (Optional)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -204,15 +204,15 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                       type="checkbox"
                       checked={formData.allowedFileTypes.includes(type.value)}
                       onChange={() => handleFileTypeToggle(type.value)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#5C2482] border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className="text-sm text-gray-700">
                       {type.label}
                     </span>
                   </label>
                 ))}
               </div>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-2 text-sm text-gray-500">
                 Leave unchecked to allow all file types
               </p>
             </div>
@@ -221,7 +221,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="maxSize"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Maximum File Size *
               </label>
@@ -232,7 +232,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 onChange={(e) =>
                   setFormData({ ...formData, maxSizeBytes: parseInt(e.target.value) })
                 }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value={5242880}>5 MB</option>
                 <option value={10485760}>10 MB</option>
@@ -243,18 +243,18 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                className="px-6 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
               >
                 {loading ? 'Creating...' : 'Create Assignment'}
               </button>

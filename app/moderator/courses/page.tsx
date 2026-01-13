@@ -60,19 +60,19 @@ export default function ModeratorCourses() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">All Courses</h1>
+            <h1 className="text-3xl font-bold text-[#5C2482]">All Courses</h1>
             <p className="mt-2 text-gray-600">Browse and view all courses in the system</p>
           </div>
         </div>
 
         {/* Search/Filter */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-xl shadow p-4">
           <input
             type="text"
             placeholder="Search courses by code, title, or term..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
@@ -81,11 +81,11 @@ export default function ModeratorCourses() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : filteredCourses.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
+          <div className="bg-white rounded-xl shadow p-12 text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No courses found</h3>
+            <h3 className="mt-2 text-sm font-medium text-[#5C2482]">No courses found</h3>
             <p className="mt-1 text-sm text-gray-500">
               {filter ? 'Try adjusting your search criteria.' : 'No courses available in the system.'}
             </p>
@@ -93,12 +93,12 @@ export default function ModeratorCourses() {
         ) : (
           <div className="grid grid-cols-1 gap-6">
             {filteredCourses.map((course) => (
-              <div key={course.id} className="bg-white rounded-lg shadow overflow-hidden">
+              <div key={course.id} className="bg-white rounded-xl shadow overflow-hidden">
                 <div className="p-6">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="flex items-center">
-                        <h3 className="text-xl font-bold text-gray-900">{course.code}</h3>
+                        <h3 className="text-xl font-bold text-[#5C2482]">{course.code}</h3>
                         <span className="ml-3 px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                           {course.term}
                         </span>
@@ -119,10 +119,10 @@ export default function ModeratorCourses() {
                   <div className="mt-6 space-y-4">
                     <h4 className="text-sm font-semibold text-gray-700 uppercase">Sections</h4>
                     {course.sections.map((section) => (
-                      <div key={section.id} className="border border-gray-200 rounded-lg p-4">
+                      <div key={section.id} className="border border-gray-200 rounded-xl p-4">
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm font-medium text-[#5C2482]">
                               Instructor: {section.instructor.name}
                             </p>
                             <p className="text-xs text-gray-500">{section.instructor.email}</p>

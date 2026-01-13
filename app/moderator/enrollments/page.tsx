@@ -103,7 +103,7 @@ export default function ModeratorEnrollments() {
     <DashboardLayout role="MODERATOR">
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Pending Enrollments</h1>
+          <h1 className="text-3xl font-bold text-[#5C2482]">Pending Enrollments</h1>
           <p className="mt-2 text-gray-600">
             Review and manage enrollment requests
           </p>
@@ -114,15 +114,15 @@ export default function ModeratorEnrollments() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : enrollments.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
+          <div className="bg-white rounded-xl shadow p-12 text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No pending enrollments</h3>
+            <h3 className="mt-2 text-sm font-medium text-[#5C2482]">No pending enrollments</h3>
             <p className="mt-1 text-sm text-gray-500">All enrollment requests have been processed.</p>
           </div>
         ) : (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="bg-white shadow rounded-xl overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -148,18 +148,18 @@ export default function ModeratorEnrollments() {
                   <tr key={enrollment.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{enrollment.user.name}</div>
+                        <div className="text-sm font-medium text-[#5C2482]">{enrollment.user.name}</div>
                         <div className="text-sm text-gray-500">{enrollment.user.email}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{enrollment.section.course.code}</div>
+                        <div className="text-sm font-medium text-[#5C2482]">{enrollment.section.course.code}</div>
                         <div className="text-sm text-gray-500">{enrollment.section.course.title}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{enrollment.section.instructor.name}</div>
+                      <div className="text-sm text-[#5C2482]">{enrollment.section.instructor.name}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {format(new Date(enrollment.enrolledAt), 'MMM d, yyyy')}
@@ -168,7 +168,7 @@ export default function ModeratorEnrollments() {
                       <button
                         onClick={() => handleApprove(enrollment.id)}
                         disabled={processing === enrollment.id}
-                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-[#F95B0E] hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {processing === enrollment.id ? 'Processing...' : 'Approve'}
                       </button>

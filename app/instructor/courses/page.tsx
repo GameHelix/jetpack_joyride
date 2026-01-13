@@ -43,23 +43,23 @@ export default async function InstructorCoursesPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[#5C2482]">
               My Courses
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-600">
               Manage your courses and sections
             </p>
           </div>
           <Link
             href="/instructor/courses/new"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+            className="px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition font-medium"
           >
             + Create Course
           </Link>
         </div>
 
         {/* Courses List */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div className="bg-white rounded-xl shadow">
           {sections.length === 0 ? (
             <div className="p-12 text-center">
               <svg
@@ -75,27 +75,27 @@ export default async function InstructorCoursesPage() {
                   d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                 />
               </svg>
-              <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+              <h3 className="mt-2 text-lg font-medium text-[#5C2482]">
                 No courses yet
               </h3>
-              <p className="mt-1 text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-gray-500">
                 Get started by creating your first course.
               </p>
               <div className="mt-6">
                 <Link
                   href="/instructor/courses/new"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#F95B0E] hover:bg-[#d94f0c]"
                 >
                   + Create Course
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+            <div className="divide-y divide-gray-200">
               {sections.map((section) => (
                 <div
                   key={section.id}
-                  className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                  className="p-6 hover:bg-gray-50/50 transition"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -103,16 +103,16 @@ export default async function InstructorCoursesPage() {
                         href={`/instructor/courses/${section.course.id}`}
                         className="group"
                       >
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                        <h3 className="text-lg font-semibold text-[#5C2482] group-hover:text-[#5C2482]">
                           {section.course.code}: {section.course.title}
                         </h3>
                       </Link>
                       {section.course.description && (
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
                           {section.course.description}
                         </p>
                       )}
-                      <div className="mt-4 flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="mt-4 flex items-center space-x-6 text-sm text-gray-500">
                         <div className="flex items-center">
                           <svg
                             className="mr-1.5 h-5 w-5"
@@ -182,7 +182,7 @@ export default async function InstructorCoursesPage() {
                     <div className="ml-4 flex space-x-2">
                       <Link
                         href={`/instructor/courses/${section.course.id}`}
-                        className="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
+                        className="px-4 py-2 text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
                       >
                         Manage
                       </Link>
