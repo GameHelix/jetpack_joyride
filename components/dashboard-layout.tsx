@@ -31,7 +31,11 @@ const navigationByRole: Record<
     { name: 'Assignments', href: '/instructor/assignments', icon: '📝' },
     { name: 'Schedule', href: '/instructor/schedule', icon: '📅' },
   ],
-  MODERATOR: [],
+  MODERATOR: [
+    { name: 'Dashboard', href: '/moderator', icon: '📊' },
+    { name: 'Enrollments', href: '/moderator/enrollments', icon: '✅' },
+    { name: 'Courses', href: '/moderator/courses', icon: '📚' },
+  ],
   STUDENT: [
     { name: 'Dashboard', href: '/student', icon: '📊' },
     { name: 'Courses', href: '/student/courses', icon: '📚' },
@@ -46,27 +50,27 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const pathname = usePathname()
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
       {/* Top Navigation */}
-      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <nav className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
               <Link
                 href="/dashboard"
-                className="flex items-center text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+                className="flex items-center text-2xl font-bold text-white"
               >
                 Educy
               </Link>
-              <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
+              <div className="hidden sm:ml-8 sm:flex sm:space-x-6">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition ${
+                    className={`inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition ${
                       pathname === item.href
-                        ? 'border-blue-500 text-gray-900 dark:text-white'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                        ? 'bg-white/20 text-white'
+                        : 'text-purple-100 hover:bg-white/10 hover:text-white'
                     }`}
                   >
                     <span className="mr-2">{item.icon}</span>
@@ -76,15 +80,15 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-purple-100">
                 {session?.user?.name}
               </span>
-              <span className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+              <span className="px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
                 {session?.user?.role}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition"
+                className="text-sm text-purple-100 hover:text-white transition px-3 py-2 rounded-lg hover:bg-white/10"
               >
                 Sign Out
               </button>
@@ -93,16 +97,16 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="sm:hidden border-t border-gray-200 dark:border-gray-700">
+        <div className="sm:hidden border-t border-purple-400/30">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                className={`block pl-3 pr-4 py-2 text-base font-medium ${
                   pathname === item.href
-                    ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-700 dark:text-blue-300'
-                    : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-800'
+                    ? 'bg-white/20 text-white border-l-4 border-white'
+                    : 'text-purple-100 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <span className="mr-2">{item.icon}</span>
