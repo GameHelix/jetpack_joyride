@@ -129,6 +129,7 @@ export default function SignInPage() {
                     className="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent transition"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -145,6 +146,7 @@ export default function SignInPage() {
                     className="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-12 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent transition"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
                     required
                   />
                   {showPassword ? (
