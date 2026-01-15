@@ -107,7 +107,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
   async function toggleRoomStatus() {
     try {
       const response = await fetch(`/api/case-rooms/${params.id}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           isActive: !room?.isActive,
