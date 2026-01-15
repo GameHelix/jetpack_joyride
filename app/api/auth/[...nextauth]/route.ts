@@ -6,7 +6,10 @@ import { rateLimitByIP, rateLimitByIdentifier, RateLimitPresets, logRateLimitVio
 const handler = NextAuth(authOptions)
 
 // Wrap NextAuth handler with rate limiting for POST requests (login/auth)
-async function POST(request: NextRequest) {
+async function POST(
+  request: NextRequest,
+  context: { params: { nextauth: string[] } }
+) {
   // Only rate limit credential login attempts (not session checks)
   const url = new URL(request.url)
   const isCredentialProvider = url.pathname.includes('callback/credentials')
@@ -37,18 +40,21 @@ async function POST(request: NextRequest) {
           headers: request.headers,
           body: JSON.stringify(body),
         })
-        return handler(newRequest as any)
+        return handler(newRequest as any, context as any)
       }
     } catch (e) {
       // If body parsing fails, continue without email-based rate limiting
     }
   }
 
-  return handler(request as any)
+  return handler(request as any, context as any)
 }
 
-async function GET(request: NextRequest) {
-  return handler(request as any)
+async function GET(
+  request: NextRequest,
+  context: { params: { nextauth: string[] } }
+) {
+  return handler(request as any, context as any)
 }
 
 export { GET, POST }
