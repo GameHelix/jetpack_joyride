@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Assignment {
   id: string
@@ -98,12 +99,14 @@ export default function StudentDashboardPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your dashboard...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
@@ -139,8 +142,9 @@ export default function StudentDashboardPage() {
   const activeCaseRooms = caseRooms.filter(c => c.isActive)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <DashboardLayout role="STUDENT">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
@@ -370,7 +374,8 @@ export default function StudentDashboardPage() {
             <p className="text-gray-600">You have no upcoming tasks this week</p>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
