@@ -1,10 +1,52 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  // Redirect logged-in users to their dashboard
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      const roleRoutes = {
+        ADMIN: '/admin',
+        INSTRUCTOR: '/instructor',
+        MODERATOR: '/moderator',
+        STUDENT: '/student/dashboard',
+      }
+      const route = roleRoutes[session.user.role as keyof typeof roleRoutes] || '/dashboard'
+      router.push(route)
+    }
+  }, [status, session, router])
+
+  // Show loading state while checking authentication
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#5C2482] mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Don't show landing page content while redirecting authenticated users
+  if (status === 'authenticated') {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#5C2482] mb-4"></div>
+          <p className="text-gray-600">Redirecting to dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white">
