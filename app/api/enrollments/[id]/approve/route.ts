@@ -17,8 +17,8 @@ export async function POST(
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only instructors and admins can approve enrollments
-    if (user.role !== 'INSTRUCTOR' && user.role !== 'ADMIN') {
+    // Only instructors, moderators, and admins can approve enrollments
+    if (user.role !== 'INSTRUCTOR' && user.role !== 'MODERATOR' && user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -60,6 +60,7 @@ export async function POST(
     }
 
     // Check if user has permission to approve this enrollment
+    // Instructors can only approve their own sections, Moderators and Admins can approve any
     if (
       user.role === 'INSTRUCTOR' &&
       enrollment.section.instructorId !== user.id

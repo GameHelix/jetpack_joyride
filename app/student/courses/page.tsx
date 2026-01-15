@@ -48,10 +48,17 @@ interface Enrollment {
   }
 }
 
+interface Certificate {
+  id: string
+  sectionId: string
+  certificateNumber: string
+}
+
 export default function StudentCoursesPage() {
   const { data: session, status } = useSession()
   const [enrolledCourses, setEnrolledCourses] = useState<Enrollment[]>([])
   const [availableCourses, setAvailableCourses] = useState<Course[]>([])
+  const [certificates, setCertificates] = useState<Certificate[]>([])
   const [pendingSections, setPendingSections] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [enrolling, setEnrolling] = useState<string | null>(null)
@@ -64,15 +71,17 @@ export default function StudentCoursesPage() {
 
   const fetchCourses = async () => {
     try {
-      const [enrolledRes, availableRes, pendingRes] = await Promise.all([
+      const [enrolledRes, availableRes, pendingRes, certificatesRes] = await Promise.all([
         fetch('/api/student/enrollments'),
         fetch('/api/student/courses/available'),
         fetch('/api/enrollments/my-requests'),
+        fetch('/api/student/certificates'),
       ])
 
       const enrolledData = await enrolledRes.json()
       const availableData = await availableRes.json()
       const pendingData = await pendingRes.json()
+      const certificatesData = await certificatesRes.json()
 
       if (enrolledData.success) {
         setEnrolledCourses(enrolledData.enrollments || [])
@@ -80,6 +89,10 @@ export default function StudentCoursesPage() {
 
       if (availableData.success) {
         setAvailableCourses(availableData.courses || [])
+      }
+
+      if (certificatesData.success) {
+        setCertificates(certificatesData.certificates || [])
       }
 
       // Track pending section IDs
@@ -139,16 +152,31 @@ export default function StudentCoursesPage() {
     redirect('/auth/signin')
   }
 
+  // Split courses into ongoing and completed
+  const certificateSectionIds = new Set(certificates.map(cert => cert.sectionId))
+  const ongoingCourses = enrolledCourses.filter(enrollment => !certificateSectionIds.has(enrollment.section.id))
+  const completedCourses = enrolledCourses.filter(enrollment => certificateSectionIds.has(enrollment.section.id))
+
   return (
     <DashboardLayout role={session.user.role}>
       <div className="space-y-8">
-        {/* Enrolled Courses */}
+        {/* Page Header */}
         <div>
-          <h1 className="text-3xl font-bold text-[#5C2482] mb-6">
+          <h1 className="text-3xl font-bold text-[#5C2482]">
             My Courses
           </h1>
+          <p className="mt-2 text-gray-600">
+            {ongoingCourses.length} ongoing, {completedCourses.length} completed
+          </p>
+        </div>
 
-          {enrolledCourses.length === 0 ? (
+        {/* Ongoing Courses */}
+        <div>
+          <h2 className="text-2xl font-semibold text-[#5C2482] mb-4">
+            🎯 Ongoing Courses ({ongoingCourses.length})
+          </h2>
+
+          {ongoingCourses.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
               <div className="text-6xl mb-4">📚</div>
               <p className="text-gray-600 text-lg mb-2 font-medium">No courses yet</p>
@@ -158,7 +186,7 @@ export default function StudentCoursesPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-              {enrolledCourses.map((enrollment) => (
+              {ongoingCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
                   className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-[#5C2482]/20 transition-all duration-200"
@@ -216,6 +244,61 @@ export default function StudentCoursesPage() {
             </div>
           )}
         </div>
+
+        {/* Completed Courses */}
+        {completedCourses.length > 0 && (
+          <div>
+            <h2 className="text-2xl font-semibold text-[#5C2482] mb-4">
+              ✅ Completed Courses ({completedCourses.length})
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+              {completedCourses.map((enrollment) => (
+                <div
+                  key={enrollment.id}
+                  className="bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-sm border-2 border-green-200 hover:shadow-xl transition-all duration-200"
+                >
+                  <div className="p-5 sm:p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <span className="inline-block px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-green-600/10 to-green-700/10 text-green-700 rounded-full border border-green-300">
+                        {enrollment.section.course.code}
+                      </span>
+                      <span className="flex items-center gap-1 text-green-700 text-xs font-semibold bg-green-100 px-3 py-1.5 rounded-full">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                          <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Completed
+                      </span>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                      {enrollment.section.course.title}
+                    </h3>
+                    {enrollment.section.course.description && (
+                      <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
+                        {enrollment.section.course.description}
+                      </p>
+                    )}
+                    <div className="space-y-2 pt-4 border-t border-green-100">
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span className="font-medium">{enrollment.section.instructor.name}</span>
+                      </div>
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {enrollment.section.term}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Available Courses */}
         {availableCourses.length > 0 && (

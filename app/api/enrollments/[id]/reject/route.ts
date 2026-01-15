@@ -22,8 +22,8 @@ export async function POST(
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only instructors and admins can reject enrollments
-    if (user.role !== 'INSTRUCTOR' && user.role !== 'ADMIN') {
+    // Only instructors, moderators, and admins can reject enrollments
+    if (user.role !== 'INSTRUCTOR' && user.role !== 'MODERATOR' && user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -68,6 +68,7 @@ export async function POST(
     }
 
     // Check if user has permission to reject this enrollment
+    // Instructors can only reject their own sections, Moderators and Admins can reject any
     if (
       user.role === 'INSTRUCTOR' &&
       enrollment.section.instructorId !== user.id
