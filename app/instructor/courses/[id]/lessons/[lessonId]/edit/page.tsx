@@ -22,6 +22,24 @@ interface Room {
   capacity: number
 }
 
+interface Lesson {
+  id: string
+  title: string
+  description: string | null
+  dayOfWeek: string
+  startTime: string
+  endTime: string
+  roomId: string | null
+  section: {
+    id: string
+    course: {
+      id: string
+      code: string
+      title: string
+    }
+  }
+}
+
 interface RoomSchedule {
   id: string
   title: string
@@ -34,12 +52,15 @@ interface RoomSchedule {
   instructor: string
 }
 
-export default function NewLessonPage({ params }: { params: { id: string } }) {
+export default function EditLessonPage({ params }: { params: { id: string; lessonId: string } }) {
   const router = useRouter()
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
+  const [fetching, setFetching] = useState(true)
   const [error, setError] = useState('')
   const [rooms, setRooms] = useState<Room[]>([])
+  const [lesson, setLesson] = useState<Lesson | null>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [roomSchedule, setRoomSchedule] = useState<RoomSchedule[]>([])
   const [loadingSchedule, setLoadingSchedule] = useState(false)
 
@@ -51,6 +72,36 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
     endTime: '10:30',
     roomId: '',
   })
+
+  // Fetch lesson data
+  useEffect(() => {
+    const fetchLesson = async () => {
+      try {
+        const response = await fetch(`/api/sections/${params.id}/lessons/${params.lessonId}`)
+        const data = await response.json()
+
+        if (data.success && data.lesson) {
+          setLesson(data.lesson)
+          setFormData({
+            title: data.lesson.title,
+            description: data.lesson.description || '',
+            dayOfWeek: data.lesson.dayOfWeek,
+            startTime: data.lesson.startTime,
+            endTime: data.lesson.endTime,
+            roomId: data.lesson.roomId || '',
+          })
+        } else {
+          setError('Failed to load lesson')
+        }
+      } catch (err) {
+        setError('Failed to load lesson')
+      } finally {
+        setFetching(false)
+      }
+    }
+
+    fetchLesson()
+  }, [params.id, params.lessonId])
 
   // Fetch available rooms
   useEffect(() => {
@@ -77,7 +128,9 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
       .then((data) => {
         if (data.success && data.availability && data.availability.length > 0) {
           const schedule = data.availability[0].schedule[formData.dayOfWeek] || []
-          setRoomSchedule(schedule)
+          // Filter out the current lesson from the schedule
+          const filteredSchedule = schedule.filter((l: RoomSchedule) => l.id !== params.lessonId)
+          setRoomSchedule(filteredSchedule)
         } else {
           setRoomSchedule([])
         }
@@ -87,7 +140,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
         setRoomSchedule([])
       })
       .finally(() => setLoadingSchedule(false))
-  }, [formData.roomId, formData.dayOfWeek])
+  }, [formData.roomId, formData.dayOfWeek, params.lessonId])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,29 +148,28 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
     setLoading(true)
 
     try {
-      const response = await fetch(`/api/sections/${params.id}/lessons`, {
-        method: 'POST',
+      const response = await fetch(`/api/sections/${params.id}/lessons/${params.lessonId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...formData,
-          roomId: formData.roomId || undefined,
+          roomId: formData.roomId || null,
         }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create lesson')
+        throw new Error(data.error || 'Failed to update lesson')
       }
 
-      // Redirect back to course page using the courseId from the response
-      const courseId = data.lesson?.section?.course?.id || data.lesson?.section?.courseId
+      // Redirect back to course page
+      const courseId = lesson?.section?.course?.id
       if (courseId) {
         router.push(`/instructor/courses/${courseId}`)
       } else {
-        // Fallback: go back
         router.back()
       }
       router.refresh()
@@ -128,8 +180,49 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
     }
   }
 
+  const handleDelete = async () => {
+    setError('')
+    setLoading(true)
+
+    try {
+      const response = await fetch(`/api/sections/${params.id}/lessons/${params.lessonId}`, {
+        method: 'DELETE',
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete lesson')
+      }
+
+      // Redirect back to course page
+      const courseId = lesson?.section?.course?.id
+      if (courseId) {
+        router.push(`/instructor/courses/${courseId}`)
+      } else {
+        router.back()
+      }
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+      setShowDeleteConfirm(false)
+    }
+  }
+
   if (!session?.user) {
     return null
+  }
+
+  if (fetching) {
+    return (
+      <DashboardLayout role={session.user.role}>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-500">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (
@@ -137,11 +230,13 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-[#5C2482]">
-            Create New Lesson
+            Edit Lesson
           </h1>
-          <p className="mt-2 text-gray-600">
-            Schedule a new class session
-          </p>
+          {lesson && (
+            <p className="mt-2 text-gray-600">
+              {lesson.section.course.code}: {lesson.section.course.title}
+            </p>
+          )}
         </div>
 
         <div className="bg-white rounded-xl shadow p-6">
@@ -338,24 +433,62 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
               <button
                 type="button"
-                onClick={() => router.back()}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
+                onClick={() => setShowDeleteConfirm(true)}
+                className="px-6 py-2 border border-red-300 text-red-700 rounded-xl hover:bg-red-50 transition"
               >
-                Cancel
+                Delete Lesson
               </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
-              >
-                {loading ? 'Creating...' : 'Create Lesson'}
-              </button>
+              <div className="flex items-center space-x-4">
+                <button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                >
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
             </div>
           </form>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+              <h3 className="text-xl font-bold text-red-600 mb-4">
+                Delete Lesson?
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this lesson? This action cannot be undone.
+              </p>
+              <div className="flex items-center justify-end space-x-4">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+                >
+                  {loading ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   )

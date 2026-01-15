@@ -191,7 +191,7 @@ export default async function CourseDetailPage({
                 {section.lessons.map((lesson) => (
                   <div
                     key={lesson.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
                   >
                     <div>
                       <h3 className="font-medium text-[#5C2482]">
@@ -201,7 +201,18 @@ export default async function CourseDetailPage({
                         {lesson.dayOfWeek} • {lesson.startTime} - {lesson.endTime}
                         {lesson.room && ` • ${lesson.room.name}`}
                       </p>
+                      {lesson.description && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          {lesson.description}
+                        </p>
+                      )}
                     </div>
+                    <Link
+                      href={`/instructor/courses/${section.id}/lessons/${lesson.id}/edit`}
+                      className="px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-sm font-medium"
+                    >
+                      Edit
+                    </Link>
                   </div>
                 ))}
               </div>
