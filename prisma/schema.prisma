@@ -119,6 +119,10 @@ model User {
   approvedCasePosts  CasePost[]      @relation("CasePostApprover")
   payments           Payment[]
   recordedPayments   Payment[]       @relation("PaymentRecorder")
+  reportsFiled       UserReport[]    @relation("ReportFiler")
+  reportsReceived    UserReport[]    @relation("ReportedUser")
+  commentBansApplied CommentBan[]    @relation("BanApplier")
+  commentBansReceived CommentBan[]   @relation("BannedUser")
 
   @@map("users")
   @@schema("educy")
@@ -605,5 +609,58 @@ model Payment {
   @@index([paymentMonth])
   @@index([status])
   @@map("payments")
+  @@schema("educy")
+}
+
+enum UserReportStatus {
+  PENDING     // Awaiting review
+  REVIEWED    // Reviewed by admin
+  DISMISSED   // Report dismissed
+  ACTIONED    // Action taken (ban applied, etc.)
+
+  @@schema("educy")
+}
+
+// User Report model - for moderators to report policy violations
+model UserReport {
+  id            String           @id @default(uuid())
+  reportedById  String
+  reportedBy    User             @relation("ReportFiler", fields: [reportedById], references: [id])
+  reportedUserId String
+  reportedUser  User             @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  reason        String           // Reason for report
+  evidence      String?          // Optional evidence (URLs, screenshots,  etc.)
+  status        UserReportStatus @default(PENDING)
+  reviewedById  String?          // Admin who reviewed
+  reviewedAt    DateTime?
+  reviewNotes   String?          // Admin's notes on the report
+  createdAt     DateTime         @default(now())
+
+  @@index([reportedById])
+  @@index([reportedUserId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("user_reports")
+  @@schema("educy")
+}
+
+// Comment Ban model - temporary bans on commenting
+model CommentBan {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation("BannedUser", fields: [userId], references: [id], onDelete: Cascade)
+  bannedById  String
+  bannedBy    User      @relation("BanApplier", fields: [bannedById], references: [id])
+  reason      String
+  durationHours Int     // Duration in hours (e.g., 24, 48, 72)
+  expiresAt   DateTime  // Calculated expiry time
+  isActive    Boolean   @default(true) // Auto-set to false after expiry
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([bannedById])
+  @@index([expiresAt])
+  @@index([isActive])
+  @@map("comment_bans")
   @@schema("educy")
 }
