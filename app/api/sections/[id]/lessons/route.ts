@@ -162,8 +162,40 @@ export async function POST(
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Provide more specific error messages based on field
+      const firstError = error.errors[0]
+      let errorMessage = 'Validation error'
+
+      if (firstError) {
+        const field = firstError.path.join('.')
+
+        switch (field) {
+          case 'title':
+            errorMessage = 'Lesson title is required and must be less than 200 characters'
+            break
+          case 'dayOfWeek':
+            errorMessage = 'Please select a valid day of the week'
+            break
+          case 'startTime':
+            errorMessage = 'Start time must be in HH:MM format (e.g., 09:00)'
+            break
+          case 'endTime':
+            errorMessage = 'End time must be in HH:MM format (e.g., 10:30)'
+            break
+          case 'roomId':
+            errorMessage = 'Invalid room selected'
+            break
+          case 'materialIds':
+            errorMessage = 'Invalid course materials. Please check your uploaded files and links.'
+            break
+          default:
+            errorMessage = firstError.message
+        }
+      }
+
+      console.error('Validation error:', error.errors)
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: error.errors },
+        { success: false, error: errorMessage, details: error.errors },
         { status: 400 }
       )
     }

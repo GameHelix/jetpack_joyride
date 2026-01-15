@@ -106,7 +106,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           ...formData,
           roomId: formData.roomId || undefined,
-          materialIds: materials.map(m => m.fileId || m.fileKey),
+          materialIds: materials.map(m => m.fileId || m.fileKey).filter(id => id), // Filter out undefined/null values
         }),
       })
 
