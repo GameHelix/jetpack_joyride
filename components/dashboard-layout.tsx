@@ -125,126 +125,127 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
-      {/* Top Navigation */}
-      <nav className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link
-                href="/dashboard"
-                className="flex items-center text-xl md:text-2xl font-bold text-white"
-              >
-                Educy
-              </Link>
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-              {/* Desktop Navigation */}
-              <div className="hidden lg:ml-6 lg:flex lg:space-x-2 xl:space-x-3">
-                {navigation.map((item) => (
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="flex items-center justify-between h-16 px-6 border-b border-purple-400/30">
+            <Link
+              href="/dashboard"
+              className="text-2xl font-bold text-white"
+            >
+              Educy
+            </Link>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden text-white hover:bg-white/10 rounded-lg p-2"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* User Info */}
+          <div className="px-4 py-4 border-b border-purple-400/30">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
+                {session?.user?.name?.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {session?.user?.name}
+                </p>
+                <p className="text-xs text-purple-200 truncate">
+                  {session?.user?.email}
+                </p>
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#F95B0E] text-white">
+                {session?.user?.role}
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto py-4 px-3">
+            <div className="space-y-1">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href
+                return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`inline-flex items-center px-2 xl:px-3 py-2 rounded-lg text-xs xl:text-sm font-medium transition whitespace-nowrap ${
-                      pathname === item.href
-                        ? 'bg-white/20 text-white'
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all ${
+                      isActive
+                        ? 'bg-white text-[#5C2482] shadow-lg'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
                     }`}
                   >
-                    <span className="mr-1.5 xl:mr-2">{item.icon}</span>
-                    <span>{item.name}</span>
+                    <span className={isActive ? 'text-[#5C2482]' : ''}>{item.icon}</span>
+                    <span className="ml-3">{item.name}</span>
                   </Link>
-                ))}
-              </div>
+                )
+              })}
             </div>
+          </nav>
 
-            {/* Desktop User Menu */}
-            <div className="hidden md:flex items-center space-x-2 xl:space-x-3">
-              <span className="text-xs xl:text-sm text-purple-100 truncate max-w-[120px] xl:max-w-[160px]">
-                {session?.user?.name}
-              </span>
-              <span className="px-2 xl:px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full whitespace-nowrap">
-                {session?.user?.role}
-              </span>
-              <button
-                onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-xs xl:text-sm text-purple-100 hover:text-white transition px-2 xl:px-3 py-2 rounded-lg hover:bg-white/10 whitespace-nowrap"
-              >
-                Sign Out
-              </button>
-            </div>
-
-            {/* Mobile Hamburger Button */}
-            <div className="flex items-center lg:hidden">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-purple-100 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                {!mobileMenuOpen ? (
-                  <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                ) : (
-                  <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                )}
-              </button>
-            </div>
+          {/* Sign Out */}
+          <div className="p-4 border-t border-purple-400/30">
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-all"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Sign Out
+            </button>
           </div>
         </div>
-
-        {/* Mobile Navigation Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-purple-400/30">
-            <div className="pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center pl-3 pr-4 py-3 text-base font-medium ${
-                    pathname === item.href
-                      ? 'bg-white/20 text-white border-l-4 border-white'
-                      : 'text-purple-100 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <span className="mr-3">{item.icon}</span>
-                  {item.name}
-                </Link>
-              ))}
-
-              {/* Mobile User Section */}
-              <div className="border-t border-purple-400/30 pt-4 pb-3 px-4">
-                <div className="flex items-center mb-3">
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-white">{session?.user?.name}</div>
-                    <div className="text-xs text-purple-200">{session?.user?.email}</div>
-                  </div>
-                  <span className="px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
-                    {session?.user?.role}
-                  </span>
-                </div>
-                <button
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  className="w-full text-left px-3 py-2 text-sm text-purple-100 hover:text-white hover:bg-white/10 rounded-lg transition"
-                >
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+      </aside>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+      <div className="lg:pl-64">
+        {/* Mobile Top Bar */}
+        <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 shadow-sm">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <Link href="/dashboard" className="text-xl font-bold text-[#5C2482]">
+            Educy
+          </Link>
+          <div className="w-10" /> {/* Spacer for balance */}
+        </div>
+
+        {/* Page Content */}
+        <main className="p-4 sm:p-6 lg:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }
