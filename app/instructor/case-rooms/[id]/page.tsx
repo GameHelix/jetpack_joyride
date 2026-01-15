@@ -165,7 +165,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
 
   return (
     <DashboardLayout role="INSTRUCTOR">
-      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">

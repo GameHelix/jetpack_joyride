@@ -39,7 +39,7 @@ export default async function StudentExamsPage() {
 
   return (
     <DashboardLayout role="STUDENT">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">My Exams</h1>

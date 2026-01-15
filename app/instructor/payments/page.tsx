@@ -85,7 +85,7 @@ export default function InstructorPaymentsPage() {
 
   return (
     <DashboardLayout role="INSTRUCTOR">
-      <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+      <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Payment Tracking</h1>

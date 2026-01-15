@@ -284,7 +284,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   if (attempt?.isCompleted) {
     return (
       <DashboardLayout role="STUDENT">
-        <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
           <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="text-center mb-8">
@@ -338,7 +338,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   if (!attempt) {
     return (
       <DashboardLayout role="STUDENT">
-        <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
           <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{exam.title}</h1>
@@ -397,7 +397,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   return (
     <DashboardLayout role="STUDENT">
-      <div className="bg-gray-50 -m-8 p-0 min-h-screen pb-24">
+      <div className="bg-gray-50 -my-8 p-0 min-h-screen pb-24">
         {/* Fixed header with timer */}
       <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-4">

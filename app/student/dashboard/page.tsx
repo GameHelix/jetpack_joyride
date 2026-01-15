@@ -143,7 +143,7 @@ export default function StudentDashboardPage() {
 
   return (
     <DashboardLayout role="STUDENT">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

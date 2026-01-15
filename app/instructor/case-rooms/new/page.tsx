@@ -95,7 +95,7 @@ export default function NewCaseRoomPage() {
 
   return (
     <DashboardLayout role="INSTRUCTOR">
-      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Create Case Room</h1>
