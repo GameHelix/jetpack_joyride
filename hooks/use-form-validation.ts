@@ -35,7 +35,7 @@ export function useFormValidation() {
   /**
    * Set multiple field errors at once (e.g., from API response)
    */
-  const setFieldErrors = (errors: FieldErrors) => {
+  const setAllFieldErrors = (errors: FieldErrors) => {
     setFieldErrors(errors)
   }
 
@@ -156,7 +156,7 @@ export function useFormValidation() {
     generalError,
     setFieldError,
     clearFieldError,
-    setFieldErrors,
+    setAllFieldErrors,
     setGeneralError,
     clearAllErrors,
     parseApiError,

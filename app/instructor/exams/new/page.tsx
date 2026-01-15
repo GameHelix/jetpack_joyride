@@ -170,16 +170,16 @@ export default function NewExamPage() {
         }
       }
 
-      // Combine date and time
-      const startDateTime = `${formData.startDate}T${formData.startTime}:00.000Z`
-      const endDateTime = `${formData.endDate}T${formData.endTime}:00.000Z`
+      // Combine date and time for API
+      const startDateTimeString = `${formData.startDate}T${formData.startTime}:00.000Z`
+      const endDateTimeString = `${formData.endDate}T${formData.endTime}:00.000Z`
 
       const payload = {
         sectionId: formData.sectionId,
         title: formData.title,
         durationMinutes: formData.durationMinutes,
-        startTime: startDateTime,
-        endTime: endDateTime,
+        startTime: startDateTimeString,
+        endTime: endDateTimeString,
         isGroupExam: formData.isGroupExam,
         questions: questions.map((q, index) => ({
           questionText: q.questionText,

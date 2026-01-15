@@ -668,3 +668,40 @@ model CommentBan {
   @@map("comment_bans")
   @@schema("educy")
 }
+
+// System Settings - Platform-wide configuration (Admin-only)
+model SystemSettings {
+  id                  String   @id @default(uuid())
+  
+  // Platform Identity
+  platformName        String   @default("Educy")
+  platformLogoUrl     String?
+  
+  // Email Configuration
+  systemEmailFrom     String?  // Sender email address
+  systemEmailName     String?  // Sender display name
+  
+  // Security Settings
+  passwordMinLength   Int      @default(8)
+  passwordRequireUpper Boolean @default(true)
+  passwordRequireLower Boolean @default(true)
+  passwordRequireNumber Boolean @default(true)
+  passwordRequireSpecial Boolean @default(false)
+  
+  // Storage Limits
+  maxUploadSizeMB     Int      @default(10)  // Global upload limit in MB
+  
+  // Feature Flags
+  enableCaseRooms     Boolean  @default(true)
+  enableExams         Boolean  @default(true)
+  enableCertificates  Boolean  @default(true)
+  enablePayments      Boolean  @default(true)
+  
+  // Metadata
+  lastModifiedBy      String?  // User ID of last admin who modified
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  @@map("system_settings")
+  @@schema("educy")
+}
