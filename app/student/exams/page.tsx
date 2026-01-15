@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
+import DashboardLayout from '@/components/dashboard-layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,8 +38,9 @@ export default async function StudentExamsPage() {
   const pastExams = exams.filter((exam: any) => new Date(exam.endTime) <= now)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <DashboardLayout role="STUDENT">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">My Exams</h1>
           <p className="text-sm md:text-base text-gray-600">View and take your scheduled exams</p>
@@ -212,5 +214,6 @@ export default async function StudentExamsPage() {
         )}
       </div>
     </div>
+    </DashboardLayout>
   )
 }

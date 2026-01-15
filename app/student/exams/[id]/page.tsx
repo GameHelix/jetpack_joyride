@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Question {
   id: string
@@ -203,28 +204,32 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (loading || status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading exam...</p>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading exam...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   if (error || !exam) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error || 'Exam not found'}</p>
-          <button
-            onClick={() => router.push('/student/exams')}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg"
-          >
-            Back to Exams
-          </button>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">{error || 'Exam not found'}</p>
+            <button
+              onClick={() => router.push('/student/exams')}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg"
+            >
+              Back to Exams
+            </button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
@@ -235,47 +240,52 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (now < startTime) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Not Yet Available</h2>
-          <p className="text-gray-600 mb-6">
-            This exam will be available starting {startTime.toLocaleString()}
-          </p>
-          <button
-            onClick={() => router.push('/student/exams')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg"
-          >
-            Back to Exams
-          </button>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center max-w-md">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Not Yet Available</h2>
+            <p className="text-gray-600 mb-6">
+              This exam will be available starting {startTime.toLocaleString()}
+            </p>
+            <button
+              onClick={() => router.push('/student/exams')}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            >
+              Back to Exams
+            </button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   if (now > endTime && (!attempt || !attempt.isCompleted)) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Closed</h2>
-          <p className="text-gray-600 mb-6">
-            This exam closed on {endTime.toLocaleString()}
-          </p>
-          <button
-            onClick={() => router.push('/student/exams')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg"
-          >
-            Back to Exams
-          </button>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center max-w-md">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Closed</h2>
+            <p className="text-gray-600 mb-6">
+              This exam closed on {endTime.toLocaleString()}
+            </p>
+            <button
+              onClick={() => router.push('/student/exams')}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            >
+              Back to Exams
+            </button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   // Show results if completed
   if (attempt?.isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 p-4 md:p-8">
-        <div className="max-w-3xl mx-auto">
+      <DashboardLayout role="STUDENT">
+        <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+          <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="text-center mb-8">
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -318,16 +328,18 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
               Back to Exams
             </button>
           </div>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   // Show start screen
   if (!attempt) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
-        <div className="max-w-3xl mx-auto">
+      <DashboardLayout role="STUDENT">
+        <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+          <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{exam.title}</h1>
             <p className="text-gray-600 mb-8">
@@ -372,8 +384,9 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
               Start Exam
             </button>
           </div>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
@@ -383,8 +396,9 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   const progressPercent = (answeredCount / exam.questions.length) * 100
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
-      {/* Fixed header with timer */}
+    <DashboardLayout role="STUDENT">
+      <div className="bg-gray-50 -m-8 p-0 min-h-screen pb-24">
+        {/* Fixed header with timer */}
       <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -529,6 +543,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </DashboardLayout>
   )
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Post {
   id: string
@@ -123,28 +124,32 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading case room...</p>
+      <DashboardLayout role="INSTRUCTOR">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading case room...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
   if (!room) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Case room not found</p>
-          <button
-            onClick={() => router.push('/instructor/case-rooms')}
-            className="bg-purple-600 text-white px-6 py-2 rounded-lg"
-          >
-            Back to Case Rooms
-          </button>
+      <DashboardLayout role="INSTRUCTOR">
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">Case room not found</p>
+            <button
+              onClick={() => router.push('/instructor/case-rooms')}
+              className="bg-purple-600 text-white px-6 py-2 rounded-lg"
+            >
+              Back to Case Rooms
+            </button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
@@ -159,8 +164,9 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
     posts
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout role="INSTRUCTOR">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -316,7 +322,8 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
             ))}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

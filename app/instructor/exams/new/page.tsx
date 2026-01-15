@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Question {
   questionText: string
@@ -184,8 +185,9 @@ export default function NewExamPage() {
   const today = new Date().toISOString().split('T')[0]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
+    <DashboardLayout role="INSTRUCTOR">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-5xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Create New Exam</h1>
           <p className="text-sm md:text-base text-gray-600">Set up a timed exam for your students</p>
@@ -535,5 +537,6 @@ export default function NewExamPage() {
         </form>
       </div>
     </div>
+    </DashboardLayout>
   )
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
 
 export default function NewCaseRoomPage() {
   const router = useRouter()
@@ -93,8 +94,9 @@ export default function NewCaseRoomPage() {
   const today = new Date().toISOString().split('T')[0]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-3xl mx-auto">
+    <DashboardLayout role="INSTRUCTOR">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Create Case Room</h1>
           <p className="text-sm md:text-base text-gray-600">
@@ -217,5 +219,6 @@ export default function NewCaseRoomPage() {
         </form>
       </div>
     </div>
+    </DashboardLayout>
   )
 }

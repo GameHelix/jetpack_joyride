@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Post {
   id: string
@@ -146,8 +147,9 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
   const isOverdue = dueDate && dueDate < now
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout role="STUDENT">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -317,5 +319,6 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
         )}
       </div>
     </div>
+    </DashboardLayout>
   )
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import DashboardLayout from '@/components/dashboard-layout'
 
 interface Room {
   id: string
@@ -51,12 +52,14 @@ export default function StudentCaseRoomsPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+      <DashboardLayout role="STUDENT">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     )
   }
 
@@ -65,8 +68,9 @@ export default function StudentCaseRoomsPage() {
   const closedRooms = rooms.filter((room) => !room.isActive)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout role="STUDENT">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Case Rooms</h1>
           <p className="text-sm md:text-base text-gray-600">Share your case submissions and get feedback</p>
@@ -178,7 +182,8 @@ export default function StudentCaseRoomsPage() {
             <p className="text-gray-600">Your instructor hasn't created any case rooms yet</p>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

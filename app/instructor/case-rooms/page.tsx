@@ -1,39 +1,78 @@
-import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import DashboardLayout from '@/components/dashboard-layout'
 
-export const dynamic = 'force-dynamic'
-
-async function getCaseRooms() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user) return []
-
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/case-rooms`, {
-    headers: {
-      'Cookie': `next-auth.session-token=${session.user.id}`,
-    },
-    cache: 'no-store',
-  })
-
-  if (!response.ok) return []
-  const data = await response.json()
-  return data.rooms || []
+interface Room {
+  id: string
+  title: string
+  description: string | null
+  dueDate: string | null
+  isActive: boolean
+  section: {
+    course: {
+      code: string
+      title: string
+    }
+  }
+  _count: {
+    posts: number
+  }
+  posts?: Array<{
+    isApproved: boolean | null
+  }>
 }
 
-export default async function InstructorCaseRoomsPage() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user || !['INSTRUCTOR', 'ADMIN'].includes(session.user.role)) {
-    redirect('/signin')
+export default function InstructorCaseRoomsPage() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
+  const [rooms, setRooms] = useState<Room[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/signin')
+    } else if (status === 'authenticated') {
+      loadRooms()
+    }
+  }, [status])
+
+  async function loadRooms() {
+    try {
+      const response = await fetch('/api/case-rooms')
+      if (!response.ok) throw new Error('Failed to load rooms')
+      const data = await response.json()
+      setRooms(data.rooms || [])
+    } catch (err) {
+      console.error('Failed to load rooms:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const rooms = await getCaseRooms()
-  const activeRooms = rooms.filter((room: any) => room.isActive)
-  const closedRooms = rooms.filter((room: any) => !room.isActive)
+  if (status === 'loading' || loading) {
+    return (
+      <DashboardLayout role="INSTRUCTOR">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  const activeRooms = rooms.filter((room) => room.isActive)
+  const closedRooms = rooms.filter((room) => !room.isActive)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout role="INSTRUCTOR">
+      <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Case Rooms</h1>
@@ -55,8 +94,8 @@ export default async function InstructorCaseRoomsPage() {
           <div className="mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-purple-800 mb-4">Active Rooms</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {activeRooms.map((room: any) => {
-                const pendingCount = room.posts?.filter((p: any) => p.isApproved === null).length || 0
+              {activeRooms.map((room) => {
+                const pendingCount = room.posts?.filter((p) => p.isApproved === null).length || 0
 
                 return (
                   <Link
@@ -113,7 +152,7 @@ export default async function InstructorCaseRoomsPage() {
           <div className="mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Closed Rooms</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {closedRooms.map((room: any) => (
+              {closedRooms.map((room) => (
                 <Link
                   key={room.id}
                   href={`/instructor/case-rooms/${room.id}`}
@@ -162,7 +201,8 @@ export default async function InstructorCaseRoomsPage() {
             </Link>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

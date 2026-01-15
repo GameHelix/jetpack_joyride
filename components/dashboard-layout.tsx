@@ -142,35 +142,35 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden lg:ml-8 lg:flex lg:space-x-4">
+              <div className="hidden lg:ml-6 lg:flex lg:space-x-2 xl:space-x-3">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition ${
+                    className={`inline-flex items-center px-2 xl:px-3 py-2 rounded-lg text-xs xl:text-sm font-medium transition whitespace-nowrap ${
                       pathname === item.href
                         ? 'bg-white/20 text-white'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
                     }`}
                   >
-                    <span className="mr-2">{item.icon}</span>
-                    <span className="hidden xl:inline">{item.name}</span>
+                    <span className="mr-1.5 xl:mr-2">{item.icon}</span>
+                    <span>{item.name}</span>
                   </Link>
                 ))}
               </div>
             </div>
 
             {/* Desktop User Menu */}
-            <div className="hidden md:flex items-center space-x-4">
-              <span className="text-xs md:text-sm text-purple-100 truncate max-w-32">
+            <div className="hidden md:flex items-center space-x-2 xl:space-x-3">
+              <span className="text-xs xl:text-sm text-purple-100 truncate max-w-[120px] xl:max-w-[160px]">
                 {session?.user?.name}
               </span>
-              <span className="px-2 md:px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
+              <span className="px-2 xl:px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full whitespace-nowrap">
                 {session?.user?.role}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-xs md:text-sm text-purple-100 hover:text-white transition px-3 py-2 rounded-lg hover:bg-white/10"
+                className="text-xs xl:text-sm text-purple-100 hover:text-white transition px-2 xl:px-3 py-2 rounded-lg hover:bg-white/10 whitespace-nowrap"
               >
                 Sign Out
               </button>

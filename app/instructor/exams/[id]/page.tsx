@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
+import DashboardLayout from '@/components/dashboard-layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,8 +63,9 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
     : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <DashboardLayout role="INSTRUCTOR">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -m-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -313,5 +315,6 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
         </div>
       </div>
     </div>
+    </DashboardLayout>
   )
 }
