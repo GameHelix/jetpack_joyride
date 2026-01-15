@@ -142,8 +142,50 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Provide field-specific error messages
+      const firstError = error.errors[0]
+      let errorMessage = 'Validation error'
+      const fieldErrors: Record<string, string> = {}
+
+      // Map all Zod errors to field-level errors
+      error.errors.forEach((err) => {
+        const field = err.path.join('.')
+
+        switch (field) {
+          case 'name':
+            fieldErrors[field] = 'Name is required'
+            break
+          case 'surname':
+            fieldErrors[field] = 'Please enter a valid surname'
+            break
+          case 'phone':
+            fieldErrors[field] = 'Please enter a valid phone number'
+            break
+          case 'expertise':
+            fieldErrors[field] = 'Invalid expertise keywords'
+            break
+          case 'profileAvatarUrl':
+            fieldErrors[field] = 'Invalid profile picture URL'
+            break
+          default:
+            fieldErrors[field] = err.message
+        }
+      })
+
+      // Use first error as general message if needed
+      if (firstError) {
+        const field = firstError.path.join('.')
+        errorMessage = fieldErrors[field] || firstError.message
+      }
+
+      console.error('Validation error:', error.errors)
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: error.errors },
+        {
+          success: false,
+          error: errorMessage,
+          errors: fieldErrors, // Field-level errors for frontend
+          details: error.errors,
+        },
         { status: 400 }
       )
     }
