@@ -5,19 +5,20 @@ type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'success'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface BaseButtonProps {
-  children: ReactNode
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean
   className?: string
 }
 
-interface ButtonProps extends BaseButtonProps, ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends BaseButtonProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   href?: never
+  children: ReactNode
 }
 
 interface LinkButtonProps extends BaseButtonProps {
   href: string
+  children: ReactNode
   disabled?: never
   onClick?: never
   type?: never
