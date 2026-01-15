@@ -111,6 +111,11 @@ model User {
   examGroupMembers   ExamGroupMember[]
   examIndividualScores ExamIndividualScore[]
   gradedExamScores   ExamIndividualScore[] @relation("ExamGrader")
+  createdCaseRooms   CaseRoom[]      @relation("CaseRoomCreator")
+  casePosts          CasePost[]
+  approvedCasePosts  CasePost[]      @relation("CasePostApprover")
+  payments           Payment[]
+  recordedPayments   Payment[]       @relation("PaymentRecorder")
 
   @@map("users")
   @@schema("educy")
@@ -151,6 +156,7 @@ model Section {
   certificates  Certificate[]
   announcements Announcement[]
   exams         Exam[]
+  caseRooms     CaseRoom[]
 
   @@index([term])
   @@index([instructorId])
@@ -526,5 +532,75 @@ model ExamIndividualScore {
   @@index([attemptId])
   @@index([studentId])
   @@map("exam_individual_scores")
+  @@schema("educy")
+}
+
+model CaseRoom {
+  id          String     @id @default(uuid())
+  sectionId   String
+  section     Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  dueDate     DateTime?
+  createdById String
+  createdBy   User       @relation("CaseRoomCreator", fields: [createdById], references: [id])
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  posts       CasePost[]
+
+  @@index([sectionId])
+  @@index([createdById])
+  @@map("case_rooms")
+  @@schema("educy")
+}
+
+model CasePost {
+  id          String     @id @default(uuid())
+  roomId      String
+  room        CaseRoom   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  content     String
+  fileKeys    String[]   // Array of uploaded file keys
+  isApproved  Boolean?   // null = pending, true = approved, false = rejected
+  approvedById String?
+  approvedBy  User?      @relation("CasePostApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedAt  DateTime?
+  feedback    String?    // Instructor feedback
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([roomId])
+  @@index([studentId])
+  @@index([isApproved])
+  @@map("case_posts")
+  @@schema("educy")
+}
+
+model Payment {
+  id             String    @id @default(uuid())
+  studentId      String
+  student        User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  amount         Float
+  currency       String    @default("USD")
+  paymentMonth   DateTime  // Which month this payment is for
+  status         String    // "pending", "paid", "paused", "cancelled"
+  statusReason   String?   // Reason for status (e.g., "On leave", "Financial difficulty")
+  paidAt         DateTime?
+  paymentMethod  String?   // "cash", "card", "bank_transfer", etc.
+  receiptUrl     String?
+  notes          String?
+  recordedById   String
+  recordedBy     User      @relation("PaymentRecorder", fields: [recordedById], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([studentId])
+  @@index([paymentMonth])
+  @@index([status])
+  @@map("payments")
   @@schema("educy")
 }
