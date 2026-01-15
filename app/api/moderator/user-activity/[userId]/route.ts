@@ -91,13 +91,13 @@ export async function GET(
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        enrolledAt: 'desc',
       },
     })
 
     // Get user's submissions
-    const submissions = await prisma.assignmentSubmission.findMany({
-      where: { userId: params.userId },
+    const submissions = await prisma.submission.findMany({
+      where: { studentId: params.userId },
       include: {
         assignment: {
           select: {
