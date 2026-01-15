@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
+import { rateLimitByIdentifier, rateLimitByIP, RateLimitPresets, logRateLimitViolation } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,20 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const data = resetPasswordSchema.parse(body)
+
+    // Apply rate limiting by IP
+    const ipRateLimit = rateLimitByIP(request, 'reset-password-ip', RateLimitPresets.passwordResetConfirm)
+    if (ipRateLimit) {
+      logRateLimitViolation('reset-password-ip', '/api/auth/reset-password', request.headers.get('x-forwarded-for') || 'unknown')
+      return ipRateLimit
+    }
+
+    // Apply rate limiting by token (prevents brute force attacks on tokens)
+    const tokenRateLimit = rateLimitByIdentifier(request, 'reset-token', data.token, RateLimitPresets.passwordResetConfirm)
+    if (tokenRateLimit) {
+      logRateLimitViolation(`reset-token:${data.token.substring(0, 10)}...`, '/api/auth/reset-password', request.headers.get('x-forwarded-for') || 'unknown')
+      return tokenRateLimit
+    }
 
     // Find user by reset token
     const user = await prisma.user.findUnique({

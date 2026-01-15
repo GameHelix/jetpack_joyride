@@ -69,15 +69,21 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.email = user.email
         token.name = user.name
+        token.iat = Math.floor(Date.now() / 1000) // Set issued at time
       }
 
-      // Refresh token data on update
+      // Refresh token data on update (role changes, profile updates)
       if (trigger === 'update' && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { role: true, name: true, email: true },
         })
         if (dbUser) {
+          // Check if role changed - if so, rotate token
+          if (token.role !== dbUser.role) {
+            token.iat = Math.floor(Date.now() / 1000) // Rotate token on role change
+            console.log(`[SECURITY] Token rotated for user ${token.id} due to role change`)
+          }
           token.role = dbUser.role
           token.name = dbUser.name
           token.email = dbUser.email
@@ -102,11 +108,40 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-    updateAge: 24 * 60 * 60, // 24 hours - session will be updated if older than this
+    maxAge: 24 * 60 * 60, // 24 hours (improved from 30 days for security)
+    updateAge: 60 * 60, // 1 hour - session will be updated if older than this
   },
   jwt: {
-    maxAge: 30 * 24 * 60 * 60, // 30 days - must match session maxAge
+    maxAge: 24 * 60 * 60, // 24 hours - must match session maxAge
+  },
+  cookies: {
+    sessionToken: {
+      name: `${process.env.NODE_ENV === 'production' ? '__Secure-' : ''}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+    callbackUrl: {
+      name: `${process.env.NODE_ENV === 'production' ? '__Secure-' : ''}next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+    csrfToken: {
+      name: `${process.env.NODE_ENV === 'production' ? '__Host-' : ''}next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development',

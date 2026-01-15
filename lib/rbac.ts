@@ -98,3 +98,270 @@ export async function requireInstructor() {
 export async function requireModerator() {
   return requireRole([RoleName.MODERATOR, RoleName.ADMIN])
 }
+
+// ==============================================================================
+// Resource-specific Authorization Helpers (IDOR Protection)
+// ==============================================================================
+
+import { prisma } from './prisma'
+
+/**
+ * Check if user can access a specific submission
+ * Rules: Student can only access their own submissions, Instructors can access submissions for their courses, Admins can access all
+ */
+export async function canAccessSubmission(userId: string, userRole: RoleName, submissionId: string): Promise<boolean> {
+  const submission = await prisma.submission.findUnique({
+    where: { id: submissionId },
+    include: {
+      assignment: {
+        include: {
+          section: {
+            select: { instructorId: true }
+          }
+        }
+      }
+    }
+  })
+
+  if (!submission) return false
+
+  // Admin can access all
+  if (userRole === RoleName.ADMIN) return true
+
+  // Student can only access their own
+  if (userRole === RoleName.STUDENT) {
+    return submission.studentId === userId
+  }
+
+  // Instructor can access submissions for their sections
+  if (userRole === RoleName.INSTRUCTOR) {
+    return submission.assignment.section.instructorId === userId
+  }
+
+  return false
+}
+
+/**
+ * Check if user can access a specific assignment
+ * Rules: Students can access assignments they're enrolled in, Instructors can access their own assignments, Admins can access all
+ */
+export async function canAccessAssignment(userId: string, userRole: RoleName, assignmentId: string): Promise<boolean> {
+  const assignment = await prisma.assignment.findUnique({
+    where: { id: assignmentId },
+    include: {
+      section: {
+        select: {
+          instructorId: true,
+          enrollments: {
+            select: { userId: true, status: true }
+          }
+        }
+      }
+    }
+  })
+
+  if (!assignment) return false
+
+  // Admin can access all
+  if (userRole === RoleName.ADMIN) return true
+
+  // Instructor can access their own assignments
+  if (userRole === RoleName.INSTRUCTOR) {
+    return assignment.section.instructorId === userId
+  }
+
+  // Student can access if enrolled
+  if (userRole === RoleName.STUDENT) {
+    return assignment.section.enrollments.some(
+      e => e.userId === userId && e.status === 'ENROLLED'
+    )
+  }
+
+  return false
+}
+
+/**
+ * Check if user can modify a specific assignment
+ * Rules: Only instructors who own the assignment and admins
+ */
+export async function canModifyAssignment(userId: string, userRole: RoleName, assignmentId: string): Promise<boolean> {
+  const assignment = await prisma.assignment.findUnique({
+    where: { id: assignmentId },
+    include: {
+      section: {
+        select: { instructorId: true }
+      }
+    }
+  })
+
+  if (!assignment) return false
+
+  // Admin can modify all
+  if (userRole === RoleName.ADMIN) return true
+
+  // Instructor can modify their own
+  if (userRole === RoleName.INSTRUCTOR) {
+    return assignment.section.instructorId === userId || assignment.createdById === userId
+  }
+
+  return false
+}
+
+/**
+ * Check if user can access an enrollment
+ * Rules: Student can access their own, Instructors can access enrollments for their sections, Moderators/Admins can access all
+ */
+export async function canAccessEnrollment(userId: string, userRole: RoleName, enrollmentId: string): Promise<boolean> {
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: enrollmentId },
+    include: {
+      section: {
+        select: { instructorId: true }
+      }
+    }
+  })
+
+  if (!enrollment) return false
+
+  // Admin and Moderator can access all
+  if (userRole === RoleName.ADMIN || userRole === RoleName.MODERATOR) return true
+
+  // Instructor can access enrollments for their sections
+  if (userRole === RoleName.INSTRUCTOR) {
+    return enrollment.section.instructorId === userId
+  }
+
+  // Student can access their own
+  if (userRole === RoleName.STUDENT) {
+    return enrollment.userId === userId
+  }
+
+  return false
+}
+
+/**
+ * Check if user can access a course
+ */
+export async function canAccessCourse(userId: string, userRole: RoleName, courseId: string): Promise<boolean> {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    include: {
+      sections: {
+        select: {
+          instructorId: true,
+          enrollments: {
+            select: { userId: true }
+          }
+        }
+      }
+    }
+  })
+
+  if (!course) return false
+
+  // Admin can access all
+  if (userRole === RoleName.ADMIN || userRole === RoleName.MODERATOR) return true
+
+  // Instructor can access if they teach any section
+  if (userRole === RoleName.INSTRUCTOR) {
+    return course.sections.some(s => s.instructorId === userId) || course.createdById === userId
+  }
+
+  // Student can access if enrolled in any section
+  if (userRole === RoleName.STUDENT) {
+    return course.sections.some(s =>
+      s.enrollments.some(e => e.userId === userId)
+    )
+  }
+
+  return false
+}
+
+/**
+ * Check if user can access a section
+ */
+export async function canAccessSection(userId: string, userRole: RoleName, sectionId: string): Promise<boolean> {
+  const section = await prisma.section.findUnique({
+    where: { id: sectionId },
+    include: {
+      enrollments: {
+        select: { userId: true, status: true }
+      }
+    }
+  })
+
+  if (!section) return false
+
+  // Admin and Moderator can access all
+  if (userRole === RoleName.ADMIN || userRole === RoleName.MODERATOR) return true
+
+  // Instructor can access their own sections
+  if (userRole === RoleName.INSTRUCTOR) {
+    return section.instructorId === userId
+  }
+
+  // Student can access if enrolled
+  if (userRole === RoleName.STUDENT) {
+    return section.enrollments.some(
+      e => e.userId === userId && e.status === 'ENROLLED'
+    )
+  }
+
+  return false
+}
+
+/**
+ * Check if user can access a file
+ */
+export async function canAccessFile(userId: string, userRole: RoleName, fileId: string): Promise<boolean> {
+  const file = await prisma.file.findUnique({
+    where: { id: fileId }
+  })
+
+  if (!file) return false
+
+  // Admin can access all
+  if (userRole === RoleName.ADMIN) return true
+
+  // User can access their own files
+  return file.ownerId === userId
+}
+
+/**
+ * Generic authorization error response
+ */
+export function forbiddenResponse(message: string = 'You do not have permission to access this resource') {
+  return new Response(
+    JSON.stringify({ error: message }),
+    {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}
+
+/**
+ * Unauthorized error response
+ */
+export function unauthorizedResponse(message: string = 'Authentication required') {
+  return new Response(
+    JSON.stringify({ error: message }),
+    {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}
+
+/**
+ * Not found error response
+ */
+export function notFoundResponse(message: string = 'Resource not found') {
+  return new Response(
+    JSON.stringify({ error: message }),
+    {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+}

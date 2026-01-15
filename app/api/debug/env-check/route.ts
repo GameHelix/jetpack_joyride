@@ -4,6 +4,14 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
+    // Disable in production unless explicitly enabled via environment variable
+    if (process.env.NODE_ENV === 'production' && process.env.ENABLE_DEBUG_ENDPOINTS !== 'true') {
+      return NextResponse.json(
+        { error: 'Not Found' },
+        { status: 404 }
+      )
+    }
+
     // Only allow admins to access this endpoint
     const session = await getServerSession(authOptions)
 

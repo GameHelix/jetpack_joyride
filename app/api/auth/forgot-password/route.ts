@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import crypto from 'crypto'
 import { sendPasswordResetEmail } from '@/lib/email'
+import { rateLimitByIdentifier, rateLimitByIP, RateLimitPresets, logRateLimitViolation } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,24 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const data = forgotPasswordSchema.parse(body)
+
+    // Apply rate limiting by IP
+    const ipRateLimit = rateLimitByIP(request, 'forgot-password-ip', RateLimitPresets.passwordReset)
+    if (ipRateLimit) {
+      logRateLimitViolation('forgot-password-ip', '/api/auth/forgot-password', request.headers.get('x-forwarded-for') || 'unknown')
+      return ipRateLimit
+    }
+
+    // Apply rate limiting by email (prevents targeted attacks on specific accounts)
+    const emailRateLimit = rateLimitByIdentifier(request, 'forgot-password', data.email, RateLimitPresets.passwordReset)
+    if (emailRateLimit) {
+      logRateLimitViolation(`forgot-password:${data.email}`, '/api/auth/forgot-password', request.headers.get('x-forwarded-for') || 'unknown')
+      // Return same generic message to prevent email enumeration
+      return NextResponse.json({
+        success: true,
+        message: 'If an account exists with this email, you will receive a password reset link.',
+      })
+    }
 
     // Find user by email
     const user = await prisma.user.findUnique({
