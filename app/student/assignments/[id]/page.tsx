@@ -99,6 +99,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
             filename: file.name,
             contentType: file.type,
             sizeBytes: file.size,
+            context: 'assignment',
           }),
         })
 
