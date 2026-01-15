@@ -106,6 +106,11 @@ model User {
   issuedCertificates Certificate[]   @relation("CertificateIssuer")
   announcements      Announcement[]  @relation("AnnouncementAuthor")
   tabSwitches        TabSwitch[]
+  createdExams       Exam[]          @relation("ExamCreator")
+  examAttempts       ExamAttempt[]
+  examGroupMembers   ExamGroupMember[]
+  examIndividualScores ExamIndividualScore[]
+  gradedExamScores   ExamIndividualScore[] @relation("ExamGrader")
 
   @@map("users")
   @@schema("educy")
@@ -145,6 +150,7 @@ model Section {
   assignments   Assignment[]
   certificates  Certificate[]
   announcements Announcement[]
+  exams         Exam[]
 
   @@index([term])
   @@index([instructorId])
@@ -380,5 +386,145 @@ model TabSwitch {
   @@index([submissionId])
   @@index([timestamp])
   @@map("tab_switches")
+  @@schema("educy")
+}
+
+model Exam {
+  id           String      @id @default(uuid())
+  sectionId    String
+  section      Section     @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  durationMinutes Int      // Time limit in minutes
+  startTime    DateTime   // When exam becomes available
+  endTime      DateTime   // When exam closes
+  isGroupExam  Boolean    @default(false) // Whether this is a group exam
+  createdById  String
+  createdBy    User       @relation("ExamCreator", fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relations
+  examAttempts ExamAttempt[]
+  questions    ExamQuestion[]
+
+  @@index([sectionId])
+  @@index([startTime])
+  @@index([endTime])
+  @@map("exams")
+  @@schema("educy")
+}
+
+model ExamQuestion {
+  id           String     @id @default(uuid())
+  examId       String
+  exam         Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questionText String
+  questionType String     // "multiple_choice", "true_false", "short_answer", "essay"
+  options      Json?      // For multiple choice: ["A", "B", "C", "D"]
+  correctAnswer String?   // Correct answer or answer key
+  points       Float      @default(1)
+  orderIndex   Int        // Question order in the exam
+  createdAt    DateTime   @default(now())
+
+  // Relations
+  answers      ExamAnswer[]
+
+  @@index([examId])
+  @@map("exam_questions")
+  @@schema("educy")
+}
+
+model ExamAttempt {
+  id            String     @id @default(uuid())
+  examId        String
+  exam          Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  studentId     String?    // Null if group exam
+  student       User?      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  groupId       String?    // For group exams
+  group         ExamGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  startedAt     DateTime   @default(now())
+  submittedAt   DateTime?
+  timeRemaining Int?       // Seconds remaining (for pause/resume)
+  score         Float?
+  isCompleted   Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+
+  // Relations
+  answers       ExamAnswer[]
+  individualScores ExamIndividualScore[]
+
+  @@index([examId])
+  @@index([studentId])
+  @@index([groupId])
+  @@unique([examId, studentId]) // One attempt per student per exam
+  @@map("exam_attempts")
+  @@schema("educy")
+}
+
+model ExamGroup {
+  id           String      @id @default(uuid())
+  examId       String
+  name         String      // Group name
+  createdAt    DateTime    @default(now())
+
+  // Relations
+  members      ExamGroupMember[]
+  attempts     ExamAttempt[]
+
+  @@index([examId])
+  @@map("exam_groups")
+  @@schema("educy")
+}
+
+model ExamGroupMember {
+  id        String    @id @default(uuid())
+  groupId   String
+  group     ExamGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  studentId String
+  student   User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@unique([groupId, studentId])
+  @@index([groupId])
+  @@index([studentId])
+  @@map("exam_group_members")
+  @@schema("educy")
+}
+
+model ExamAnswer {
+  id         String       @id @default(uuid())
+  attemptId  String
+  attempt    ExamAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId String
+  question   ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answer     String?      // Student's answer
+  isCorrect  Boolean?     // Auto-graded or manually graded
+  points     Float?       // Points awarded
+  createdAt  DateTime     @default(now())
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("exam_answers")
+  @@schema("educy")
+}
+
+model ExamIndividualScore {
+  id         String      @id @default(uuid())
+  attemptId  String
+  attempt    ExamAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  studentId  String
+  student    User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  score      Float       // Individual score within the group
+  feedback   String?
+  gradedAt   DateTime    @default(now())
+  gradedById String
+  gradedBy   User        @relation("ExamGrader", fields: [gradedById], references: [id])
+
+  @@unique([attemptId, studentId])
+  @@index([attemptId])
+  @@index([studentId])
+  @@map("exam_individual_scores")
   @@schema("educy")
 }
