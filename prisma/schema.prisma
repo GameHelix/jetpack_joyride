@@ -83,6 +83,9 @@ model User {
   email             String         @unique
   hashedPassword    String?        // Optional - can be null for PENDING users
   name              String
+  surname           String?        // Last name/surname
+  phone             String?        // Phone number
+  expertise         String[]       @default([]) // Keywords/subjects for instructors (for filtering)
   role              RoleName       @default(STUDENT)
   status            UserStatus     @default(ACTIVE) // Track account status
   profileAvatarUrl  String?
