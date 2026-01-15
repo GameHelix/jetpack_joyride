@@ -93,45 +93,65 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      // Provide more specific error messages based on field
+      // Provide field-specific error messages
       const firstError = error.errors[0]
       let errorMessage = 'Validation error'
+      const fieldErrors: Record<string, string> = {}
 
-      if (firstError) {
-        const field = firstError.path.join('.')
+      // Map all Zod errors to field-level errors
+      error.errors.forEach((err) => {
+        const field = err.path.join('.')
 
         switch (field) {
           case 'sectionId':
-            errorMessage = 'Please select a valid section'
+            fieldErrors[field] = 'Please select a valid section'
             break
           case 'title':
-            errorMessage = 'Exam title is required and must be less than 200 characters'
+            if (err.code === 'too_small') {
+              fieldErrors[field] = 'Exam title is required'
+            } else if (err.code === 'too_big') {
+              fieldErrors[field] = 'Exam title must be less than 200 characters'
+            } else {
+              fieldErrors[field] = 'Please enter a valid exam title'
+            }
             break
           case 'durationMinutes':
-            errorMessage = 'Duration must be between 1 and 480 minutes'
+            fieldErrors[field] = 'Duration must be between 1 and 480 minutes'
             break
           case 'startTime':
-            errorMessage = 'Invalid start date/time format'
+            fieldErrors[field] = 'Please enter a valid start date and time'
             break
           case 'endTime':
-            errorMessage = 'Invalid end date/time format'
+            fieldErrors[field] = 'Please enter a valid end date and time'
             break
           case 'questions':
-            errorMessage = 'At least one question is required'
+            fieldErrors[field] = 'At least one question is required'
             break
           default:
             if (field.startsWith('questions.')) {
               const questionIndex = field.split('.')[1]
-              errorMessage = `Question ${parseInt(questionIndex) + 1}: ${firstError.message}`
+              const subField = field.split('.').slice(2).join('.')
+              fieldErrors[field] = `Question ${parseInt(questionIndex) + 1}: ${err.message}`
             } else {
-              errorMessage = firstError.message
+              fieldErrors[field] = err.message
             }
         }
+      })
+
+      // Use first error as general message if needed
+      if (firstError) {
+        const field = firstError.path.join('.')
+        errorMessage = fieldErrors[field] || firstError.message
       }
 
       console.error('Validation error:', error.errors)
       return NextResponse.json(
-        { success: false, error: errorMessage, details: error.errors },
+        {
+          success: false,
+          error: errorMessage,
+          errors: fieldErrors, // Field-level errors for frontend
+          details: error.errors,
+        },
         { status: 400 }
       )
     }

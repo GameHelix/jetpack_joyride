@@ -58,8 +58,50 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Provide field-specific error messages
+      const firstError = error.errors[0]
+      let errorMessage = 'Validation error'
+      const fieldErrors: Record<string, string> = {}
+
+      // Map all Zod errors to field-level errors
+      error.errors.forEach((err) => {
+        const field = err.path.join('.')
+
+        switch (field) {
+          case 'sectionId':
+            fieldErrors[field] = 'Please select a valid section'
+            break
+          case 'title':
+            if (err.code === 'too_small') {
+              fieldErrors[field] = 'Room title is required'
+            } else if (err.code === 'too_big') {
+              fieldErrors[field] = 'Room title must be less than 200 characters'
+            } else {
+              fieldErrors[field] = 'Please enter a valid room title'
+            }
+            break
+          case 'dueDate':
+            fieldErrors[field] = 'Please enter a valid date (year range: 2000–2100)'
+            break
+          default:
+            fieldErrors[field] = err.message
+        }
+      })
+
+      // Use first error as general message if needed
+      if (firstError) {
+        const field = firstError.path.join('.')
+        errorMessage = fieldErrors[field] || firstError.message
+      }
+
+      console.error('Validation error:', error.errors)
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: error.errors },
+        {
+          success: false,
+          error: errorMessage,
+          errors: fieldErrors, // Field-level errors for frontend
+          details: error.errors,
+        },
         { status: 400 }
       )
     }

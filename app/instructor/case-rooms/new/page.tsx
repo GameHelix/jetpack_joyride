@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import { FormField } from '@/components/form-field'
+import { useFormValidation } from '@/hooks/use-form-validation'
 
 export default function NewCaseRoomPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false)
   const [sectionsLoading, setSectionsLoading] = useState(true)
-  const [error, setError] = useState('')
   const [sections, setSections] = useState<any[]>([])
+  const { fieldErrors, generalError, setGeneralError, handleHttpError, clearAllErrors } = useFormValidation()
 
   const [formData, setFormData] = useState({
     sectionId: '',
@@ -36,7 +38,7 @@ export default function NewCaseRoomPage() {
       const data = await response.json()
       setSections(data.sections || [])
     } catch (err) {
-      setError('Failed to load sections')
+      setGeneralError('Failed to load sections')
     } finally {
       setSectionsLoading(false)
     }
@@ -44,10 +46,24 @@ export default function NewCaseRoomPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
+    clearAllErrors()
     setLoading(true)
 
     try {
+      // Validate date range on frontend
+      if (formData.dueDate) {
+        const dueDate = new Date(formData.dueDate)
+        const today = new Date()
+        const twoYearsFromNow = new Date()
+        twoYearsFromNow.setFullYear(twoYearsFromNow.getFullYear() + 2)
+
+        if (dueDate > twoYearsFromNow) {
+          setGeneralError('Due date cannot be more than 2 years in the future. Please select a more reasonable date.')
+          setLoading(false)
+          return
+        }
+      }
+
       // Combine date and time if provided
       let dueDateTimeString = null
       if (formData.dueDate) {
@@ -68,13 +84,25 @@ export default function NewCaseRoomPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create case room')
+        // Handle HTTP errors with field-level error parsing
+        const handled = handleHttpError(response, data)
+        if (!handled) {
+          setGeneralError(data.error || 'Failed to create case room')
+        }
+        setLoading(false)
+        return
       }
 
       router.push('/instructor/case-rooms')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      // Handle network errors
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setGeneralError('Network error. Please check your internet connection and try again.')
+      } else {
+        setGeneralError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.')
+      }
+      setLoading(false)
     } finally {
       setLoading(false)
     }
@@ -105,23 +133,25 @@ export default function NewCaseRoomPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
+          {/* General error (system-level only) */}
+          {generalError && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
-              {error}
+              {generalError}
             </div>
           )}
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="space-y-4">
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                  Section *
-                </label>
+              {/* Section Field */}
+              <FormField
+                label="Section"
+                required
+                error={fieldErrors.sectionId}
+              >
                 <select
                   required
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select a section</option>
                   {sections.map((section) => (
@@ -130,61 +160,63 @@ export default function NewCaseRoomPage() {
                     </option>
                   ))}
                 </select>
-              </div>
+              </FormField>
 
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                  Room Title *
-                </label>
+              {/* Title Field */}
+              <FormField
+                label="Room Title"
+                required
+                error={fieldErrors.title}
+              >
                 <input
                   type="text"
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="e.g., Week 5 Case Study Discussion"
                   maxLength={200}
                 />
-              </div>
+              </FormField>
 
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                  Description (Optional)
-                </label>
+              {/* Description Field */}
+              <FormField
+                label="Description (Optional)"
+                error={fieldErrors.description}
+              >
                 <textarea
                   rows={4}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Provide instructions and context for the case submission..."
                 />
-              </div>
+              </FormField>
 
+              {/* Date/Time Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                    Due Date (Optional)
-                  </label>
+                <FormField
+                  label="Due Date (Optional)"
+                  error={fieldErrors.dueDate}
+                  helpText="Must be within the next 2 years"
+                >
                   <input
                     type="date"
                     min={today}
+                    max={new Date(new Date().setFullYear(new Date().getFullYear() + 2)).toISOString().split('T')[0]}
                     value={formData.dueDate}
                     onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
-                </div>
+                </FormField>
 
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                    Due Time
-                  </label>
+                <FormField
+                  label="Due Time"
+                  error={fieldErrors.dueTime}
+                >
                   <input
                     type="time"
                     value={formData.dueTime}
                     onChange={(e) => setFormData({ ...formData, dueTime: e.target.value })}
-                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
-                </div>
+                </FormField>
               </div>
             </div>
           </div>
