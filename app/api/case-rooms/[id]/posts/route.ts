@@ -47,6 +47,23 @@ export async function POST(
       return NextResponse.json({ success: false, error: 'Not enrolled' }, { status: 403 })
     }
 
+    // Validate file ownership - students can only attach their own files
+    if (data.fileKeys && data.fileKeys.length > 0) {
+      const files = await prisma.file.findMany({
+        where: {
+          key: { in: data.fileKeys },
+          ownerId: session.user.id,
+        },
+      })
+
+      if (files.length !== data.fileKeys.length) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid file references - you can only attach your own files' },
+          { status: 403 }
+        )
+      }
+    }
+
     const post = await prisma.casePost.create({
       data: {
         roomId: params.id,
@@ -89,6 +106,44 @@ export async function GET(
     if (!session?.user) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
+
+    // Verify case room exists and get section info
+    const room = await prisma.caseRoom.findUnique({
+      where: { id: params.id },
+      include: { section: true },
+    })
+
+    if (!room) {
+      return NextResponse.json({ success: false, error: 'Room not found' }, { status: 404 })
+    }
+
+    // Check enrollment for students - only enrolled students can view posts
+    if (session.user.role === 'STUDENT') {
+      const enrollment = await prisma.enrollment.findFirst({
+        where: {
+          userId: session.user.id,
+          sectionId: room.sectionId,
+          status: 'ENROLLED',
+        },
+      })
+
+      if (!enrollment) {
+        return NextResponse.json(
+          { success: false, error: 'Not enrolled in this course' },
+          { status: 403 }
+        )
+      }
+    }
+    // Instructors can view if they teach the section
+    else if (session.user.role === 'INSTRUCTOR') {
+      if (room.section.instructorId !== session.user.id) {
+        return NextResponse.json(
+          { success: false, error: 'You do not teach this course' },
+          { status: 403 }
+        )
+      }
+    }
+    // Admins and moderators can view all
 
     const posts = await prisma.casePost.findMany({
       where: { roomId: params.id },

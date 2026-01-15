@@ -22,6 +22,20 @@ export const authOptions: NextAuthOptions = {
         })
 
         if (!user || !user.hashedPassword) {
+          // Log failed login attempt for non-existent user
+          await prisma.auditLog.create({
+            data: {
+              action: 'LOGIN_FAILED',
+              targetType: 'User',
+              details: {
+                email: credentials.email,
+                reason: 'User not found or no password set',
+                timestamp: new Date().toISOString(),
+              },
+              severity: 'WARNING',
+              category: 'SECURITY',
+            },
+          })
           throw new Error('Invalid credentials')
         }
 
@@ -31,6 +45,22 @@ export const authOptions: NextAuthOptions = {
         )
 
         if (!isPasswordValid) {
+          // Log failed login attempt with user context
+          await prisma.auditLog.create({
+            data: {
+              userId: user.id,
+              action: 'LOGIN_FAILED',
+              targetType: 'User',
+              targetId: user.id,
+              details: {
+                email: user.email,
+                reason: 'Invalid password',
+                timestamp: new Date().toISOString(),
+              },
+              severity: 'WARNING',
+              category: 'SECURITY',
+            },
+          })
           throw new Error('Invalid credentials')
         }
 

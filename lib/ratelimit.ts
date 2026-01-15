@@ -199,6 +199,41 @@ export const RateLimitPresets = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     message: 'Rate limit exceeded. Please slow down.',
   },
+
+  // Certificate issuance: 10 per hour per user
+  certificateIssue: {
+    maxAttempts: 10,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many certificate issuance attempts. Please try again later.',
+  },
+
+  // Grade submission: 50 per hour per instructor
+  gradeSubmission: {
+    maxAttempts: 50,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many grading attempts. Please try again later.',
+  },
+
+  // Enrollment actions: 30 per hour per user
+  enrollmentAction: {
+    maxAttempts: 30,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many enrollment actions. Please try again later.',
+  },
+
+  // Payment recording: 20 per hour per user
+  paymentRecord: {
+    maxAttempts: 20,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many payment recording attempts. Please try again later.',
+  },
+
+  // User import: 3 per hour per admin
+  userImport: {
+    maxAttempts: 3,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many user import attempts. Please try again later.',
+  },
 }
 
 /**

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,8 +28,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Rate limiting for payment recording
+    const rateLimit = rateLimitByIdentifier(
+      request,
+      'payment-record',
+      session.user.id,
+      RateLimitPresets.paymentRecord
+    )
+    if (rateLimit) return rateLimit
+
     const body = await request.json()
     const data = createPaymentSchema.parse(body)
+
+    // Validate student exists and has STUDENT role
+    const student = await prisma.user.findUnique({
+      where: { id: data.studentId },
+      select: { id: true, role: true, name: true },
+    })
+
+    if (!student) {
+      return NextResponse.json(
+        { success: false, error: 'Student not found' },
+        { status: 404 }
+      )
+    }
+
+    if (student.role !== 'STUDENT') {
+      return NextResponse.json(
+        { success: false, error: 'Invalid student ID - user is not a student' },
+        { status: 400 }
+      )
+    }
 
     const payment = await prisma.payment.create({
       data: {

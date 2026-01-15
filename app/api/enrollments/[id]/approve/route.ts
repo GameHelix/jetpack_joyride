@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { sendEnrollmentApprovedEmail } from '@/lib/email'
+import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,6 +24,15 @@ export async function POST(
         { status: 403 }
       )
     }
+
+    // Rate limiting for enrollment actions
+    const rateLimit = rateLimitByIdentifier(
+      request,
+      'enrollment-approve',
+      user.id,
+      RateLimitPresets.enrollmentAction
+    )
+    if (rateLimit) return rateLimit
 
     const enrollment = await prisma.enrollment.findUnique({
       where: { id: params.id },

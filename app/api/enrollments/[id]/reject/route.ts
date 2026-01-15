@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendEnrollmentRejectedEmail } from '@/lib/email'
+import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,6 +29,15 @@ export async function POST(
         { status: 403 }
       )
     }
+
+    // Rate limiting for enrollment actions
+    const rateLimit = rateLimitByIdentifier(
+      request,
+      'enrollment-reject',
+      user.id,
+      RateLimitPresets.enrollmentAction
+    )
+    if (rateLimit) return rateLimit
 
     const body = await request.json().catch(() => ({}))
     const data = rejectSchema.parse(body)

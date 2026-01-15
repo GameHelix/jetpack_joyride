@@ -7,6 +7,14 @@ export const dynamic = 'force-dynamic'
 // GET /api/debug/enrollments - Debug enrollment data
 export async function GET(request: NextRequest) {
   try {
+    // SECURITY: Debug endpoints are completely disabled in production
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        { error: 'Not Found' },
+        { status: 404 }
+      )
+    }
+
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })

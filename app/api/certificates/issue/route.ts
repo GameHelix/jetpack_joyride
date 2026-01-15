@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
+import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,6 +15,15 @@ export async function POST(request: NextRequest) {
     if (user.role !== 'INSTRUCTOR' && user.role !== 'ADMIN') {
       return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
     }
+
+    // Rate limiting for certificate issuance
+    const rateLimit = rateLimitByIdentifier(
+      request,
+      'certificate-issue',
+      user.id,
+      RateLimitPresets.certificateIssue
+    )
+    if (rateLimit) return rateLimit
 
     const { enrollmentId } = await request.json()
 

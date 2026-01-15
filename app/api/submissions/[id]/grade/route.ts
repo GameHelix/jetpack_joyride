@@ -3,6 +3,7 @@ import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { sendGradeReceivedEmail } from '@/lib/email'
+import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,16 @@ export async function PUT(
 ) {
   try {
     const user = await requireInstructor()
+
+    // Rate limiting for grade submission
+    const rateLimit = rateLimitByIdentifier(
+      request,
+      'grade-submission',
+      user.id,
+      RateLimitPresets.gradeSubmission
+    )
+    if (rateLimit) return rateLimit
+
     const body = await request.json()
     const data = gradeSubmissionSchema.parse(body)
 

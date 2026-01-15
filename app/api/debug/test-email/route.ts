@@ -5,15 +5,16 @@ import { sendPasswordResetEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   try {
-    // Disable in production unless explicitly enabled via environment variable
-    if (process.env.NODE_ENV === 'production' && process.env.ENABLE_DEBUG_ENDPOINTS !== 'true') {
+    // SECURITY: Debug endpoints are completely disabled in production
+    // No environment variable can override this for security
+    if (process.env.NODE_ENV === 'production') {
       return NextResponse.json(
         { error: 'Not Found' },
         { status: 404 }
       )
     }
 
-    // Only allow admins to access this endpoint
+    // Only allow admins to access this endpoint in development
     const session = await getServerSession(authOptions)
 
     if (!session?.user || session.user.role !== 'ADMIN') {

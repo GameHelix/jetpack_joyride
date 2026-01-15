@@ -6,13 +6,21 @@ import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
+// SECURITY: Server-side file size limits - cannot be overridden by client
+const FILE_SIZE_LIMITS = {
+  GLOBAL_MAX: 104857600, // 100MB absolute maximum
+  DEFAULT_MAX: 10485760, // 10MB default for general uploads
+  ASSIGNMENT: 52428800, // 50MB for assignments
+  PROFILE: 5242880, // 5MB for profile images
+} as const
+
 const uploadUrlSchema = z.object({
   filename: z.string().min(1),
   contentType: z.string().min(1),
   sizeBytes: z.number().positive(),
   allowedTypes: z.array(z.string()).optional(),
-  maxSizeBytes: z.number().positive().optional().default(10485760), // 10MB default
   prefix: z.string().optional(),
+  context: z.enum(['assignment', 'profile', 'general']).optional().default('general'),
 })
 
 export async function POST(request: NextRequest) {
@@ -22,18 +30,35 @@ export async function POST(request: NextRequest) {
 
     const data = uploadUrlSchema.parse(body)
 
-    // Validate file type if allowedTypes is provided
-    if (data.allowedTypes && !validateFileType(data.filename, data.allowedTypes)) {
+    // SECURITY: Enforce server-side file size limits based on context
+    // Client cannot override these limits
+    const contextLimits = {
+      assignment: FILE_SIZE_LIMITS.ASSIGNMENT,
+      profile: FILE_SIZE_LIMITS.PROFILE,
+      general: FILE_SIZE_LIMITS.DEFAULT_MAX,
+    }
+    const maxSizeBytes = contextLimits[data.context]
+
+    // Check against global maximum
+    if (data.sizeBytes > FILE_SIZE_LIMITS.GLOBAL_MAX) {
       return NextResponse.json(
-        { error: `File type not allowed. Allowed types: ${data.allowedTypes.join(', ')}` },
+        { error: `File size exceeds global maximum of ${FILE_SIZE_LIMITS.GLOBAL_MAX / 1048576}MB` },
         { status: 400 }
       )
     }
 
-    // Validate file size
-    if (!validateFileSize(data.sizeBytes, data.maxSizeBytes)) {
+    // Check against context-specific limit
+    if (data.sizeBytes > maxSizeBytes) {
       return NextResponse.json(
-        { error: `File size exceeds maximum allowed size of ${data.maxSizeBytes} bytes` },
+        { error: `File size exceeds maximum allowed size of ${maxSizeBytes / 1048576}MB for ${data.context} uploads` },
+        { status: 400 }
+      )
+    }
+
+    // Validate file type if allowedTypes is provided
+    if (data.allowedTypes && !validateFileType(data.filename, data.allowedTypes)) {
+      return NextResponse.json(
+        { error: `File type not allowed. Allowed types: ${data.allowedTypes.join(', ')}` },
         { status: 400 }
       )
     }
