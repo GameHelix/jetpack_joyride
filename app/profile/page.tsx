@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard-layout'
+import { FormField } from '@/components/form-field'
+import { useFormValidation } from '@/hooks/use-form-validation'
 
 interface UserProfile {
   id: string
@@ -25,6 +27,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const { fieldErrors, generalError, setGeneralError, handleHttpError, clearAllErrors } = useFormValidation()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -99,6 +102,7 @@ export default function ProfilePage() {
     e.preventDefault()
     setSaving(true)
     setMessage(null)
+    clearAllErrors()
 
     try {
       let avatarUrl = formData.profileAvatarUrl
@@ -123,7 +127,7 @@ export default function ProfilePage() {
           if (!urlResponse.ok) throw new Error(urlData.error || 'Failed to get upload URL')
 
           // Upload to R2
-          await fetch(urlData.uploadUrl, {
+          const uploadResponse = await fetch(urlData.uploadUrl, {
             method: 'PUT',
             body: avatarFile,
             headers: {
@@ -131,10 +135,20 @@ export default function ProfilePage() {
             },
           })
 
+          if (!uploadResponse.ok) {
+            throw new Error('Failed to upload profile picture to storage')
+          }
+
           // Confirm upload
-          await fetch(`/api/files/${urlData.fileId}/confirm`, {
+          const confirmResponse = await fetch('/api/files/confirm-upload', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileKey: urlData.fileKey }),
           })
+
+          if (!confirmResponse.ok) {
+            throw new Error('Failed to confirm file upload')
+          }
 
           // Get public URL (construct from file key)
           avatarUrl = `https://pub-f850e88d52e84edba2e5b82a80ba3126.r2.dev/${urlData.fileKey}`
@@ -157,6 +171,16 @@ export default function ProfilePage() {
 
       const data = await response.json()
 
+      if (!response.ok) {
+        // Handle HTTP errors with field-level error parsing
+        const handled = handleHttpError(response, data)
+        if (!handled) {
+          setMessage({ type: 'error', text: data.error || 'Failed to update profile' })
+        }
+        setSaving(false)
+        return
+      }
+
       if (data.success) {
         setMessage({ type: 'success', text: 'Profile updated successfully!' })
         setProfile(data.user)
@@ -165,7 +189,13 @@ export default function ProfilePage() {
         setMessage({ type: 'error', text: data.error || 'Failed to update profile' })
       }
     } catch (error) {
-      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to update profile' })
+      // Handle network errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        setMessage({ type: 'error', text: 'Network error. Please check your internet connection and try again.' })
+      } else {
+        setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to update profile' })
+      }
+      setSaving(false)
     } finally {
       setSaving(false)
       setUploading(false)

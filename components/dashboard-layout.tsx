@@ -78,6 +78,11 @@ const icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
+  profile: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  ),
 }
 
 const navigationByRole: Record<
@@ -93,6 +98,7 @@ const navigationByRole: Record<
     { name: 'Users', href: '/admin/users', icon: icons.users },
     { name: 'Rooms', href: '/admin/rooms', icon: icons.rooms },
     { name: 'Audit Logs', href: '/admin/audit-logs', icon: icons.auditLogs },
+    { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
   INSTRUCTOR: [
     { name: 'Dashboard', href: '/instructor', icon: icons.dashboard },
@@ -104,11 +110,13 @@ const navigationByRole: Record<
     { name: 'Content', href: '/instructor/content', icon: icons.content },
     { name: 'Schedule', href: '/instructor/schedule', icon: icons.schedule },
     { name: 'Certificates', href: '/instructor/certificates', icon: icons.certificates },
+    { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
   MODERATOR: [
     { name: 'Dashboard', href: '/moderator', icon: icons.dashboard },
     { name: 'Enrollments', href: '/moderator/enrollments', icon: icons.enrollments },
     { name: 'Courses', href: '/moderator/courses', icon: icons.courses },
+    { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
   STUDENT: [
     { name: 'Dashboard', href: '/student/dashboard', icon: icons.dashboard },
@@ -118,6 +126,7 @@ const navigationByRole: Record<
     { name: 'Exams', href: '/student/exams', icon: icons.exams },
     { name: 'Case Rooms', href: '/student/case-rooms', icon: icons.caseRooms },
     { name: 'Certificates', href: '/student/certificates', icon: icons.certificates },
+    { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
 }
 
