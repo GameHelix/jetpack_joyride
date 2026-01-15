@@ -15,14 +15,6 @@ export async function DELETE(
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only instructors, moderators, and admins can remove students
-    if (!['INSTRUCTOR', 'MODERATOR', 'ADMIN'].includes(user.role)) {
-      return NextResponse.json(
-        { success: false, error: 'Only instructors, moderators, and admins can remove students' },
-        { status: 403 }
-      )
-    }
-
     // Get enrollment with section and course info
     const enrollment = await prisma.enrollment.findUnique({
       where: { id: params.id },
@@ -41,15 +33,19 @@ export async function DELETE(
       return NextResponse.json({ success: false, error: 'Enrollment not found' }, { status: 404 })
     }
 
-    // Check if user has permission to remove students from this section
-    const hasPermission =
-      user.role === 'ADMIN' ||
-      user.role === 'MODERATOR' ||
-      (user.role === 'INSTRUCTOR' && enrollment.section.instructorId === user.id)
+    // Check if user has permission:
+    // - Students can only remove their own enrollments
+    // - Instructors can remove students from their sections
+    // - Moderators and admins can remove any enrollment
+    const isOwnEnrollment = enrollment.userId === user.id
+    const isInstructor = user.role === 'INSTRUCTOR' && enrollment.section.instructorId === user.id
+    const isModeratorOrAdmin = user.role === 'ADMIN' || user.role === 'MODERATOR'
+
+    const hasPermission = isOwnEnrollment || isInstructor || isModeratorOrAdmin
 
     if (!hasPermission) {
       return NextResponse.json(
-        { success: false, error: 'You do not have permission to remove students from this section' },
+        { success: false, error: 'You do not have permission to remove this enrollment' },
         { status: 403 }
       )
     }
@@ -60,10 +56,11 @@ export async function DELETE(
     })
 
     // Log unenrollment action
+    const action = isOwnEnrollment ? 'SELF_UNENROLLED' : 'ENROLLMENT_REMOVED'
     await prisma.auditLog.create({
       data: {
         userId: user.id,
-        action: 'ENROLLMENT_REMOVED',
+        action,
         targetType: 'Enrollment',
         targetId: enrollment.id,
         details: {
@@ -73,15 +70,20 @@ export async function DELETE(
           courseCode: enrollment.section.course.code,
           removedBy: user.name,
           removedByRole: user.role,
+          selfUnenrolled: isOwnEnrollment,
         },
-        severity: 'WARNING',
+        severity: isOwnEnrollment ? 'INFO' : 'WARNING',
         category: 'USER_ACTION',
       },
     })
 
+    const message = isOwnEnrollment
+      ? `You have successfully left ${enrollment.section.course.code}`
+      : `${enrollment.user.name} has been removed from ${enrollment.section.course.code}`
+
     return NextResponse.json({
       success: true,
-      message: `${enrollment.user.name} has been removed from ${enrollment.section.course.code}`,
+      message,
     })
   } catch (error) {
     console.error('Unenrollment error:', error)

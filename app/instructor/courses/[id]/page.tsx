@@ -7,6 +7,7 @@ import DashboardLayout from '@/components/dashboard-layout'
 import { ContentAgeIndicator } from '@/components/content-age-indicator'
 import { EnrollStudentsButton } from '@/components/enroll-students-button'
 import { EnrolledStudentsList } from '@/components/enrolled-students-list'
+import { DeleteCourseButton } from '@/components/delete-course-button'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -131,12 +132,20 @@ export default async function CourseDetailPage({
               </p>
             )}
           </div>
-          <Link
-            href={`/instructor/courses/${course.id}/edit`}
-            className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
-          >
-            Edit Course
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Link
+              href={`/instructor/courses/${course.id}/edit`}
+              className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+            >
+              Edit Course
+            </Link>
+            <DeleteCourseButton
+              courseId={course.id}
+              courseCode={course.code}
+              courseTitle={course.title}
+              hasEnrollments={(section?.enrollments.length || 0) > 0}
+            />
+          </div>
         </div>
 
         {/* Stats Grid */}

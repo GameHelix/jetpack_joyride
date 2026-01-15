@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard-layout'
+import { LeaveCourseButton } from '@/components/leave-course-button'
 
 interface Course {
   id: string
@@ -168,9 +169,16 @@ export default function StudentCoursesPage() {
                           {enrollment.section.course.code}
                         </span>
                       </div>
-                      <span className="text-green-600 text-xs sm:text-sm font-medium">
-                        Enrolled
-                      </span>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className="text-green-600 text-xs sm:text-sm font-medium">
+                          Enrolled
+                        </span>
+                        <LeaveCourseButton
+                          enrollmentId={enrollment.id}
+                          courseCode={enrollment.section.course.code}
+                          courseTitle={enrollment.section.course.title}
+                        />
+                      </div>
                     </div>
                     <h3 className="text-xl font-bold text-[#5C2482] mb-2">
                       {enrollment.section.course.title}

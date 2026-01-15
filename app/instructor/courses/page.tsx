@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import DashboardLayout from '@/components/dashboard-layout'
+import { CourseActions } from '@/components/course-actions'
 import Link from 'next/link'
 
 export default async function InstructorCoursesPage() {
@@ -180,12 +181,12 @@ export default async function InstructorCoursesPage() {
                       </div>
                     </div>
                     <div className="ml-0 mt-4 sm:ml-4 sm:mt-0">
-                      <Link
-                        href={`/instructor/courses/${section.course.id}`}
-                        className="inline-block px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-[#5C2482] rounded-xl hover:bg-purple-50 transition"
-                      >
-                        Manage
-                      </Link>
+                      <CourseActions
+                        courseId={section.course.id}
+                        courseCode={section.course.code}
+                        courseTitle={section.course.title}
+                        hasEnrollments={section._count.enrollments > 0}
+                      />
                     </div>
                   </div>
                 </div>
