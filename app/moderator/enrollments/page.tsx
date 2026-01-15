@@ -130,8 +130,8 @@ export default function ModeratorEnrollments() {
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-[#5C2482]">No pending enrollments</h3>
-            <p className="mt-1 text-sm text-gray-500">All enrollment requests have been processed.</p>
+            <h3 className="mt-2 text-xs sm:text-sm font-medium text-[#5C2482]">No pending enrollments</h3>
+            <p className="mt-1 text-xs sm:text-sm text-gray-500">All enrollment requests have been processed.</p>
           </div>
         ) : (
           <div className="bg-white shadow rounded-xl overflow-hidden">
@@ -139,19 +139,19 @@ export default function ModeratorEnrollments() {
               <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Student
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Course
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Instructor
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Requested
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -161,23 +161,23 @@ export default function ModeratorEnrollments() {
                   <tr key={enrollment.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-[#5C2482]">{enrollment.user.name}</div>
-                        <div className="text-sm text-gray-500">{enrollment.user.email}</div>
+                        <div className="text-xs sm:text-sm font-medium text-[#5C2482]">{enrollment.user.name}</div>
+                        <div className="text-xs sm:text-sm text-gray-500">{enrollment.user.email}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-[#5C2482]">{enrollment.section.course.code}</div>
-                        <div className="text-sm text-gray-500">{enrollment.section.course.title}</div>
+                        <div className="text-xs sm:text-sm font-medium text-[#5C2482]">{enrollment.section.course.code}</div>
+                        <div className="text-xs sm:text-sm text-gray-500">{enrollment.section.course.title}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-[#5C2482]">{enrollment.section.instructor.name}</div>
+                      <div className="text-xs sm:text-sm text-[#5C2482]">{enrollment.section.instructor.name}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                       {format(new Date(enrollment.enrolledAt), 'MMM d, yyyy')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium space-x-2">
                       <button
                         onClick={() => setApproveDialog({ isOpen: true, enrollmentId: enrollment.id })}
                         disabled={processing === enrollment.id}

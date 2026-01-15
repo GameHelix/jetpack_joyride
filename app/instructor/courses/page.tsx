@@ -52,7 +52,7 @@ export default async function InstructorCoursesPage() {
           </div>
           <Link
             href="/instructor/courses/new"
-            className="px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition font-medium"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition font-medium"
           >
             + Create Course
           </Link>
@@ -84,7 +84,7 @@ export default async function InstructorCoursesPage() {
               <div className="mt-6">
                 <Link
                   href="/instructor/courses/new"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#F95B0E] hover:bg-[#d94f0c]"
+                  className="inline-flex items-center px-3 py-2 sm:px-4 border border-transparent shadow-sm text-xs sm:text-sm font-medium rounded-md text-white bg-[#F95B0E] hover:bg-[#d94f0c]"
                 >
                   + Create Course
                 </Link>
@@ -108,11 +108,11 @@ export default async function InstructorCoursesPage() {
                         </h3>
                       </Link>
                       {section.course.description && (
-                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                        <p className="mt-2 text-xs sm:text-sm text-gray-600 line-clamp-2">
                           {section.course.description}
                         </p>
                       )}
-                      <div className="mt-4 flex items-center space-x-6 text-sm text-gray-500">
+                      <div className="mt-4 flex items-center space-x-6 text-xs sm:text-sm text-gray-500">
                         <div className="flex items-center">
                           <svg
                             className="mr-1.5 h-5 w-5"
@@ -182,7 +182,7 @@ export default async function InstructorCoursesPage() {
                     <div className="ml-4 flex space-x-2">
                       <Link
                         href={`/instructor/courses/${section.course.id}`}
-                        className="px-4 py-2 text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
+                        className="px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
                       >
                         Manage
                       </Link>

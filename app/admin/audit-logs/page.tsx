@@ -213,13 +213,13 @@ export default function AuditLogsPage() {
           <div className="flex gap-2">
             <button
               onClick={() => handleExport('csv')}
-              className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+              className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
             >
               Export CSV
             </button>
             <button
               onClick={() => handleExport('json')}
-              className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+              className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
             >
               Export JSON
             </button>
@@ -230,25 +230,25 @@ export default function AuditLogsPage() {
         <div className="bg-white rounded-xl shadow p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-600">Total Logs</p>
+              <p className="text-xs sm:text-sm text-gray-600">Total Logs</p>
               <p className="text-2xl font-bold text-[#5C2482]">
                 {pagination.total.toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Current Page</p>
+              <p className="text-xs sm:text-sm text-gray-600">Current Page</p>
               <p className="text-2xl font-bold text-[#5C2482]">
                 {pagination.page} / {pagination.totalPages}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Showing</p>
+              <p className="text-xs sm:text-sm text-gray-600">Showing</p>
               <p className="text-2xl font-bold text-[#5C2482]">
                 {logs.length} logs
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Active Filters</p>
+              <p className="text-xs sm:text-sm text-gray-600">Active Filters</p>
               <p className="text-2xl font-bold text-[#5C2482]">
                 {[search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate].filter(Boolean).length}
               </p>
@@ -262,7 +262,7 @@ export default function AuditLogsPage() {
             <h2 className="text-lg font-semibold text-[#5C2482]">Filters</h2>
             <button
               onClick={resetFilters}
-              className="text-sm text-[#5C2482] hover:underline"
+              className="text-xs sm:text-sm text-[#5C2482] hover:underline"
             >
               Reset All
             </button>
@@ -271,7 +271,7 @@ export default function AuditLogsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Search
               </label>
               <input
@@ -288,7 +288,7 @@ export default function AuditLogsPage() {
 
             {/* Action Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Action
               </label>
               <select
@@ -308,7 +308,7 @@ export default function AuditLogsPage() {
 
             {/* Target Type Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Target Type
               </label>
               <select
@@ -328,7 +328,7 @@ export default function AuditLogsPage() {
 
             {/* Severity Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Severity
               </label>
               <select
@@ -348,7 +348,7 @@ export default function AuditLogsPage() {
 
             {/* Category Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Category
               </label>
               <select
@@ -369,7 +369,7 @@ export default function AuditLogsPage() {
 
             {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 Start Date
               </label>
               <input
@@ -385,7 +385,7 @@ export default function AuditLogsPage() {
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 End Date
               </label>
               <input
@@ -412,25 +412,25 @@ export default function AuditLogsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Timestamp
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Action
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Severity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Target
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Details
                     </th>
                   </tr>
@@ -439,17 +439,17 @@ export default function AuditLogsPage() {
                   {logs.map((log) => (
                     <tr key={log.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-[#5C2482]">
+                        <div className="text-xs sm:text-sm text-[#5C2482]">
                           {new Date(log.createdAt).toLocaleString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-[#5C2482]">
+                          <div className="text-xs sm:text-sm font-medium text-[#5C2482]">
                             {log.user?.name || 'System'}
                           </div>
                           {log.user && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-xs sm:text-sm text-gray-500">
                               {log.user.email}
                             </div>
                           )}
@@ -475,14 +475,14 @@ export default function AuditLogsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {log.category && (
-                          <span className="text-sm text-gray-600">
+                          <span className="text-xs sm:text-sm text-gray-600">
                             {log.category}
                           </span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {log.targetType && (
-                          <div className="text-sm text-gray-600">
+                          <div className="text-xs sm:text-sm text-gray-600">
                             {log.targetType}
                             {log.targetId && (
                               <div className="text-xs text-gray-500">
@@ -494,7 +494,7 @@ export default function AuditLogsPage() {
                       </td>
                       <td className="px-6 py-4">
                         {log.details && (
-                          <details className="text-sm">
+                          <details className="text-xs sm:text-sm">
                             <summary className="cursor-pointer text-[#5C2482] hover:underline">
                               View details
                             </summary>
@@ -514,21 +514,21 @@ export default function AuditLogsPage() {
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white px-6 py-3 rounded-xl shadow">
+          <div className="flex items-center justify-between bg-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl shadow">
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
               disabled={pagination.page === 1}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-xs sm:text-sm text-gray-600">
               Page {pagination.page} of {pagination.totalPages}
             </span>
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
               disabled={pagination.page === pagination.totalPages}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>

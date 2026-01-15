@@ -68,7 +68,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
         <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center text-sm text-gray-600 mb-2">
+          <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2">
             <Link href="/instructor/exams" className="hover:text-blue-600">
               Exams
             </Link>
@@ -78,7 +78,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">{exam.title}</h1>
-              <p className="text-sm md:text-base text-gray-600">
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">
                 {exam.section.course.code}: {exam.section.course.title}
               </p>
             </div>
@@ -109,14 +109,14 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                 {isUpcoming && '🔵 Upcoming'}
                 {isPast && '⚫ Closed'}
               </p>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">
                 {isActive && `Closes ${endTime.toLocaleString()}`}
                 {isUpcoming && `Opens ${startTime.toLocaleString()}`}
                 {isPast && `Closed ${endTime.toLocaleString()}`}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Duration</p>
+              <p className="text-xs sm:text-sm text-gray-600">Duration</p>
               <p className="font-bold text-gray-900">{exam.durationMinutes} minutes</p>
             </div>
           </div>
@@ -125,19 +125,19 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Questions</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Total Questions</p>
             <p className="text-3xl font-bold text-gray-900">{exam.questions.length}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Points</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Total Points</p>
             <p className="text-3xl font-bold text-gray-900">{totalPoints}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Completed</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Completed</p>
             <p className="text-3xl font-bold text-green-600">{completedAttempts.length}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Average Score</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Average Score</p>
             <p className="text-3xl font-bold text-blue-600">{averageScore.toFixed(1)}%</p>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                       <p className="font-medium text-gray-900">
                         {exam.isGroupExam ? `Group ${attempt.group?.name}` : attempt.student?.name}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                         Started {new Date(attempt.startedAt).toLocaleString()}
                       </p>
                     </div>
@@ -187,19 +187,19 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Student/Group
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Submitted
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Time Taken
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Score
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -218,14 +218,14 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                                 {exam.isGroupExam ? `Group ${attempt.group?.name}` : attempt.student?.name}
                               </p>
                               {!exam.isGroupExam && (
-                                <p className="text-sm text-gray-600">{attempt.student?.email}</p>
+                                <p className="text-xs sm:text-sm text-gray-600">{attempt.student?.email}</p>
                               )}
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-xs sm:text-sm text-gray-600">
                             {submittedAt.toLocaleString()}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-xs sm:text-sm text-gray-600">
                             {timeTakenMinutes} min
                           </td>
                           <td className="px-6 py-4">
@@ -242,7 +242,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                           <td className="px-6 py-4">
                             <Link
                               href={`/instructor/exams/${exam.id}/attempts/${attempt.id}`}
-                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                              className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
                             >
                               View Details →
                             </Link>
@@ -266,7 +266,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
               .map((question: any, index: number) => (
                 <div key={question.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-start">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-bold text-sm mr-3 flex-shrink-0">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm mr-3 flex-shrink-0">
                       {index + 1}
                     </span>
                     <div className="flex-1">
@@ -276,7 +276,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                           {question.points} {question.points === 1 ? 'point' : 'points'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 mb-2">
                         <span className="px-2 py-0.5 rounded bg-purple-100 text-purple-700">
                           {question.questionType.replace('_', ' ').toUpperCase()}
                         </span>
@@ -296,7 +296,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
                           {question.options.map((option: string, oIndex: number) => (
                             <div
                               key={oIndex}
-                              className={`text-sm p-2 rounded ${
+                              className={`text-xs sm:text-sm p-2 rounded ${
                                 option === question.correctAnswer
                                   ? 'bg-green-50 text-green-800 font-medium'
                                   : 'bg-gray-50 text-gray-700'

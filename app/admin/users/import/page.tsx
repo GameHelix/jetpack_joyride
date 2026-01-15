@@ -212,7 +212,7 @@ export default function BulkUserImportPage() {
           </div>
           <Link
             href="/admin/users"
-            className="px-4 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition"
+            className="px-3 py-2 sm:px-4 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition"
           >
             Back to Users
           </Link>
@@ -230,7 +230,7 @@ export default function BulkUserImportPage() {
               <h3 className="text-lg font-medium text-blue-800">
                 Instructions
               </h3>
-              <div className="mt-2 text-sm text-blue-700">
+              <div className="mt-2 text-xs sm:text-sm text-blue-700">
                 <ol className="list-decimal list-inside space-y-2">
                   <li>
                     Download the template file below and fill it with user data
@@ -277,7 +277,7 @@ export default function BulkUserImportPage() {
               <h3 className="text-lg font-medium text-green-800">
                 Secure Password Management
               </h3>
-              <p className="mt-2 text-sm text-green-700">
+              <p className="mt-2 text-xs sm:text-sm text-green-700">
                 For security reasons, you do not need to provide passwords in the Excel file.
                 The system will automatically generate secure, random passwords for each user and
                 send them via email. Users will be prompted to change their password on first login.
@@ -295,7 +295,7 @@ export default function BulkUserImportPage() {
             Download this template file, <strong>replace the example emails with real user emails</strong>, and upload it below.
           </p>
           <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
-            <p className="text-sm text-yellow-800">
+            <p className="text-xs sm:text-sm text-yellow-800">
               ⚠️ <strong>Important:</strong> The template contains example emails like "student@yourdomain.com".
               You must replace these with real, unique email addresses before uploading.
             </p>
@@ -303,7 +303,7 @@ export default function BulkUserImportPage() {
           <a
             href="/templates/bulk-user-import-template.xlsx"
             download="bulk-user-import-template.xlsx"
-            className="inline-flex items-center px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+            className="inline-flex items-center px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -323,7 +323,7 @@ export default function BulkUserImportPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Select Excel or CSV file
               </label>
               <input
@@ -331,13 +331,13 @@ export default function BulkUserImportPage() {
                 type="file"
                 accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
                 onChange={handleFileChange}
-                className="block w-full text-sm text-[#5C2482] border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none"
+                className="block w-full text-xs sm:text-sm text-[#5C2482] border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none"
               />
             </div>
 
             {file && (
               <div className="p-4 bg-gray-50 rounded-xl">
-                <p className="text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600">
                   Selected file: <span className="font-medium text-[#5C2482]">{file.name}</span>
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
@@ -382,10 +382,10 @@ export default function BulkUserImportPage() {
                       {progress.phase === 'sending_emails' && '📧 Sending Welcome Emails'}
                       {!progress.phase && '⏳ Starting Import'}
                     </h3>
-                    <p className="text-sm text-gray-600">{progress.message}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">{progress.message}</p>
                   </div>
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-xs sm:text-sm text-gray-500">
                   {Math.ceil(progress.timeElapsed / 1000)}s elapsed
                 </div>
               </div>
@@ -393,7 +393,7 @@ export default function BulkUserImportPage() {
               {/* Progress Bar */}
               {progress.total > 0 && (
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-xs sm:text-sm">
                     <span className="font-medium text-gray-700">
                       {progress.current} / {progress.total} users
                     </span>
@@ -413,7 +413,7 @@ export default function BulkUserImportPage() {
               {/* Current User */}
               {progress.currentUser && (
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                  <p className="text-sm text-gray-700">
+                  <p className="text-xs sm:text-sm text-gray-700">
                     <span className="font-medium">Current:</span>{' '}
                     <span className="text-[#5C2482]">{progress.currentUser}</span>
                   </p>
@@ -473,7 +473,7 @@ export default function BulkUserImportPage() {
                 }`}>
                   {result.success ? 'Import Successful' : 'Import Failed'}
                 </h3>
-                <div className={`mt-2 text-sm ${
+                <div className={`mt-2 text-xs sm:text-sm ${
                   result.success
                     ? 'text-green-700'
                     : 'text-red-700'
@@ -549,7 +549,7 @@ export default function BulkUserImportPage() {
                   <div className="mt-4">
                     <Link
                       href="/admin/users"
-                      className="inline-flex items-center px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-sm"
+                      className="inline-flex items-center px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-xs sm:text-sm"
                     >
                       View All Users
                       <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -51,21 +51,21 @@ export default function LandingPage() {
               <div className="flex flex-col space-y-4">
                 <a
                   href="#features"
-                  className="text-gray-700 hover:text-[#5C2482] transition px-4 py-2"
+                  className="text-gray-700 hover:text-[#5C2482] transition px-3 py-2 sm:px-4"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Features
                 </a>
                 <a
                   href="#how-it-works"
-                  className="text-gray-700 hover:text-[#5C2482] transition px-4 py-2"
+                  className="text-gray-700 hover:text-[#5C2482] transition px-3 py-2 sm:px-4"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   How It Works
                 </a>
                 <Link
                   href="/auth/signin"
-                  className="bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-4 py-2 rounded-lg font-medium transition text-center mx-4"
+                  className="bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-3 py-2 sm:px-4 rounded-lg font-medium transition text-center mx-4"
                 >
                   Get Started
                 </Link>
@@ -80,8 +80,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
-              <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-                <span className="text-sm font-medium">🚀 Trusted by 500+ Educational Institutions</span>
+              <div className="inline-block bg-white/10 backdrop-blur-sm px-3 py-2 sm:px-4 rounded-full mb-6">
+                <span className="text-xs sm:text-sm font-medium">🚀 Trusted by 500+ Educational Institutions</span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight">
                 Stop Drowning in Spreadsheets. Start Teaching.
@@ -101,7 +101,7 @@ export default function LandingPage() {
                   Watch Demo
                 </button>
               </div>
-              <p className="mt-6 text-sm text-purple-200">
+              <p className="mt-6 text-xs sm:text-sm text-purple-200">
                 ✓ No credit card required  ✓ 14-day free trial  ✓ Setup in 5 minutes
               </p>
             </div>
@@ -112,23 +112,23 @@ export default function LandingPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
                     <div className="text-4xl font-bold text-[#5C2482] mb-2">95%</div>
-                    <div className="text-sm text-gray-600">Time Saved on Admin Tasks</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Time Saved on Admin Tasks</div>
                   </div>
                   <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl">
                     <div className="text-4xl font-bold text-[#F95B0E] mb-2">10K+</div>
-                    <div className="text-sm text-gray-600">Active Students</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Active Students</div>
                   </div>
                   <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl">
                     <div className="text-4xl font-bold text-green-600 mb-2">500+</div>
-                    <div className="text-sm text-gray-600">Courses Running</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Courses Running</div>
                   </div>
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl">
                     <div className="text-4xl font-bold text-blue-600 mb-2">24/7</div>
-                    <div className="text-sm text-gray-600">Support Available</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Support Available</div>
                   </div>
                 </div>
                 <div className="border-t border-gray-200 pt-6">
-                  <p className="text-sm text-gray-500 mb-3">Trusted by leading institutions:</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mb-3">Trusted by leading institutions:</p>
                   <div className="flex items-center gap-6 text-gray-400">
                     <span className="text-lg font-semibold">University X</span>
                     <span className="text-lg font-semibold">College Y</span>
@@ -160,7 +160,7 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-4">
                 Manually tracking enrollment requests in spreadsheets. Lost emails. Duplicate entries. Students asking "Did you get my request?"
               </p>
-              <div className="text-sm text-red-600 font-semibold">❌ Hours wasted weekly</div>
+              <div className="text-xs sm:text-sm text-red-600 font-semibold">❌ Hours wasted weekly</div>
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500">
@@ -169,7 +169,7 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-4">
                 Collecting assignments via email. Files scattered everywhere. No version control. Can't track who submitted what.
               </p>
-              <div className="text-sm text-red-600 font-semibold">❌ Impossible to scale</div>
+              <div className="text-xs sm:text-sm text-red-600 font-semibold">❌ Impossible to scale</div>
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500">
@@ -178,7 +178,7 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-4">
                 Zero insight into student progress. Can't identify struggling students until it's too late. No data-driven decisions.
               </p>
-              <div className="text-sm text-red-600 font-semibold">❌ Students fall through cracks</div>
+              <div className="text-xs sm:text-sm text-red-600 font-semibold">❌ Students fall through cracks</div>
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function LandingPage() {
               <p className="text-purple-100 mb-4">
                 Students enroll with one click. Auto-approve or manual review. Instant email notifications. Waitlist management. Zero spreadsheets.
               </p>
-              <div className="text-sm text-green-300 font-semibold">✓ 5 minutes setup, 95% time saved</div>
+              <div className="text-xs sm:text-sm text-green-300 font-semibold">✓ 5 minutes setup, 95% time saved</div>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
@@ -212,7 +212,7 @@ export default function LandingPage() {
               <p className="text-purple-100 mb-4">
                 Students submit directly in platform. Automatic late detection. File validation. Bulk grading. Feedback loops. All in one place.
               </p>
-              <div className="text-sm text-green-300 font-semibold">✓ Grade 100 assignments in 30 mins</div>
+              <div className="text-xs sm:text-sm text-green-300 font-semibold">✓ Grade 100 assignments in 30 mins</div>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
@@ -221,7 +221,7 @@ export default function LandingPage() {
               <p className="text-purple-100 mb-4">
                 See who's struggling instantly. Track submission rates. Monitor engagement. Export reports. Make data-driven interventions.
               </p>
-              <div className="text-sm text-green-300 font-semibold">✓ Identify at-risk students early</div>
+              <div className="text-xs sm:text-sm text-green-300 font-semibold">✓ Identify at-risk students early</div>
             </div>
           </div>
         </div>
@@ -329,7 +329,7 @@ export default function LandingPage() {
                   <p className="text-gray-600 mb-4">
                     Upload Excel with student emails. We send welcome emails with password setup links. They're enrolled and ready in minutes.
                   </p>
-                  <div className="text-sm text-[#5C2482] font-semibold">⏱️ 5 minutes</div>
+                  <div className="text-xs sm:text-sm text-[#5C2482] font-semibold">⏱️ 5 minutes</div>
                 </div>
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function LandingPage() {
                   <p className="text-gray-600 mb-4">
                     Add course details, create sections, build weekly schedule. Upload materials. Create assignments. Set grading criteria.
                   </p>
-                  <div className="text-sm text-[#5C2482] font-semibold">⏱️ 10 minutes</div>
+                  <div className="text-xs sm:text-sm text-[#5C2482] font-semibold">⏱️ 10 minutes</div>
                 </div>
               </div>
             </div>
@@ -359,7 +359,7 @@ export default function LandingPage() {
                   <p className="text-gray-600 mb-4">
                     Students enroll, submit assignments, get grades. You monitor analytics, provide feedback. System handles the rest automatically.
                   </p>
-                  <div className="text-sm text-[#5C2482] font-semibold">⏱️ Automated</div>
+                  <div className="text-xs sm:text-sm text-[#5C2482] font-semibold">⏱️ Automated</div>
                 </div>
               </div>
             </div>
@@ -380,7 +380,7 @@ export default function LandingPage() {
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl">
               <div className="text-4xl mb-3">👨‍💼</div>
               <h3 className="text-xl font-bold text-[#5C2482] mb-3">For Admins</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
                 <li>✓ Bulk user management</li>
                 <li>✓ System-wide analytics</li>
                 <li>✓ Audit logs & compliance</li>
@@ -392,7 +392,7 @@ export default function LandingPage() {
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl">
               <div className="text-4xl mb-3">👩‍🏫</div>
               <h3 className="text-xl font-bold text-[#F95B0E] mb-3">For Instructors</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
                 <li>✓ Course creation</li>
                 <li>✓ Assignment grading</li>
                 <li>✓ Student progress tracking</li>
@@ -404,7 +404,7 @@ export default function LandingPage() {
             <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
               <div className="text-4xl mb-3">🎓</div>
               <h3 className="text-xl font-bold text-green-600 mb-3">For Students</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
                 <li>✓ Easy enrollment</li>
                 <li>✓ Assignment submission</li>
                 <li>✓ Grade tracking</li>
@@ -416,7 +416,7 @@ export default function LandingPage() {
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl">
               <div className="text-4xl mb-3">👮</div>
               <h3 className="text-xl font-bold text-blue-600 mb-3">For Moderators</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
                 <li>✓ Enrollment approval</li>
                 <li>✓ Content moderation</li>
                 <li>✓ Student support</li>
@@ -475,7 +475,7 @@ export default function LandingPage() {
                 </div>
                 <div className="ml-3">
                   <div className="font-bold text-gray-900">Sarah Miller</div>
-                  <div className="text-sm text-gray-600">Dean, Springfield University</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Dean, Springfield University</div>
                 </div>
               </div>
             </div>
@@ -493,7 +493,7 @@ export default function LandingPage() {
                 </div>
                 <div className="ml-3">
                   <div className="font-bold text-gray-900">Dr. James Davis</div>
-                  <div className="text-sm text-gray-600">Professor, Tech Institute</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Professor, Tech Institute</div>
                 </div>
               </div>
             </div>
@@ -511,7 +511,7 @@ export default function LandingPage() {
                 </div>
                 <div className="ml-3">
                   <div className="font-bold text-gray-900">Lisa Wang</div>
-                  <div className="text-sm text-gray-600">Director, Online Academy</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Director, Online Academy</div>
                 </div>
               </div>
             </div>
@@ -540,7 +540,7 @@ export default function LandingPage() {
               Schedule Demo
             </button>
           </div>
-          <p className="mt-6 text-sm text-purple-200">
+          <p className="mt-6 text-xs sm:text-sm text-purple-200">
             No credit card required • 14-day free trial • Cancel anytime
           </p>
         </div>
@@ -557,25 +557,25 @@ export default function LandingPage() {
             <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
               <div className="text-2xl mb-2">👨‍💼</div>
               <div className="font-bold text-[#5C2482] mb-1">Admin</div>
-              <div className="text-sm text-gray-600 mb-2">admin@educy.com</div>
+              <div className="text-xs sm:text-sm text-gray-600 mb-2">admin@educy.com</div>
               <div className="text-xs text-gray-500">Full system access</div>
             </div>
             <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
               <div className="text-2xl mb-2">👩‍🏫</div>
               <div className="font-bold text-[#F95B0E] mb-1">Instructor</div>
-              <div className="text-sm text-gray-600 mb-2">alice.instructor@educy.com</div>
+              <div className="text-xs sm:text-sm text-gray-600 mb-2">alice.instructor@educy.com</div>
               <div className="text-xs text-gray-500">Course management</div>
             </div>
             <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
               <div className="text-2xl mb-2">👮</div>
               <div className="font-bold text-green-600 mb-1">Moderator</div>
-              <div className="text-sm text-gray-600 mb-2">moderator@educy.com</div>
+              <div className="text-xs sm:text-sm text-gray-600 mb-2">moderator@educy.com</div>
               <div className="text-xs text-gray-500">Enrollment approval</div>
             </div>
             <div className="bg-white p-4 rounded-xl shadow border border-gray-200">
               <div className="text-2xl mb-2">🎓</div>
               <div className="font-bold text-blue-600 mb-1">Student</div>
-              <div className="text-sm text-gray-600 mb-2">bob.student@educy.com</div>
+              <div className="text-xs sm:text-sm text-gray-600 mb-2">bob.student@educy.com</div>
               <div className="text-xs text-gray-500">Student experience</div>
             </div>
           </div>
@@ -588,13 +588,13 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="text-white text-xl font-bold mb-4">Educy</h3>
-              <p className="text-sm">
+              <p className="text-xs sm:text-sm">
                 Modern course management platform for forward-thinking educational institutions.
               </p>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><a href="#features" className="hover:text-white transition">Features</a></li>
                 <li><a href="#how-it-works" className="hover:text-white transition">How It Works</a></li>
                 <li><a href="#" className="hover:text-white transition">Security</a></li>
@@ -603,7 +603,7 @@ export default function LandingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><a href="#" className="hover:text-white transition">About</a></li>
                 <li><a href="#" className="hover:text-white transition">Blog</a></li>
                 <li><a href="#" className="hover:text-white transition">Careers</a></li>
@@ -612,7 +612,7 @@ export default function LandingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><a href="#" className="hover:text-white transition">Documentation</a></li>
                 <li><a href="#" className="hover:text-white transition">API Reference</a></li>
                 <li><a href="#" className="hover:text-white transition">Support</a></li>
@@ -620,7 +620,7 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
+          <div className="border-t border-gray-800 pt-8 text-center text-xs sm:text-sm">
             <p>&copy; 2026 Educy. All rights reserved. Built with Next.js, TypeScript, and passion for education.</p>
           </div>
         </div>

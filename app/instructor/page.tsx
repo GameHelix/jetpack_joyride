@@ -176,7 +176,7 @@ export default async function InstructorDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-[#5C2482]">
+                <p className="text-xs sm:text-sm font-medium text-[#5C2482]">
                   Total Sections
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -194,7 +194,7 @@ export default async function InstructorDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-[#5C2482]">
+                <p className="text-xs sm:text-sm font-medium text-[#5C2482]">
                   Total Students
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -212,7 +212,7 @@ export default async function InstructorDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-[#5C2482]">
+                <p className="text-xs sm:text-sm font-medium text-[#5C2482]">
                   Active Assignments
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -230,7 +230,7 @@ export default async function InstructorDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-[#5C2482]">
+                <p className="text-xs sm:text-sm font-medium text-[#5C2482]">
                   Pending Grading
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -256,7 +256,7 @@ export default async function InstructorDashboard() {
                     <h3 className="text-lg font-semibold text-yellow-900">
                       Content Review Needed
                     </h3>
-                    <p className="text-sm text-yellow-700 mt-1">
+                    <p className="text-xs sm:text-sm text-yellow-700 mt-1">
                       You have <strong>{contentStats.needsReview}</strong> content item{contentStats.needsReview !== 1 ? 's' : ''} that may need updating
                       ({contentStats.outdated} outdated, {contentStats.aging} aging)
                     </p>
@@ -265,7 +265,7 @@ export default async function InstructorDashboard() {
                         {outdatedContent.map((item: any) => (
                           <div key={item.id} className="flex items-center justify-between bg-white/60 rounded-lg p-3">
                             <div>
-                              <p className="font-medium text-gray-900 text-sm">
+                              <p className="font-medium text-gray-900 text-xs sm:text-sm">
                                 {item.title}
                               </p>
                               <p className="text-xs text-gray-600">
@@ -284,7 +284,7 @@ export default async function InstructorDashboard() {
                 </div>
                 <Link
                   href="/instructor/content"
-                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-xl transition font-medium text-sm flex-shrink-0"
+                  className="px-3 py-2 sm:px-4 bg-yellow-600 hover:bg-yellow-700 text-white rounded-xl transition font-medium text-xs sm:text-sm flex-shrink-0"
                 >
                   Review Content
                 </Link>
@@ -301,7 +301,7 @@ export default async function InstructorDashboard() {
             </h2>
             <Link
               href="/instructor/courses/new"
-              className="px-4 py-2 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
+              className="px-3 py-2 sm:px-4 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
             >
               Create New Course
             </Link>
@@ -324,7 +324,7 @@ export default async function InstructorDashboard() {
                     <h3 className="font-semibold text-[#5C2482]">
                       {section.course.code}: {section.course.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
                       {section.term}
                     </p>
                     <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
@@ -364,7 +364,7 @@ export default async function InstructorDashboard() {
                       <h3 className="font-medium text-[#5C2482]">
                         {submission.assignment.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         {submission.assignment.section.course.code} • Submitted by{' '}
                         {submission.student.name}
                       </p>
@@ -375,7 +375,7 @@ export default async function InstructorDashboard() {
                     </div>
                     <Link
                       href={`/instructor/assignments/${submission.assignmentId}/submissions/${submission.id}`}
-                      className="px-4 py-2 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
+                      className="px-3 py-2 sm:px-4 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
                     >
                       Grade
                     </Link>

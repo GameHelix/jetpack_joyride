@@ -181,7 +181,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
             <div className="flex-1">
-              <p className="text-sm text-blue-800">
+              <p className="text-xs sm:text-sm text-blue-800">
                 <strong>Academic Integrity Notice:</strong> Tab switching is being monitored for this assignment.
                 Switching tabs or windows may be flagged for review by your instructor.
                 {tabSwitchCount > 0 && (
@@ -204,7 +204,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
               {assignment.description}
             </p>
           )}
-          <div className="flex items-center space-x-6 text-sm">
+          <div className="flex items-center space-x-6 text-xs sm:text-sm">
             <div>
               <span className="text-gray-600">Due: </span>
               <span className={isOverdue ? 'text-red-600 font-medium' : 'text-gray-900'}>
@@ -245,17 +245,17 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
 
             {/* File Upload */}
             <div>
-              <label className="block text-sm font-medium text-[#5C2482] mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-[#5C2482] mb-2">
                 Upload File {assignment.allowedFileTypes.length > 0 && '(Required)'}
               </label>
               <input
                 type="file"
                 onChange={handleFileChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 accept={assignment.allowedFileTypes.length > 0 ? assignment.allowedFileTypes.map(t => `.${t}`).join(',') : undefined}
               />
               {file && (
-                <p className="mt-2 text-sm text-green-600">
+                <p className="mt-2 text-xs sm:text-sm text-green-600">
                   ✓ Selected: {file.name} ({(file.size / 1048576).toFixed(2)}MB)
                 </p>
               )}
@@ -263,14 +263,14 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
 
             {/* Text Submission */}
             <div>
-              <label className="block text-sm font-medium text-[#5C2482] mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-[#5C2482] mb-2">
                 Additional Notes (Optional)
               </label>
               <textarea
                 rows={5}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-[#5C2482]"
                 placeholder="Add any comments or notes about your submission..."
               />
             </div>

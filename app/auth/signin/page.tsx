@@ -85,11 +85,11 @@ export default function SignInPage() {
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
                   <div className="text-3xl font-bold">500+</div>
-                  <div className="text-sm text-purple-200">Institutions</div>
+                  <div className="text-xs sm:text-sm text-purple-200">Institutions</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold">10K+</div>
-                  <div className="text-sm text-purple-200">Students</div>
+                  <div className="text-xs sm:text-sm text-purple-200">Students</div>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function SignInPage() {
 
             <form onSubmit={handleLogin} className="w-full flex flex-col gap-6">
               {error && (
-                <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-xl text-sm border border-red-200">
+                <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-xl text-xs sm:text-sm border border-red-200">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
@@ -120,7 +120,7 @@ export default function SignInPage() {
 
               {/* EMAIL */}
               <div className="flex flex-col gap-2">
-                <label className="text-gray-700 font-medium text-sm">Email Address</label>
+                <label className="text-gray-700 font-medium text-xs sm:text-sm">Email Address</label>
                 <div className="relative flex items-center">
                   <MdEmail className="absolute left-4 text-gray-400 text-xl" />
                   <input
@@ -137,7 +137,7 @@ export default function SignInPage() {
 
               {/* PASSWORD */}
               <div className="flex flex-col gap-2">
-                <label className="text-gray-700 font-medium text-sm">Password</label>
+                <label className="text-gray-700 font-medium text-xs sm:text-sm">Password</label>
                 <div className="relative flex items-center">
                   <MdLock className="absolute left-4 text-gray-400 text-xl" />
                   <input
@@ -163,7 +163,7 @@ export default function SignInPage() {
                 </div>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-right text-sm text-[#5C2482] hover:text-[#7B3FA3] transition font-medium"
+                  className="text-right text-xs sm:text-sm text-[#5C2482] hover:text-[#7B3FA3] transition font-medium"
                 >
                   Forgot Password?
                 </Link>
@@ -195,7 +195,7 @@ export default function SignInPage() {
                 <div className="text-2xl">🎯</div>
                 <h3 className="text-[#5C2482] font-bold text-lg">Try Demo Accounts</h3>
               </div>
-              <p className="text-center text-sm text-gray-600 mb-4">
+              <p className="text-center text-xs sm:text-sm text-gray-600 mb-4">
                 Test different roles without signing up
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

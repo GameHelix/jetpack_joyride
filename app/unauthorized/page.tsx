@@ -31,7 +31,7 @@ export default function UnauthorizedPage() {
 
           <Link
             href="/"
-            className="block text-sm text-gray-500 hover:text-[#5C2482] transition"
+            className="block text-xs sm:text-sm text-gray-500 hover:text-[#5C2482] transition"
           >
             ← Back to home
           </Link>

@@ -89,29 +89,29 @@ export default function InstructorPaymentsPage() {
         <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Payment Tracking</h1>
-          <p className="text-sm md:text-base text-gray-600">Monitor student payments and subscription status</p>
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">Monitor student payments and subscription status</p>
         </div>
 
         {/* Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Records</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Total Records</p>
             <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
           </div>
           <div className="bg-green-50 rounded-xl shadow-sm border border-green-200 p-6">
-            <p className="text-sm text-green-700 mb-1">Paid</p>
+            <p className="text-xs sm:text-sm text-green-700 mb-1">Paid</p>
             <p className="text-3xl font-bold text-green-700">{stats.paid}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-200 p-6">
-            <p className="text-sm text-yellow-700 mb-1">Pending</p>
+            <p className="text-xs sm:text-sm text-yellow-700 mb-1">Pending</p>
             <p className="text-3xl font-bold text-yellow-700">{stats.pending}</p>
           </div>
           <div className="bg-blue-50 rounded-xl shadow-sm border border-blue-200 p-6">
-            <p className="text-sm text-blue-700 mb-1">Paused</p>
+            <p className="text-xs sm:text-sm text-blue-700 mb-1">Paused</p>
             <p className="text-3xl font-bold text-blue-700">{stats.paused}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Amount</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Total Amount</p>
             <p className="text-2xl font-bold text-gray-900">${stats.totalAmount.toLocaleString()}</p>
           </div>
         </div>
@@ -120,13 +120,13 @@ export default function InstructorPaymentsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Status Filter
               </label>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">All Statuses</option>
                 <option value="paid">Paid</option>
@@ -136,14 +136,14 @@ export default function InstructorPaymentsPage() {
               </select>
             </div>
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Month Filter
               </label>
               <input
                 type="month"
                 value={monthFilter}
                 onChange={(e) => setMonthFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="flex items-end">
@@ -174,22 +174,22 @@ export default function InstructorPaymentsPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Student
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Month
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Paid Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Method
                     </th>
                   </tr>
@@ -200,13 +200,13 @@ export default function InstructorPaymentsPage() {
                       <td className="px-6 py-4">
                         <div>
                           <p className="font-medium text-gray-900">{payment.student.name}</p>
-                          <p className="text-sm text-gray-600">{payment.student.email}</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{payment.student.email}</p>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-xs sm:text-sm text-gray-900">
                         {new Date(payment.paymentMonth).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 text-xs sm:text-sm font-medium text-gray-900">
                         {payment.currency} {payment.amount.toLocaleString()}
                       </td>
                       <td className="px-6 py-4">
@@ -222,10 +222,10 @@ export default function InstructorPaymentsPage() {
                           <p className="text-xs text-gray-600 mt-1">{payment.statusReason}</p>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-xs sm:text-sm text-gray-600">
                         {payment.paidAt ? new Date(payment.paidAt).toLocaleDateString() : '-'}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-xs sm:text-sm text-gray-600">
                         {payment.paymentMethod || '-'}
                       </td>
                     </tr>

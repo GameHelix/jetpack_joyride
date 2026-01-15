@@ -75,7 +75,7 @@ export default function TestPasswordResetPage() {
             <button
               onClick={checkEnvironment}
               disabled={loading}
-              className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition disabled:bg-gray-300"
+              className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition disabled:bg-gray-300"
             >
               {loading ? 'Checking...' : 'Check Environment'}
             </button>
@@ -100,12 +100,12 @@ export default function TestPasswordResetPage() {
                 value={testEmail}
                 onChange={(e) => setTestEmail(e.target.value)}
                 placeholder="Enter your email to test"
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
               />
               <button
                 onClick={testEmail_send}
                 disabled={loading || !testEmail}
-                className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition disabled:bg-gray-300"
+                className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition disabled:bg-gray-300"
               >
                 {loading ? 'Sending...' : 'Send Test Email'}
               </button>
@@ -132,7 +132,7 @@ export default function TestPasswordResetPage() {
           {/* Instructions */}
           <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl">
             <h3 className="font-semibold text-blue-800 mb-2">Instructions:</h3>
-            <ol className="list-decimal list-inside text-sm text-blue-700 space-y-1">
+            <ol className="list-decimal list-inside text-xs sm:text-sm text-blue-700 space-y-1">
               <li>First, click "Check Environment" to verify variables are set</li>
               <li>Then, enter your email and click "Send Test Email"</li>
               <li>Check the results to see what error is occurring</li>

@@ -139,7 +139,7 @@ export default function InstructorCertificatesPage() {
                       <h3 className="text-xl font-bold">
                         {section.course.code} - {section.course.title}
                       </h3>
-                      <p className="text-purple-100 text-sm mt-1">
+                      <p className="text-purple-100 text-xs sm:text-sm mt-1">
                         {section.term} • {section._count.enrollments} students
                       </p>
                     </div>
@@ -156,16 +156,16 @@ export default function InstructorCertificatesPage() {
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Student
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Enrolled
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Certificate Status
                           </th>
-                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions
                           </th>
                         </tr>
@@ -175,15 +175,15 @@ export default function InstructorCertificatesPage() {
                           <tr key={enrollment.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div>
-                                <div className="text-sm font-medium text-[#5C2482]">
+                                <div className="text-xs sm:text-sm font-medium text-[#5C2482]">
                                   {enrollment.user.name}
                                 </div>
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs sm:text-sm text-gray-500">
                                   {enrollment.user.email}
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600">
                               {format(new Date(enrollment.enrolledAt), 'MMM d, yyyy')}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -202,7 +202,7 @@ export default function InstructorCertificatesPage() {
                                 </span>
                               )}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
                               {enrollment.certificate ? (
                                 <a
                                   href={`/verify/${enrollment.certificate.certificateNumber}`}

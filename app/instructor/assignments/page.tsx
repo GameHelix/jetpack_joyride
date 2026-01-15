@@ -94,14 +94,14 @@ export default async function InstructorAssignmentsPage() {
                         <h3 className="font-semibold text-[#5C2482]">
                           {assignment.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 mt-1">
                           {assignment.section.course.code}: {assignment.section.course.title}
                         </p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">
                           Due: {new Date(assignment.dueDate).toLocaleDateString()} at{' '}
                           {new Date(assignment.dueDate).toLocaleTimeString()}
                         </p>
-                        <div className="mt-2 flex items-center space-x-4 text-sm">
+                        <div className="mt-2 flex items-center space-x-4 text-xs sm:text-sm">
                           <span className="text-gray-600">
                             {assignment._count.submissions} submissions
                           </span>
@@ -114,7 +114,7 @@ export default async function InstructorAssignmentsPage() {
                       </div>
                       <Link
                         href={`/instructor/assignments/${assignment.id}`}
-                        className="ml-4 px-4 py-2 text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
+                        className="ml-4 px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
                       >
                         View
                       </Link>
@@ -150,13 +150,13 @@ export default async function InstructorAssignmentsPage() {
                         <h3 className="font-semibold text-[#5C2482]">
                           {assignment.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 mt-1">
                           {assignment.section.course.code}: {assignment.section.course.title}
                         </p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">
                           Due: {new Date(assignment.dueDate).toLocaleDateString()}
                         </p>
-                        <div className="mt-2 flex items-center space-x-4 text-sm">
+                        <div className="mt-2 flex items-center space-x-4 text-xs sm:text-sm">
                           <span className="text-gray-600">
                             {assignment._count.submissions} submissions
                           </span>
@@ -169,7 +169,7 @@ export default async function InstructorAssignmentsPage() {
                       </div>
                       <Link
                         href={`/instructor/assignments/${assignment.id}`}
-                        className="ml-4 px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50/50 transition"
+                        className="ml-4 px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50/50 transition"
                       >
                         View
                       </Link>

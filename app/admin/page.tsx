@@ -97,7 +97,7 @@ export default async function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Total Users
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482] group-hover:text-[#5C2482]">
@@ -125,7 +125,7 @@ export default async function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Total Courses
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -156,7 +156,7 @@ export default async function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Total Rooms
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482] group-hover:text-purple-600">
@@ -184,7 +184,7 @@ export default async function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Active Enrollments
                 </p>
                 <p className="text-2xl font-bold text-[#5C2482]">
@@ -208,25 +208,25 @@ export default async function AdminDashboard() {
                 <p className="text-3xl font-bold text-[#5C2482]">
                   {roleStats.ADMIN || 0}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">Admins</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">Admins</p>
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-xl">
                 <p className="text-3xl font-bold text-green-600">
                   {roleStats.INSTRUCTOR || 0}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">Instructors</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">Instructors</p>
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-xl">
                 <p className="text-3xl font-bold text-purple-600">
                   {roleStats.MODERATOR || 0}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">Moderators</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">Moderators</p>
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-xl">
                 <p className="text-3xl font-bold text-orange-600">
                   {roleStats.STUDENT || 0}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">Students</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">Students</p>
               </div>
             </div>
           </div>
@@ -317,13 +317,13 @@ export default async function AdminDashboard() {
               <h2 className="text-xl font-semibold text-[#5C2482]">
                 Recent Important Activity
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">
                 Critical and warning events (excluding routine logins)
               </p>
             </div>
             <Link
               href="/admin/audit-logs"
-              className="text-sm text-[#5C2482] hover:underline"
+              className="text-xs sm:text-sm text-[#5C2482] hover:underline"
             >
               View All →
             </Link>
@@ -338,7 +338,7 @@ export default async function AdminDashboard() {
                 {recentAuditLogs.map((log) => (
                   <div
                     key={log.id}
-                    className="flex items-start space-x-3 text-sm p-3 border border-gray-200 rounded-xl"
+                    className="flex items-start space-x-3 text-xs sm:text-sm p-3 border border-gray-200 rounded-xl"
                   >
                     <div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-1.5"></div>
                     <div className="flex-1 min-w-0">

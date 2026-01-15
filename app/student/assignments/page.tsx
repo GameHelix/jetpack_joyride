@@ -59,7 +59,7 @@ export default async function StudentAssignmentsPage() {
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-yellow-800">
+                <p className="text-xs sm:text-sm font-medium text-yellow-800">
                   Pending
                 </p>
                 <p className="text-2xl font-bold text-yellow-900 mt-1">
@@ -73,7 +73,7 @@ export default async function StudentAssignmentsPage() {
           <div className="bg-green-50 border border-green-200 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-green-800">
+                <p className="text-xs sm:text-sm font-medium text-green-800">
                   Submitted
                 </p>
                 <p className="text-2xl font-bold text-green-900 mt-1">
@@ -87,7 +87,7 @@ export default async function StudentAssignmentsPage() {
           <div className="bg-red-50 border border-red-200 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-800">
+                <p className="text-xs sm:text-sm font-medium text-red-800">
                   Overdue
                 </p>
                 <p className="text-2xl font-bold text-red-900 mt-1">
@@ -122,13 +122,13 @@ export default async function StudentAssignmentsPage() {
                         <h3 className="font-bold text-[#5C2482]">
                           {assignment.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 mt-1">
                           {assignment.section.course.code} - {assignment.section.course.title}
                         </p>
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-xs sm:text-sm text-gray-500 mt-2">
                           {assignment.description}
                         </p>
-                        <div className="flex items-center mt-3 space-x-4 text-sm">
+                        <div className="flex items-center mt-3 space-x-4 text-xs sm:text-sm">
                           <span className={`font-medium ${daysUntilDue <= 3 ? 'text-red-600' : 'text-gray-600'}`}>
                             Due: {assignment.dueDate.toLocaleDateString()}
                             {daysUntilDue <= 3 && ` (${daysUntilDue} ${daysUntilDue === 1 ? 'day' : 'days'} left)`}
@@ -140,7 +140,7 @@ export default async function StudentAssignmentsPage() {
                       </div>
                       <Link
                         href={`/student/assignments/${assignment.id}`}
-                        className="ml-4 px-4 py-2 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
+                        className="ml-4 px-3 py-2 sm:px-4 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
                       >
                         Submit
                       </Link>
@@ -173,10 +173,10 @@ export default async function StudentAssignmentsPage() {
                         <h3 className="font-bold text-[#5C2482]">
                           {assignment.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 mt-1">
                           {assignment.section.course.code} - {assignment.section.course.title}
                         </p>
-                        <div className="flex items-center mt-3 space-x-4 text-sm">
+                        <div className="flex items-center mt-3 space-x-4 text-xs sm:text-sm">
                           <span className="text-gray-600">
                             Submitted: {submission.submittedAt.toLocaleDateString()}
                           </span>
@@ -187,7 +187,7 @@ export default async function StudentAssignmentsPage() {
                           )}
                         </div>
                         {submission.feedback && (
-                          <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm">
+                          <div className="mt-2 p-3 bg-gray-50 rounded-lg text-xs sm:text-sm">
                             <p className="font-medium text-[#5C2482]">
                               Instructor Feedback:
                             </p>
@@ -199,11 +199,11 @@ export default async function StudentAssignmentsPage() {
                       </div>
                       <div className="ml-4">
                         {submission.grade !== null ? (
-                          <span className="px-4 py-2 bg-green-100 text-green-800 rounded-lg font-medium">
+                          <span className="px-3 py-2 sm:px-4 bg-green-100 text-green-800 rounded-lg font-medium">
                             Graded
                           </span>
                         ) : (
-                          <span className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
+                          <span className="px-3 py-2 sm:px-4 bg-yellow-100 text-yellow-800 rounded-lg font-medium">
                             Pending Review
                           </span>
                         )}
@@ -235,16 +235,16 @@ export default async function StudentAssignmentsPage() {
                       <h3 className="font-bold text-[#5C2482]">
                         {assignment.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         {assignment.section.course.code} - {assignment.section.course.title}
                       </p>
-                      <p className="text-sm text-red-600 mt-2 font-medium">
+                      <p className="text-xs sm:text-sm text-red-600 mt-2 font-medium">
                         Due date passed: {assignment.dueDate.toLocaleDateString()}
                       </p>
                     </div>
                     <Link
                       href={`/student/assignments/${assignment.id}`}
-                      className="ml-4 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
+                      className="ml-4 px-3 py-2 sm:px-4 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
                     >
                       Submit Late
                     </Link>

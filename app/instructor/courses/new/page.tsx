@@ -78,7 +78,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="code"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Course Code *
               </label>
@@ -90,11 +90,11 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, code: e.target.value.toUpperCase() })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., CS101"
                 maxLength={20}
               />
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
                 Unique identifier for the course
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Course Title *
               </label>
@@ -113,7 +113,7 @@ export default function NewCoursePage() {
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Introduction to Computer Science"
                 maxLength={200}
               />
@@ -123,7 +123,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -134,7 +134,7 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Provide a brief description of the course..."
               />
             </div>
@@ -143,7 +143,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="term"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Term/Semester *
               </label>
@@ -153,7 +153,7 @@ export default function NewCoursePage() {
                 required
                 value={formData.term}
                 onChange={(e) => setFormData({ ...formData, term: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Spring 2026, Fall 2026"
                 maxLength={50}
               />
@@ -163,7 +163,7 @@ export default function NewCoursePage() {
             <div>
               <label
                 htmlFor="capacity"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Section Capacity *
               </label>
@@ -177,9 +177,9 @@ export default function NewCoursePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, capacity: parseInt(e.target.value) })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
                 Maximum number of students for the first section
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function NewCoursePage() {
               />
               <label
                 htmlFor="visibility"
-                className="ml-2 text-sm font-medium text-gray-700"
+                className="ml-2 text-xs sm:text-sm font-medium text-gray-700"
               >
                 Make course visible to students
               </label>

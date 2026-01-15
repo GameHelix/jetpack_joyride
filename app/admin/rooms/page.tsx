@@ -198,7 +198,7 @@ export default function RoomsManagement() {
           </div>
           <button
             onClick={() => handleOpenModal()}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition shadow-lg font-medium"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition shadow-lg font-medium"
           >
             + Add Room
           </button>
@@ -234,19 +234,19 @@ export default function RoomsManagement() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Room Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Location
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Capacity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Resources
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -255,17 +255,17 @@ export default function RoomsManagement() {
                   {rooms.map((room) => (
                     <tr key={room.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-[#5C2482]">
+                        <div className="text-xs sm:text-sm font-medium text-[#5C2482]">
                           {room.name}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           {room.location || '-'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           {room.capacity} people
                         </div>
                       </td>
@@ -283,11 +283,11 @@ export default function RoomsManagement() {
                                 </span>
                               ))
                           ) : (
-                            <span className="text-sm text-gray-400">None</span>
+                            <span className="text-xs sm:text-sm text-gray-400">None</span>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium space-x-2">
                         <button
                           onClick={() => handleOpenModal(room)}
                           className="text-[#5C2482] hover:text-blue-900"
@@ -326,7 +326,7 @@ export default function RoomsManagement() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   Room Name *
                 </label>
                 <input
@@ -340,7 +340,7 @@ export default function RoomsManagement() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   Location
                 </label>
                 <input
@@ -353,7 +353,7 @@ export default function RoomsManagement() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   Capacity *
                 </label>
                 <input
@@ -370,7 +370,7 @@ export default function RoomsManagement() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Resources
                 </label>
                 <div className="space-y-2">
@@ -390,7 +390,7 @@ export default function RoomsManagement() {
                         }
                         className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 capitalize">
+                      <span className="ml-2 text-xs sm:text-sm text-gray-700 capitalize">
                         {resource.replace(/([A-Z])/g, ' $1').trim()}
                       </span>
                     </label>
@@ -403,14 +403,14 @@ export default function RoomsManagement() {
                   type="button"
                   onClick={handleCloseModal}
                   disabled={submitting}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50"
+                  className="flex-1 px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
+                  className="flex-1 px-3 py-2 sm:px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
                 >
                   {submitting ? 'Saving...' : editingRoom ? 'Update' : 'Create'}
                 </button>

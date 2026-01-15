@@ -50,7 +50,7 @@ export default function ModeratorDashboard() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Enrollments</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Pending Enrollments</p>
                 <p className="mt-2 text-3xl font-bold text-yellow-600">
                   {loading ? '...' : stats.pendingEnrollments}
                 </p>
@@ -66,7 +66,7 @@ export default function ModeratorDashboard() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Enrollments</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Total Enrollments</p>
                 <p className="mt-2 text-3xl font-bold text-[#5C2482]">
                   {loading ? '...' : stats.totalEnrollments}
                 </p>
@@ -82,7 +82,7 @@ export default function ModeratorDashboard() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Courses</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Active Courses</p>
                 <p className="mt-2 text-3xl font-bold text-green-600">
                   {loading ? '...' : stats.totalCourses}
                 </p>
@@ -111,7 +111,7 @@ export default function ModeratorDashboard() {
               </div>
               <div className="ml-4">
                 <h3 className="font-semibold text-[#5C2482]">Manage Enrollments</h3>
-                <p className="text-sm text-gray-600">Approve or reject enrollment requests</p>
+                <p className="text-xs sm:text-sm text-gray-600">Approve or reject enrollment requests</p>
               </div>
             </a>
 
@@ -126,7 +126,7 @@ export default function ModeratorDashboard() {
               </div>
               <div className="ml-4">
                 <h3 className="font-semibold text-[#5C2482]">View Courses</h3>
-                <p className="text-sm text-gray-600">Browse all courses and sections</p>
+                <p className="text-xs sm:text-sm text-gray-600">Browse all courses and sections</p>
               </div>
             </a>
           </div>

@@ -58,13 +58,13 @@ export default function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
           {message && (
-            <div className="text-green-600 bg-green-50 px-4 py-3 rounded-lg text-sm border border-green-200">
+            <div className="text-green-600 bg-green-50 px-4 py-3 rounded-lg text-xs sm:text-sm border border-green-200">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm">
+            <div className="text-red-600 bg-red-50 px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm">
               {error}
             </div>
           )}
@@ -96,7 +96,7 @@ export default function ForgotPasswordPage() {
 
           <Link
             href="/auth/signin"
-            className="text-center text-sm text-gray-500 hover:text-[#5C2482] transition"
+            className="text-center text-xs sm:text-sm text-gray-500 hover:text-[#5C2482] transition"
           >
             ← Back to Sign In
           </Link>

@@ -168,17 +168,17 @@ export default function StudentCoursesPage() {
                           {enrollment.section.course.code}
                         </span>
                       </div>
-                      <span className="text-green-600 text-sm font-medium">
+                      <span className="text-green-600 text-xs sm:text-sm font-medium">
                         Enrolled
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-[#5C2482] mb-2">
                       {enrollment.section.course.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
                       {enrollment.section.course.description}
                     </p>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-xs sm:text-sm">
                       <p className="text-gray-600">
                         <strong>Instructor:</strong> {enrollment.section.instructor.name}
                       </p>
@@ -218,10 +218,10 @@ export default function StudentCoursesPage() {
                     <h3 className="text-xl font-bold text-[#5C2482] mb-2">
                       {course.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
                       {course.description}
                     </p>
-                    <div className="space-y-2 text-sm mb-4">
+                    <div className="space-y-2 text-xs sm:text-sm mb-4">
                       {course.sections.map((section) => (
                         <div
                           key={section.id}

@@ -39,7 +39,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
-            <p className="text-sm text-purple-800">
+            <p className="text-xs sm:text-sm text-purple-800">
               <strong>Already have credentials?</strong>
               <br />
               Use the sign-in button below to access your account.
@@ -54,7 +54,7 @@ export default function RegisterPage() {
           </Link>
 
           <div className="pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-gray-500">
               Need help? Contact your course administrator.
             </p>
           </div>

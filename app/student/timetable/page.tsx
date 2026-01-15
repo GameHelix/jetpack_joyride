@@ -74,10 +74,10 @@ export default async function StudentTimetablePage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
                     Day
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-[#5C2482] uppercase tracking-wider">
                     Classes
                   </th>
                 </tr>
@@ -85,12 +85,12 @@ export default async function StudentTimetablePage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {DAYS.map((day, index) => (
                   <tr key={day} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#5C2482]">
+                    <td className="px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-[#5C2482]">
                       {DAY_NAMES[index]}
                     </td>
                     <td className="px-6 py-4">
                       {lessonsByDay[day].length === 0 ? (
-                        <span className="text-sm text-gray-400">
+                        <span className="text-xs sm:text-sm text-gray-400">
                           No classes
                         </span>
                       ) : (
@@ -101,7 +101,7 @@ export default async function StudentTimetablePage() {
                               className="flex items-start space-x-4 p-3 bg-gray-50 rounded-xl border border-gray-200"
                             >
                               <div className="flex-shrink-0">
-                                <div className="text-sm font-medium text-[#5C2482]">
+                                <div className="text-xs sm:text-sm font-medium text-[#5C2482]">
                                   {lesson.startTime}
                                 </div>
                                 <div className="text-xs text-[#7B3FA3]">
@@ -109,10 +109,10 @@ export default async function StudentTimetablePage() {
                                 </div>
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-[#5C2482]">
+                                <p className="text-xs sm:text-sm font-medium text-[#5C2482]">
                                   {lesson.title}
                                 </p>
-                                <p className="text-sm text-gray-600 mt-1">
+                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
                                   {lesson.course.code} - {lesson.course.title}
                                 </p>
                                 {lesson.room && (
@@ -136,7 +136,7 @@ export default async function StudentTimetablePage() {
 
         {/* Calendar View Hint */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-          <p className="text-sm text-[#5C2482]">
+          <p className="text-xs sm:text-sm text-[#5C2482]">
             💡 <strong>Tip:</strong> You can export your timetable to your calendar app (Coming soon)
           </p>
         </div>

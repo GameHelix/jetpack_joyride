@@ -121,7 +121,7 @@ export default function AnalyticsPage() {
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-xl"
+            className="px-3 py-2 sm:px-4 border border-gray-300 rounded-xl"
           >
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
@@ -137,9 +137,9 @@ export default function AnalyticsPage() {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm">Total Users</p>
+                <p className="text-blue-100 text-xs sm:text-sm">Total Users</p>
                 <p className="text-3xl font-bold mt-2">{analytics.users.total}</p>
-                <p className="text-blue-100 text-sm mt-2">+{analytics.users.recent} recent</p>
+                <p className="text-blue-100 text-xs sm:text-sm mt-2">+{analytics.users.recent} recent</p>
               </div>
               <div className="text-4xl opacity-50">👥</div>
             </div>
@@ -149,9 +149,9 @@ export default function AnalyticsPage() {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">Total Courses</p>
+                <p className="text-purple-100 text-xs sm:text-sm">Total Courses</p>
                 <p className="text-3xl font-bold mt-2">{analytics.courses.total}</p>
-                <p className="text-purple-100 text-sm mt-2">{analytics.courses.totalSections} sections</p>
+                <p className="text-purple-100 text-xs sm:text-sm mt-2">{analytics.courses.totalSections} sections</p>
               </div>
               <div className="text-4xl opacity-50">📚</div>
             </div>
@@ -161,9 +161,9 @@ export default function AnalyticsPage() {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">Enrollments</p>
+                <p className="text-green-100 text-xs sm:text-sm">Enrollments</p>
                 <p className="text-3xl font-bold mt-2">{analytics.enrollments.total}</p>
-                <p className="text-green-100 text-sm mt-2">+{analytics.enrollments.recent} recent</p>
+                <p className="text-green-100 text-xs sm:text-sm mt-2">+{analytics.enrollments.recent} recent</p>
               </div>
               <div className="text-4xl opacity-50">✅</div>
             </div>
@@ -173,9 +173,9 @@ export default function AnalyticsPage() {
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-100 text-sm">Submissions</p>
+                <p className="text-orange-100 text-xs sm:text-sm">Submissions</p>
                 <p className="text-3xl font-bold mt-2">{analytics.submissions.total}</p>
-                <p className="text-orange-100 text-sm mt-2">{analytics.submissions.pending} pending</p>
+                <p className="text-orange-100 text-xs sm:text-sm mt-2">{analytics.submissions.pending} pending</p>
               </div>
               <div className="text-4xl opacity-50">📝</div>
             </div>
@@ -192,7 +192,7 @@ export default function AnalyticsPage() {
                 const percentage = (roleData.count / analytics.users.total) * 100
                 return (
                   <div key={roleData.role}>
-                    <div className="flex justify-between text-sm mb-1">
+                    <div className="flex justify-between text-xs sm:text-sm mb-1">
                       <span className="text-gray-600">{roleData.role}</span>
                       <span className="text-[#5C2482] font-medium">
                         {roleData.count} ({percentage.toFixed(1)}%)
@@ -241,19 +241,19 @@ export default function AnalyticsPage() {
           <h2 className="text-xl font-bold text-[#5C2482] mb-4">System Activity</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="text-center">
-              <p className="text-gray-600 text-sm">Total Activity</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Total Activity</p>
               <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.total.toLocaleString()}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-gray-600 text-sm">Recent Activity</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Recent Activity</p>
               <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.recent.toLocaleString()}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-gray-600 text-sm">Activity Types</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Activity Types</p>
               <p className="text-3xl font-bold text-[#5C2482] mt-2">
                 {analytics.activity.byAction.length}
               </p>
@@ -265,8 +265,8 @@ export default function AnalyticsPage() {
           <div className="space-y-2">
             {analytics.activity.byAction.slice(0, 10).map((action, index) => (
               <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                <span className="text-sm text-gray-700">{action.action}</span>
-                <span className="text-sm font-bold text-[#5C2482]">
+                <span className="text-xs sm:text-sm text-gray-700">{action.action}</span>
+                <span className="text-xs sm:text-sm font-bold text-[#5C2482]">
                   {action.count} times
                 </span>
               </div>
@@ -282,11 +282,11 @@ export default function AnalyticsPage() {
               <table className="min-w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Rank</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Name</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Email</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Role</th>
-                    <th className="text-right py-3 px-4 text-sm font-medium text-gray-500">Actions</th>
+                    <th className="text-left py-3 px-4 text-xs sm:text-sm font-medium text-gray-500">Rank</th>
+                    <th className="text-left py-3 px-4 text-xs sm:text-sm font-medium text-gray-500">Name</th>
+                    <th className="text-left py-3 px-4 text-xs sm:text-sm font-medium text-gray-500">Email</th>
+                    <th className="text-left py-3 px-4 text-xs sm:text-sm font-medium text-gray-500">Role</th>
+                    <th className="text-right py-3 px-4 text-xs sm:text-sm font-medium text-gray-500">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -330,7 +330,7 @@ export default function AnalyticsPage() {
             <p className="text-4xl font-bold text-green-600">
               {analytics.notifications.total}
             </p>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-xs sm:text-sm text-gray-600 mt-2">
               {analytics.notifications.unread} unread
             </p>
           </div>
@@ -342,9 +342,9 @@ export default function AnalyticsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {analytics.enrollments.byStatus.map((statusData) => (
               <div key={statusData.status} className="p-4 bg-gray-50 rounded-xl">
-                <p className="text-sm text-gray-600 mb-1">{statusData.status}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1">{statusData.status}</p>
                 <p className="text-2xl font-bold text-[#5C2482]">{statusData.count}</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">
                   {((statusData.count / analytics.enrollments.total) * 100).toFixed(1)}% of total
                 </p>
               </div>

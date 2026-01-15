@@ -169,7 +169,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
         <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center text-sm text-gray-600 mb-2">
+          <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2">
             <button onClick={() => router.push('/instructor/case-rooms')} className="hover:text-purple-600">
               Case Rooms
             </button>
@@ -179,13 +179,13 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">{room.title}</h1>
-              <p className="text-sm md:text-base text-gray-600">
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">
                 {room.section.course.code}: {room.section.course.title}
               </p>
             </div>
             <button
               onClick={toggleRoomStatus}
-              className={`px-6 py-3 rounded-xl font-bold transition-colors ${
+              className={`px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-bold transition-colors ${
                 room.isActive
                   ? 'bg-red-600 hover:bg-red-700 text-white'
                   : 'bg-green-600 hover:bg-green-700 text-white'
@@ -199,19 +199,19 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Total Posts</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1">Total Posts</p>
             <p className="text-3xl font-bold text-gray-900">{posts.length}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-200 p-6 cursor-pointer" onClick={() => setFilter('pending')}>
-            <p className="text-sm text-yellow-700 mb-1">Pending Review</p>
+            <p className="text-xs sm:text-sm text-yellow-700 mb-1">Pending Review</p>
             <p className="text-3xl font-bold text-yellow-700">{pendingPosts.length}</p>
           </div>
           <div className="bg-green-50 rounded-xl shadow-sm border border-green-200 p-6 cursor-pointer" onClick={() => setFilter('approved')}>
-            <p className="text-sm text-green-700 mb-1">Approved</p>
+            <p className="text-xs sm:text-sm text-green-700 mb-1">Approved</p>
             <p className="text-3xl font-bold text-green-700">{approvedPosts.length}</p>
           </div>
           <div className="bg-red-50 rounded-xl shadow-sm border border-red-200 p-6 cursor-pointer" onClick={() => setFilter('rejected')}>
-            <p className="text-sm text-red-700 mb-1">Rejected</p>
+            <p className="text-xs sm:text-sm text-red-700 mb-1">Rejected</p>
             <p className="text-3xl font-bold text-red-700">{rejectedPosts.length}</p>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
+              className={`px-3 py-2 sm:px-4 rounded-lg font-medium transition-colors whitespace-nowrap ${
                 filter === f
                   ? 'bg-purple-600 text-white'
                   : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
@@ -268,7 +268,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
                   </span>
                 </div>
 
-                <p className="text-gray-900 text-sm whitespace-pre-wrap mb-4">{post.content}</p>
+                <p className="text-gray-900 text-xs sm:text-sm whitespace-pre-wrap mb-4">{post.content}</p>
 
                 {post.feedback && (
                   <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4">
@@ -284,18 +284,18 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
                       onChange={(e) => setFeedback(e.target.value)}
                       rows={3}
                       placeholder="Optional feedback..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleApprove(post.id, true)}
-                        className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors"
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm font-bold py-2 px-4 rounded-lg transition-colors"
                       >
                         ✓ Approve
                       </button>
                       <button
                         onClick={() => handleApprove(post.id, false)}
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors"
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-bold py-2 px-4 rounded-lg transition-colors"
                       >
                         ✗ Reject
                       </button>
@@ -313,7 +313,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
                 ) : post.isApproved === null ? (
                   <button
                     onClick={() => setReviewingPost(post.id)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold py-2 px-4 rounded-lg transition-colors"
                   >
                     Review
                   </button>

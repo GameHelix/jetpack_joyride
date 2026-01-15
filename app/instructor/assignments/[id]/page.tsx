@@ -80,7 +80,7 @@ export default async function AssignmentGradingPage({
         <div>
           <Link
             href={`/instructor/courses/${assignment.section.courseId}`}
-            className="text-sm text-[#5C2482] hover:underline mb-2 inline-block"
+            className="text-xs sm:text-sm text-[#5C2482] hover:underline mb-2 inline-block"
           >
             ← Back to course
           </Link>
@@ -90,7 +90,7 @@ export default async function AssignmentGradingPage({
           <p className="mt-2 text-gray-600">
             {assignment.section.course.code}: {assignment.section.course.title}
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">
             Due: {new Date(assignment.dueDate).toLocaleString()}
           </p>
         </div>
@@ -98,7 +98,7 @@ export default async function AssignmentGradingPage({
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Total Submissions
             </p>
             <p className="text-3xl font-bold text-[#5C2482] mt-2">
@@ -106,7 +106,7 @@ export default async function AssignmentGradingPage({
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Pending Grading
             </p>
             <p className="text-3xl font-bold text-orange-600 mt-2">
@@ -114,7 +114,7 @@ export default async function AssignmentGradingPage({
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Graded
             </p>
             <p className="text-3xl font-bold text-green-600 mt-2">
@@ -167,7 +167,7 @@ export default async function AssignmentGradingPage({
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-xs sm:text-sm text-gray-600 mt-1">
                             {submission.student.email}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
@@ -185,7 +185,7 @@ export default async function AssignmentGradingPage({
                             </p>
                           </div>
                         ) : (
-                          <span className="px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full">
+                          <span className="px-3 py-1 bg-orange-100 text-orange-800 text-xs sm:text-sm font-medium rounded-full">
                             Not Graded
                           </span>
                         )}
@@ -194,7 +194,7 @@ export default async function AssignmentGradingPage({
 
                     {submission.text && (
                       <div className="mb-4 p-3 bg-gray-50 rounded">
-                        <p className="text-sm text-gray-700">
+                        <p className="text-xs sm:text-sm text-gray-700">
                           {submission.text}
                         </p>
                       </div>
@@ -206,7 +206,7 @@ export default async function AssignmentGradingPage({
                           href={`/api/files/${submission.fileKey}/download-url`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center text-sm text-[#5C2482] hover:underline"
+                          className="inline-flex items-center text-xs sm:text-sm text-[#5C2482] hover:underline"
                         >
                           📎 Download Submission
                         </a>
@@ -215,7 +215,7 @@ export default async function AssignmentGradingPage({
 
                     {hasTabSwitches && (
                       <details className="mb-4">
-                        <summary className="cursor-pointer text-sm font-medium text-yellow-800 hover:text-yellow-900 flex items-center gap-2">
+                        <summary className="cursor-pointer text-xs sm:text-sm font-medium text-yellow-800 hover:text-yellow-900 flex items-center gap-2">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>

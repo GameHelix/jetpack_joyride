@@ -167,13 +167,13 @@ export default function UsersManagement() {
           <div className="flex gap-3">
             <Link
               href="/admin/users/import"
-              className="px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition shadow-lg font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition shadow-lg font-medium"
             >
               📊 Bulk Import
             </Link>
             <Link
               href="/admin/users/create"
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
             >
               + Create User
             </Link>
@@ -191,19 +191,19 @@ export default function UsersManagement() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Activity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Joined
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -213,10 +213,10 @@ export default function UsersManagement() {
                     <tr key={user.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-[#5C2482]">
+                          <div className="text-xs sm:text-sm font-medium text-[#5C2482]">
                             {user.name}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs sm:text-sm text-gray-500">
                             {user.email}
                           </div>
                         </div>
@@ -231,7 +231,7 @@ export default function UsersManagement() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           {user.role === 'STUDENT' && (
                             <span>{user._count.enrollments} enrollments</span>
                           )}
@@ -247,11 +247,11 @@ export default function UsersManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-xs sm:text-sm text-gray-600">
                           {new Date(user.createdAt).toLocaleDateString()}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium space-x-2">
                         {user.id !== session?.user?.id && (
                           <>
                             <button
@@ -296,14 +296,14 @@ export default function UsersManagement() {
             )}
 
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">
+              <p className="text-xs sm:text-sm text-gray-600 mb-2">
                 User: <strong>{editingUser.name}</strong> ({editingUser.email})
               </p>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-xs sm:text-sm text-gray-600 mb-4">
                 Current role: <strong>{editingUser.role}</strong>
               </p>
 
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 New Role
               </label>
               <select
@@ -326,7 +326,7 @@ export default function UsersManagement() {
                   setError(null)
                 }}
                 disabled={submitting}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50"
+                className="flex-1 px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -334,7 +334,7 @@ export default function UsersManagement() {
                 type="button"
                 onClick={handleSaveRole}
                 disabled={submitting || newRole === editingUser.role}
-                className="flex-1 px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50"
+                className="flex-1 px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50"
               >
                 {submitting ? 'Saving...' : 'Save Changes'}
               </button>

@@ -94,7 +94,7 @@ export default function StudentCertificatesPage() {
             <p className="text-gray-500 text-lg">
               You haven't earned any certificates yet.
             </p>
-            <p className="text-gray-400 text-sm mt-2">
+            <p className="text-gray-400 text-xs sm:text-sm mt-2">
               Complete your enrolled courses to receive certificates
             </p>
           </div>
@@ -115,7 +115,7 @@ export default function StudentCertificatesPage() {
                           Certificate of Completion
                         </h2>
                       </div>
-                      <p className="text-purple-100 text-sm">
+                      <p className="text-purple-100 text-xs sm:text-sm">
                         This certifies that <strong>{session.user.name}</strong> has successfully completed
                       </p>
                     </div>
@@ -132,7 +132,7 @@ export default function StudentCertificatesPage() {
                       {certificate.section.course.title}
                     </p>
                     {certificate.section.course.description && (
-                      <p className="text-sm text-gray-600 mt-2">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-2">
                         {certificate.section.course.description}
                       </p>
                     )}
@@ -143,7 +143,7 @@ export default function StudentCertificatesPage() {
                       <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                         Completion Date
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-xs sm:text-sm text-gray-700">
                         {format(new Date(certificate.completionDate), 'MMMM d, yyyy')}
                       </p>
                     </div>
@@ -151,7 +151,7 @@ export default function StudentCertificatesPage() {
                       <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                         Issued Date
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-xs sm:text-sm text-gray-700">
                         {format(new Date(certificate.issuedAt), 'MMMM d, yyyy')}
                       </p>
                     </div>
@@ -159,7 +159,7 @@ export default function StudentCertificatesPage() {
                       <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                         Instructor
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-xs sm:text-sm text-gray-700">
                         {certificate.section.instructor.name}
                       </p>
                     </div>
@@ -167,7 +167,7 @@ export default function StudentCertificatesPage() {
                       <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                         Term
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-xs sm:text-sm text-gray-700">
                         {certificate.section.term}
                       </p>
                     </div>
@@ -179,7 +179,7 @@ export default function StudentCertificatesPage() {
                         <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                           Certificate ID
                         </p>
-                        <p className="text-sm font-mono text-gray-700">
+                        <p className="text-xs sm:text-sm font-mono text-gray-700">
                           {certificate.certificateNumber}
                         </p>
                       </div>
@@ -187,13 +187,13 @@ export default function StudentCertificatesPage() {
                         <Link
                           href={`/verify/${certificate.certificateNumber}`}
                           target="_blank"
-                          className="px-4 py-2 bg-[#5C2482] text-white rounded-xl hover:bg-[#7B3FA3] transition text-sm font-medium"
+                          className="px-3 py-2 sm:px-4 bg-[#5C2482] text-white rounded-xl hover:bg-[#7B3FA3] transition text-xs sm:text-sm font-medium"
                         >
                           View Certificate
                         </Link>
                         <button
                           onClick={() => copyVerificationLink(certificate.certificateNumber)}
-                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-sm font-medium"
+                          className="px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-xs sm:text-sm font-medium"
                         >
                           Share
                         </button>

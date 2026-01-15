@@ -190,7 +190,7 @@ export default function NewExamPage() {
         <div className="max-w-5xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Create New Exam</h1>
-          <p className="text-sm md:text-base text-gray-600">Set up a timed exam for your students</p>
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">Set up a timed exam for your students</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -206,14 +206,14 @@ export default function NewExamPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Section *
                 </label>
                 <select
                   required
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select a section</option>
                   {sections.map((section) => (
@@ -225,7 +225,7 @@ export default function NewExamPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Exam Title *
                 </label>
                 <input
@@ -233,14 +233,14 @@ export default function NewExamPage() {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g., Midterm Exam"
                   maxLength={200}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Duration (minutes) *
                 </label>
                 <input
@@ -250,16 +250,16 @@ export default function NewExamPage() {
                   max={480}
                   value={formData.durationMinutes}
                   onChange={(e) => setFormData({ ...formData, durationMinutes: parseInt(e.target.value) })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-xs sm:text-sm text-gray-500">
                   Maximum: 480 minutes (8 hours)
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     Start Date *
                   </label>
                   <input
@@ -268,11 +268,11 @@ export default function NewExamPage() {
                     min={today}
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     Start Time *
                   </label>
                   <input
@@ -280,14 +280,14 @@ export default function NewExamPage() {
                     required
                     value={formData.startTime}
                     onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     End Date *
                   </label>
                   <input
@@ -296,11 +296,11 @@ export default function NewExamPage() {
                     min={formData.startDate || today}
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     End Time *
                   </label>
                   <input
@@ -308,7 +308,7 @@ export default function NewExamPage() {
                     required
                     value={formData.endTime}
                     onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -321,7 +321,7 @@ export default function NewExamPage() {
                     onChange={(e) => setFormData({ ...formData, isGroupExam: e.target.checked })}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-xs sm:text-sm text-gray-700">
                     This is a group exam (requires individual scoring after submission)
                   </span>
                 </label>
@@ -336,7 +336,7 @@ export default function NewExamPage() {
               <button
                 type="button"
                 onClick={addQuestion}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-colors"
               >
                 + Add Question
               </button>
@@ -351,7 +351,7 @@ export default function NewExamPage() {
                       <button
                         type="button"
                         onClick={() => removeQuestion(qIndex)}
-                        className="text-red-600 hover:text-red-800 text-sm"
+                        className="text-red-600 hover:text-red-800 text-xs sm:text-sm"
                       >
                         Remove
                       </button>
@@ -360,7 +360,7 @@ export default function NewExamPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                         Question Text *
                       </label>
                       <textarea
@@ -368,14 +368,14 @@ export default function NewExamPage() {
                         rows={3}
                         value={question.questionText}
                         onChange={(e) => updateQuestion(qIndex, { questionText: e.target.value })}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter your question..."
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                           Question Type *
                         </label>
                         <select
@@ -385,7 +385,7 @@ export default function NewExamPage() {
                             options: e.target.value === 'multiple_choice' ? ['', '', '', ''] : [],
                             correctAnswer: '',
                           })}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="multiple_choice">Multiple Choice</option>
                           <option value="true_false">True/False</option>
@@ -395,7 +395,7 @@ export default function NewExamPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                           Points *
                         </label>
                         <input
@@ -405,7 +405,7 @@ export default function NewExamPage() {
                           step={0.5}
                           value={question.points}
                           onChange={(e) => updateQuestion(qIndex, { points: parseFloat(e.target.value) })}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
                     </div>
@@ -413,13 +413,13 @@ export default function NewExamPage() {
                     {question.questionType === 'multiple_choice' && (
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-xs sm:text-sm font-medium text-gray-700">
                             Options *
                           </label>
                           <button
                             type="button"
                             onClick={() => addOption(qIndex)}
-                            className="text-blue-600 hover:text-blue-800 text-sm"
+                            className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm"
                           >
                             + Add Option
                           </button>
@@ -452,7 +452,7 @@ export default function NewExamPage() {
                                 <button
                                   type="button"
                                   onClick={() => removeOption(qIndex, oIndex)}
-                                  className="text-red-600 hover:text-red-800 text-sm px-2"
+                                  className="text-red-600 hover:text-red-800 text-xs sm:text-sm px-2"
                                 >
                                   ×
                                 </button>
@@ -468,7 +468,7 @@ export default function NewExamPage() {
 
                     {question.questionType === 'true_false' && (
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                           Correct Answer *
                         </label>
                         <div className="space-y-2">
@@ -500,7 +500,7 @@ export default function NewExamPage() {
 
                     {(question.questionType === 'short_answer' || question.questionType === 'essay') && (
                       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                        <p className="text-sm text-yellow-800">
+                        <p className="text-xs sm:text-sm text-yellow-800">
                           This question requires manual grading. You'll grade it after students submit their answers.
                         </p>
                       </div>
@@ -511,7 +511,7 @@ export default function NewExamPage() {
             </div>
 
             <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-sm text-blue-800">
+              <p className="text-xs sm:text-sm text-blue-800">
                 <strong>Total Points:</strong> {questions.reduce((sum, q) => sum + q.points, 0)}
               </p>
             </div>
@@ -522,14 +522,14 @@ export default function NewExamPage() {
             <button
               type="button"
               onClick={() => router.push('/instructor/exams')}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
             >
               {loading ? 'Creating...' : 'Create Exam'}
             </button>

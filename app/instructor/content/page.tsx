@@ -141,7 +141,7 @@ export default async function InstructorContentReviewPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-[#5C2482]">
             Content Review Center
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-600">
+          <p className="mt-2 text-xs sm:text-sm sm:text-base text-gray-600">
             Monitor and update your course content to ensure it stays current and relevant
           </p>
         </div>
@@ -150,7 +150,7 @@ export default async function InstructorContentReviewPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           <div className="bg-white rounded-xl shadow border border-gray-200 p-4 md:p-6">
             <div className="text-center">
-              <p className="text-xs sm:text-sm font-medium text-gray-600">Total Content</p>
+              <p className="text-xs sm:text-xs sm:text-sm font-medium text-gray-600">Total Content</p>
               <p className="text-2xl sm:text-3xl font-bold text-[#5C2482] mt-2">
                 {contentStats.total}
               </p>
@@ -159,7 +159,7 @@ export default async function InstructorContentReviewPage() {
 
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow border border-green-200 p-4 md:p-6">
             <div className="text-center">
-              <p className="text-xs sm:text-sm font-medium text-green-700">Fresh & Current</p>
+              <p className="text-xs sm:text-xs sm:text-sm font-medium text-green-700">Fresh & Current</p>
               <p className="text-2xl sm:text-3xl font-bold text-green-600 mt-2">
                 {contentStats.fresh + contentStats.current}
               </p>
@@ -168,7 +168,7 @@ export default async function InstructorContentReviewPage() {
 
           <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl shadow border border-yellow-200 p-4 md:p-6">
             <div className="text-center">
-              <p className="text-xs sm:text-sm font-medium text-yellow-700">Aging</p>
+              <p className="text-xs sm:text-xs sm:text-sm font-medium text-yellow-700">Aging</p>
               <p className="text-2xl sm:text-3xl font-bold text-yellow-600 mt-2">
                 {contentStats.aging}
               </p>
@@ -177,7 +177,7 @@ export default async function InstructorContentReviewPage() {
 
           <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow border border-red-200 p-4 md:p-6">
             <div className="text-center">
-              <p className="text-xs sm:text-sm font-medium text-red-700">Outdated</p>
+              <p className="text-xs sm:text-xs sm:text-sm font-medium text-red-700">Outdated</p>
               <p className="text-2xl sm:text-3xl font-bold text-red-600 mt-2">
                 {contentStats.outdated}
               </p>
@@ -198,7 +198,7 @@ export default async function InstructorContentReviewPage() {
                 <h3 className="text-base md:text-lg font-semibold text-yellow-900">
                   Action Required
                 </h3>
-                <p className="text-xs md:text-sm text-yellow-700 mt-1">
+                <p className="text-xs md:text-xs sm:text-sm text-yellow-700 mt-1">
                   You have <strong>{contentStats.needsReview}</strong> content item{contentStats.needsReview !== 1 ? 's' : ''} that need{contentStats.needsReview === 1 ? 's' : ''} review and updates.
                 </p>
               </div>
@@ -220,7 +220,7 @@ export default async function InstructorContentReviewPage() {
                     <h2 className="text-lg md:text-xl font-semibold text-[#5C2482]">
                       {getStatusLabel(status)} Content
                     </h2>
-                    <span className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium ${getStatusColor(status)}`}>
+                    <span className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-xs sm:text-sm font-medium ${getStatusColor(status)}`}>
                       {items.length} item{items.length !== 1 ? 's' : ''}
                     </span>
                   </div>
@@ -249,18 +249,18 @@ export default async function InstructorContentReviewPage() {
                                 {item.type}
                               </span>
                               <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-gray-900 text-sm md:text-base break-words">
+                                <h3 className="font-medium text-gray-900 text-xs sm:text-sm md:text-base break-words">
                                   {item.title}
                                 </h3>
                                 {item.section && (
-                                  <p className="text-xs md:text-sm text-gray-600 mt-1">
+                                  <p className="text-xs md:text-xs sm:text-sm text-gray-600 mt-1">
                                     {item.section.course.code}: {item.section.course.title}
                                   </p>
                                 )}
                               </div>
                             </div>
 
-                            <div className="mt-3 flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm">
+                            <div className="mt-3 flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-xs sm:text-sm">
                               <div className="flex items-center gap-1 md:gap-2">
                                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -284,7 +284,7 @@ export default async function InstructorContentReviewPage() {
                                 <svg className="w-4 h-4 md:w-5 md:h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                                 </svg>
-                                <p className="text-xs md:text-sm text-yellow-800">{recommendation}</p>
+                                <p className="text-xs md:text-xs sm:text-sm text-yellow-800">{recommendation}</p>
                               </div>
                             )}
                           </div>
@@ -299,7 +299,7 @@ export default async function InstructorContentReviewPage() {
                                 ? `/instructor/courses/${item.section.course.id}`
                                 : '#'
                             }
-                            className="px-3 md:px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-xs md:text-sm font-medium flex-shrink-0"
+                            className="px-3 md:px-3 py-2 sm:px-4 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-xs md:text-xs sm:text-sm font-medium flex-shrink-0"
                           >
                             {itemStatus === 'aging' || itemStatus === 'outdated' ? 'Update Now' : 'View'}
                           </Link>

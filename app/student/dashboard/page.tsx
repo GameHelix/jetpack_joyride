@@ -150,7 +150,7 @@ export default function StudentDashboardPage() {
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
             Welcome back, {session?.user?.name?.split(' ')[0] || 'Student'}
           </h1>
-          <p className="text-sm md:text-base text-gray-600">
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">
             Here's what you need to focus on this week
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function StudentDashboardPage() {
                 <h2 className="text-lg font-bold text-orange-900 mb-2">
                   Pending Work ({overdueAssignments.length})
                 </h2>
-                <p className="text-sm text-orange-800 mb-4">
+                <p className="text-xs sm:text-sm text-orange-800 mb-4">
                   These assignments have passed their due date. You can still submit them.
                 </p>
                 <div className="space-y-2">
@@ -179,7 +179,7 @@ export default function StudentDashboardPage() {
                       <div className="flex items-start justify-between">
                         <div>
                           <p className="font-medium text-gray-900">{assignment.title}</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-xs sm:text-sm text-gray-600">
                             {assignment.section.course.code}: {assignment.section.course.title}
                           </p>
                         </div>
@@ -190,7 +190,7 @@ export default function StudentDashboardPage() {
                     </Link>
                   ))}
                   {overdueAssignments.length > 3 && (
-                    <Link href="/student/assignments" className="block text-center text-sm text-orange-700 hover:text-orange-800 font-medium pt-2">
+                    <Link href="/student/assignments" className="block text-center text-xs sm:text-sm text-orange-700 hover:text-orange-800 font-medium pt-2">
                       View all {overdueAssignments.length} pending assignments →
                     </Link>
                   )}
@@ -214,7 +214,7 @@ export default function StudentDashboardPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="font-bold text-gray-900">{exam.title}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                         {exam.section.course.code} • {exam.durationMinutes} minutes
                       </p>
                     </div>
@@ -239,13 +239,13 @@ export default function StudentDashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900">📝 Assignments This Week</h2>
-              <Link href="/student/assignments" className="text-sm text-blue-600 hover:text-blue-800">
+              <Link href="/student/assignments" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
                 View all →
               </Link>
             </div>
 
             {thisWeekAssignments.length === 0 ? (
-              <p className="text-gray-500 text-sm">No assignments due this week</p>
+              <p className="text-gray-500 text-xs sm:text-sm">No assignments due this week</p>
             ) : (
               <div className="space-y-3">
                 {thisWeekAssignments.slice(0, 4).map((assignment) => (
@@ -254,7 +254,7 @@ export default function StudentDashboardPage() {
                     href={`/student/assignments/${assignment.id}`}
                     className="block border border-gray-200 rounded-lg p-3 hover:border-blue-300 hover:bg-blue-50 transition-colors"
                   >
-                    <p className="font-medium text-gray-900 text-sm">{assignment.title}</p>
+                    <p className="font-medium text-gray-900 text-xs sm:text-sm">{assignment.title}</p>
                     <p className="text-xs text-gray-600 mt-1">
                       {assignment.section.course.code}
                     </p>
@@ -276,13 +276,13 @@ export default function StudentDashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900">📊 Upcoming Exams</h2>
-              <Link href="/student/exams" className="text-sm text-blue-600 hover:text-blue-800">
+              <Link href="/student/exams" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
                 View all →
               </Link>
             </div>
 
             {upcomingExams.length === 0 ? (
-              <p className="text-gray-500 text-sm">No exams scheduled this week</p>
+              <p className="text-gray-500 text-xs sm:text-sm">No exams scheduled this week</p>
             ) : (
               <div className="space-y-3">
                 {upcomingExams.slice(0, 4).map((exam) => (
@@ -290,7 +290,7 @@ export default function StudentDashboardPage() {
                     key={exam.id}
                     className="border border-gray-200 rounded-lg p-3"
                   >
-                    <p className="font-medium text-gray-900 text-sm">{exam.title}</p>
+                    <p className="font-medium text-gray-900 text-xs sm:text-sm">{exam.title}</p>
                     <p className="text-xs text-gray-600 mt-1">
                       {exam.section.course.code} • {exam.durationMinutes} min
                     </p>
@@ -307,13 +307,13 @@ export default function StudentDashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900">💬 Case Discussions</h2>
-              <Link href="/student/case-rooms" className="text-sm text-blue-600 hover:text-blue-800">
+              <Link href="/student/case-rooms" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
                 View all →
               </Link>
             </div>
 
             {activeCaseRooms.length === 0 ? (
-              <p className="text-gray-500 text-sm">No active case discussions</p>
+              <p className="text-gray-500 text-xs sm:text-sm">No active case discussions</p>
             ) : (
               <div className="space-y-3">
                 {activeCaseRooms.slice(0, 4).map((room) => (
@@ -322,7 +322,7 @@ export default function StudentDashboardPage() {
                     href={`/student/case-rooms/${room.id}`}
                     className="block border border-gray-200 rounded-lg p-3 hover:border-purple-300 hover:bg-purple-50 transition-colors"
                   >
-                    <p className="font-medium text-gray-900 text-sm">{room.title}</p>
+                    <p className="font-medium text-gray-900 text-xs sm:text-sm">{room.title}</p>
                     <p className="text-xs text-gray-600 mt-1">
                       {room.section.course.code}
                     </p>
@@ -345,21 +345,21 @@ export default function StudentDashboardPage() {
                 href="/student/courses"
                 className="block bg-white rounded-lg p-3 hover:shadow-md transition-shadow"
               >
-                <p className="font-medium text-gray-900 text-sm">Browse Courses</p>
+                <p className="font-medium text-gray-900 text-xs sm:text-sm">Browse Courses</p>
                 <p className="text-xs text-gray-600">Enroll in new courses</p>
               </Link>
               <Link
                 href="/student/timetable"
                 className="block bg-white rounded-lg p-3 hover:shadow-md transition-shadow"
               >
-                <p className="font-medium text-gray-900 text-sm">My Timetable</p>
+                <p className="font-medium text-gray-900 text-xs sm:text-sm">My Timetable</p>
                 <p className="text-xs text-gray-600">View your schedule</p>
               </Link>
               <Link
                 href="/student/certificates"
                 className="block bg-white rounded-lg p-3 hover:shadow-md transition-shadow"
               >
-                <p className="font-medium text-gray-900 text-sm">My Certificates</p>
+                <p className="font-medium text-gray-900 text-xs sm:text-sm">My Certificates</p>
                 <p className="text-xs text-gray-600">View earned certificates</p>
               </Link>
             </div>

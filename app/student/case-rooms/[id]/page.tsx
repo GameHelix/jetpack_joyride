@@ -152,7 +152,7 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
         <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center text-sm text-gray-600 mb-2">
+          <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2">
             <button onClick={() => router.push('/student/case-rooms')} className="hover:text-purple-600">
               Case Rooms
             </button>
@@ -160,11 +160,11 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
             <span>{room.title}</span>
           </div>
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">{room.title}</h1>
-          <p className="text-sm md:text-base text-gray-600">
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">
             {room.section.course.code}: {room.section.course.title}
           </p>
           {room.description && (
-            <p className="text-sm md:text-base text-gray-700 mt-2">{room.description}</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-700 mt-2">{room.description}</p>
           )}
         </div>
 
@@ -182,7 +182,7 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
                 {room.isActive && isOverdue && '🔴 Overdue'}
               </p>
               {dueDate && (
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">
                   Due: {dueDate.toLocaleString()}
                 </p>
               )}
@@ -202,7 +202,7 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Your Response *
                 </label>
                 <textarea
@@ -210,13 +210,13 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
                   rows={6}
                   value={newPost.content}
                   onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Share your case analysis, thoughts, and insights..."
                 />
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-sm text-blue-800">
+                <p className="text-xs sm:text-sm text-blue-800">
                   <strong>Note:</strong> Your post will be visible to others only after instructor approval.
                 </p>
               </div>
@@ -264,8 +264,8 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
 
                   {post.feedback && (
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Instructor Feedback:</p>
-                      <p className="text-sm text-gray-900">{post.feedback}</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Instructor Feedback:</p>
+                      <p className="text-xs sm:text-sm text-gray-900">{post.feedback}</p>
                       {post.approvedBy && (
                         <p className="text-xs text-gray-500 mt-2">
                           - {post.approvedBy.name} ({new Date(post.approvedAt!).toLocaleDateString()})
@@ -301,7 +301,7 @@ export default function CaseRoomPage({ params }: { params: { id: string } }) {
                     </span>
                   </div>
 
-                  <p className="text-gray-900 text-sm whitespace-pre-wrap line-clamp-6">{post.content}</p>
+                  <p className="text-gray-900 text-xs sm:text-sm whitespace-pre-wrap line-clamp-6">{post.content}</p>
                 </div>
               ))}
             </div>

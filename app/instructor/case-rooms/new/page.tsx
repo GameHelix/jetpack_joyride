@@ -99,7 +99,7 @@ export default function NewCaseRoomPage() {
         <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Create Case Room</h1>
-          <p className="text-sm md:text-base text-gray-600">
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">
             Set up a Padlet-style space for student case submissions
           </p>
         </div>
@@ -114,14 +114,14 @@ export default function NewCaseRoomPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Section *
                 </label>
                 <select
                   required
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select a section</option>
                   {sections.map((section) => (
@@ -133,7 +133,7 @@ export default function NewCaseRoomPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Room Title *
                 </label>
                 <input
@@ -141,28 +141,28 @@ export default function NewCaseRoomPage() {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="e.g., Week 5 Case Study Discussion"
                   maxLength={200}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Description (Optional)
                 </label>
                 <textarea
                   rows={4}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Provide instructions and context for the case submission..."
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     Due Date (Optional)
                   </label>
                   <input
@@ -170,19 +170,19 @@ export default function NewCaseRoomPage() {
                     min={today}
                     value={formData.dueDate}
                     onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                     Due Time
                   </label>
                   <input
                     type="time"
                     value={formData.dueTime}
                     onChange={(e) => setFormData({ ...formData, dueTime: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function NewCaseRoomPage() {
 
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
             <h3 className="font-bold text-blue-900 mb-2">How It Works:</h3>
-            <ul className="text-sm text-blue-800 space-y-1">
+            <ul className="text-xs sm:text-sm text-blue-800 space-y-1">
               <li>• Students submit their case analyses and responses</li>
               <li>• All submissions require your approval before becoming visible</li>
               <li>• You can provide feedback on each submission</li>
@@ -204,14 +204,14 @@ export default function NewCaseRoomPage() {
             <button
               type="button"
               onClick={() => router.push('/instructor/case-rooms')}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
             >
               {loading ? 'Creating...' : 'Create Case Room'}
             </button>

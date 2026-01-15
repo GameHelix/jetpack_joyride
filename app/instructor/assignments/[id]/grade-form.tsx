@@ -51,17 +51,17 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
       <div className="border-t border-gray-200 pt-4 mt-4">
         {submission.feedback && (
           <div className="mb-3">
-            <p className="text-sm font-medium text-gray-700 mb-1">
+            <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Feedback:
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               {submission.feedback}
             </p>
           </div>
         )}
         <button
           onClick={() => setIsEditing(true)}
-          className="text-sm text-[#5C2482] hover:underline"
+          className="text-xs sm:text-sm text-[#5C2482] hover:underline"
         >
           Edit Grade
         </button>
@@ -85,7 +85,7 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
       <form onSubmit={handleSubmit} className="border-t border-gray-200 pt-4 mt-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
             Grade (0-100) *
           </label>
           <input
@@ -96,19 +96,19 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
             required
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="85"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
             Feedback (Optional)
           </label>
           <input
             type="text"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Great work!"
           />
         </div>
@@ -117,7 +117,7 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 transition text-sm font-medium"
+          className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 transition text-xs sm:text-sm font-medium"
         >
           {loading ? 'Saving...' : 'Save Grade'}
         </button>
@@ -129,7 +129,7 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
               setGrade(submission.grade?.toString() || '')
               setFeedback(submission.feedback || '')
             }}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-sm"
+            className="px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-xs sm:text-sm"
           >
             Cancel
           </button>

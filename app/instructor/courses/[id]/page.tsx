@@ -131,7 +131,7 @@ export default async function CourseDetailPage({
           </div>
           <Link
             href={`/instructor/courses/${course.id}/edit`}
-            className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+            className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
           >
             Edit Course
           </Link>
@@ -140,7 +140,7 @@ export default async function CourseDetailPage({
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Students
             </p>
             <p className="text-3xl font-bold text-[#5C2482] mt-2">
@@ -148,7 +148,7 @@ export default async function CourseDetailPage({
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Lessons
             </p>
             <p className="text-3xl font-bold text-[#5C2482] mt-2">
@@ -156,7 +156,7 @@ export default async function CourseDetailPage({
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Assignments
             </p>
             <p className="text-3xl font-bold text-[#5C2482] mt-2">
@@ -164,10 +164,10 @@ export default async function CourseDetailPage({
             </p>
           </div>
           <div className="bg-white rounded-xl shadow p-6">
-            <p className="text-sm font-medium text-gray-600">
+            <p className="text-xs sm:text-sm font-medium text-gray-600">
               Instructor
             </p>
-            <p className="text-sm font-medium text-[#5C2482] mt-2">
+            <p className="text-xs sm:text-sm font-medium text-[#5C2482] mt-2">
               {section?.instructor.name || 'N/A'}
             </p>
           </div>
@@ -182,7 +182,7 @@ export default async function CourseDetailPage({
             {section && (
               <Link
                 href={`/instructor/courses/${section.id}/lessons/new`}
-                className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-sm"
+                className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-xs sm:text-sm"
               >
                 + Add Lesson
               </Link>
@@ -204,12 +204,12 @@ export default async function CourseDetailPage({
                       <h3 className="font-medium text-[#5C2482]">
                         {lesson.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         {lesson.dayOfWeek} • {lesson.startTime} - {lesson.endTime}
                         {lesson.room && ` • ${lesson.room.name}`}
                       </p>
                       {lesson.description && (
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">
                           {lesson.description}
                         </p>
                       )}
@@ -224,7 +224,7 @@ export default async function CourseDetailPage({
                     </div>
                     <Link
                       href={`/instructor/courses/${section.id}/lessons/${lesson.id}/edit`}
-                      className="px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-sm font-medium flex-shrink-0"
+                      className="px-3 py-2 sm:px-4 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-xs sm:text-sm font-medium flex-shrink-0"
                     >
                       Edit
                     </Link>
@@ -244,7 +244,7 @@ export default async function CourseDetailPage({
             {section && (
               <Link
                 href={`/instructor/courses/${section.id}/assignments/new`}
-                className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-sm"
+                className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition text-xs sm:text-sm"
               >
                 + Create Assignment
               </Link>
@@ -267,7 +267,7 @@ export default async function CourseDetailPage({
                       <h3 className="font-medium text-[#5C2482]">
                         {assignment.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         Due: {new Date(assignment.dueDate).toLocaleDateString()} •{' '}
                         {assignment._count.submissions} submissions
                       </p>
@@ -309,7 +309,7 @@ export default async function CourseDetailPage({
                     <p className="font-medium text-[#5C2482]">
                       {enrollment.user.name}
                     </p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
                       {enrollment.user.email}
                     </p>
                   </div>

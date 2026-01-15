@@ -249,7 +249,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
             </p>
             <button
               onClick={() => router.push('/student/exams')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+              className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg"
             >
               Back to Exams
             </button>
@@ -270,7 +270,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
             </p>
             <button
               onClick={() => router.push('/student/exams')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+              className="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg"
             >
               Back to Exams
             </button>
@@ -299,7 +299,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Your Score</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">Your Score</p>
                 <p className="text-5xl font-bold text-gray-900">
                   {attempt.score?.toFixed(1)}%
                 </p>
@@ -307,13 +307,13 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="space-y-3 mb-8">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="text-gray-600">Submitted:</span>
                 <span className="font-medium text-gray-900">
                   {new Date(attempt.submittedAt!).toLocaleString()}
                 </span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="text-gray-600">Time Remaining:</span>
                 <span className="font-medium text-gray-900">
                   {formatTime(attempt.timeRemaining || 0)}
@@ -368,7 +368,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8">
               <h3 className="font-bold text-yellow-900 mb-2">Important Instructions:</h3>
-              <ul className="text-sm text-yellow-800 space-y-2">
+              <ul className="text-xs sm:text-sm text-yellow-800 space-y-2">
                 <li>• Once started, the timer will count down continuously</li>
                 <li>• You cannot pause the exam once started</li>
                 <li>• Do not close or refresh this page during the exam</li>
@@ -404,7 +404,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-lg md:text-xl font-bold text-gray-900">{exam.title}</h1>
-              <p className="text-xs md:text-sm text-gray-600">
+              <p className="text-xs md:text-xs sm:text-sm text-gray-600">
                 {answeredCount} of {exam.questions.length} answered
               </p>
             </div>
@@ -432,7 +432,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
           {sortedQuestions.map((question, index) => (
             <div key={question.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-start mb-4">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-bold text-sm mr-3 flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm mr-3 flex-shrink-0">
                   {index + 1}
                 </span>
                 <div className="flex-1">
@@ -521,7 +521,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
               You have answered {answeredCount} out of {exam.questions.length} questions.
               Are you sure you want to submit your exam?
             </p>
-            <p className="text-sm text-yellow-800 bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
+            <p className="text-xs sm:text-sm text-yellow-800 bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
               This action cannot be undone. Once submitted, you cannot change your answers.
             </p>
             <div className="flex gap-3">

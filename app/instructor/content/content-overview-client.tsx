@@ -132,13 +132,13 @@ export default function ContentOverviewClient({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Content Type Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Content Type
             </label>
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value as any)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
+              className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
             >
               <option value="all">All Types</option>
               <option value="lesson">Lessons</option>
@@ -149,13 +149,13 @@ export default function ContentOverviewClient({
 
           {/* Age Status Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Age Status
             </label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value as any)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
+              className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
             >
               <option value="all">All Status</option>
               <option value="outdated">⚠️ Outdated</option>
@@ -166,13 +166,13 @@ export default function ContentOverviewClient({
 
           {/* Section Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Course
             </label>
             <select
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
+              className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#5C2482]"
             >
               <option value="all">All Courses</option>
               {sections.map((section) => (
@@ -192,7 +192,7 @@ export default function ContentOverviewClient({
             Content Materials ({filteredContent.length})
           </h2>
           {stats.needsReview > 0 && (
-            <p className="text-sm text-yellow-600 mt-1">
+            <p className="text-xs sm:text-sm text-yellow-600 mt-1">
               {stats.needsReview} item{stats.needsReview !== 1 ? 's' : ''} need{stats.needsReview === 1 ? 's' : ''} review
             </p>
           )}
@@ -219,7 +219,7 @@ export default function ContentOverviewClient({
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                           {item.type}
                         </span>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-xs sm:text-sm text-gray-600">
                           {item.courseCode}
                         </span>
                       </div>
@@ -243,7 +243,7 @@ export default function ContentOverviewClient({
                       {link && (
                         <Link
                           href={link}
-                          className="px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-sm font-medium"
+                          className="px-3 py-2 sm:px-4 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-xs sm:text-sm font-medium"
                         >
                           Edit
                         </Link>
@@ -251,7 +251,7 @@ export default function ContentOverviewClient({
                       <button
                         onClick={() => handleArchive(item.id, item.type)}
                         disabled={archiving === item.id}
-                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-sm font-medium disabled:opacity-50"
+                        className="px-3 py-2 sm:px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition text-xs sm:text-sm font-medium disabled:opacity-50"
                       >
                         {archiving === item.id ? 'Archiving...' : 'Archive'}
                       </button>

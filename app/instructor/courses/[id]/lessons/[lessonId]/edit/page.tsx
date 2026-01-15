@@ -251,7 +251,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Lesson Title *
               </label>
@@ -261,7 +261,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Introduction to Variables"
                 maxLength={200}
               />
@@ -271,7 +271,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -282,7 +282,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Brief description of the lesson..."
               />
             </div>
@@ -291,7 +291,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
             <div>
               <label
                 htmlFor="dayOfWeek"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Day of Week *
               </label>
@@ -302,7 +302,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 onChange={(e) =>
                   setFormData({ ...formData, dayOfWeek: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {DAYS_OF_WEEK.map((day) => (
                   <option key={day.value} value={day.value}>
@@ -317,7 +317,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
               <div>
                 <label
                   htmlFor="startTime"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
                 >
                   Start Time *
                 </label>
@@ -329,14 +329,14 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                   onChange={(e) =>
                     setFormData({ ...formData, startTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="endTime"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
                 >
                   End Time *
                 </label>
@@ -348,7 +348,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                   onChange={(e) =>
                     setFormData({ ...formData, endTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -357,7 +357,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
             <div>
               <label
                 htmlFor="roomId"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Room (Optional)
               </label>
@@ -367,7 +367,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 onChange={(e) =>
                   setFormData({ ...formData, roomId: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">No room assigned</option>
                 {rooms.map((room) => (
@@ -378,7 +378,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 ))}
               </select>
               {rooms.length === 0 && (
-                <p className="mt-1 text-sm text-yellow-600">
+                <p className="mt-1 text-xs sm:text-sm text-yellow-600">
                   No rooms available. Contact an administrator to add rooms.
                 </p>
               )}
@@ -392,16 +392,16 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                     Room Schedule for {DAYS_OF_WEEK.find(d => d.value === formData.dayOfWeek)?.label}
                   </h3>
                   {loadingSchedule && (
-                    <span className="text-sm text-blue-600">Loading...</span>
+                    <span className="text-xs sm:text-sm text-blue-600">Loading...</span>
                   )}
                 </div>
                 {roomSchedule.length === 0 ? (
-                  <p className="text-sm text-blue-700">
+                  <p className="text-xs sm:text-sm text-blue-700">
                     ✓ This room is available all day on {DAYS_OF_WEEK.find(d => d.value === formData.dayOfWeek)?.label}
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    <p className="text-sm text-blue-700 mb-2">
+                    <p className="text-xs sm:text-sm text-blue-700 mb-2">
                       Occupied time slots:
                     </p>
                     {roomSchedule.map((lesson) => (
@@ -414,7 +414,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                             <p className="font-medium text-gray-900">
                               {lesson.startTime} - {lesson.endTime}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-xs sm:text-sm text-gray-600">
                               {lesson.course.code}: {lesson.title}
                             </p>
                             <p className="text-xs text-gray-500">

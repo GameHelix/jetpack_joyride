@@ -99,7 +99,7 @@ export default function CreateUserPage() {
                 : 'User created. Make sure to save the temporary password below:'}
             </p>
             <div className="bg-white p-4 rounded border border-green-300">
-              <p className="text-sm text-gray-600 mb-1">
+              <p className="text-xs sm:text-sm text-gray-600 mb-1">
                 <strong>Temporary Password:</strong>
               </p>
               <p className="font-mono text-lg text-[#5C2482] bg-gray-100 p-2 rounded">
@@ -112,13 +112,13 @@ export default function CreateUserPage() {
             <div className="mt-4 flex gap-3">
               <button
                 onClick={() => setSuccess(null)}
-                className="px-4 py-2 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c]"
+                className="px-3 py-2 sm:px-4 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c]"
               >
                 Create Another User
               </button>
               <Link
                 href="/admin/users"
-                className="px-4 py-2 border border-green-600 text-green-600 rounded-xl hover:bg-green-50"
+                className="px-3 py-2 sm:px-4 border border-green-600 text-green-600 rounded-xl hover:bg-green-50"
               >
                 Back to Users List
               </Link>
@@ -137,7 +137,7 @@ export default function CreateUserPage() {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -145,13 +145,13 @@ export default function CreateUserPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="John Doe"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -159,13 +159,13 @@ export default function CreateUserPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="user@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Role *
                 </label>
                 <select
@@ -176,14 +176,14 @@ export default function CreateUserPage() {
                       role: e.target.value as typeof formData.role,
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="STUDENT">Student</option>
                   <option value="INSTRUCTOR">Instructor</option>
                   <option value="MODERATOR">Moderator</option>
                   <option value="ADMIN">Admin</option>
                 </select>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">
                   Select the appropriate role for this user
                 </p>
               </div>
@@ -200,14 +200,14 @@ export default function CreateUserPage() {
                 />
                 <label
                   htmlFor="sendEmail"
-                  className="ml-2 text-sm text-gray-700"
+                  className="ml-2 text-xs sm:text-sm text-gray-700"
                 >
                   Send welcome email with login credentials
                 </label>
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <p className="text-sm text-blue-800">
+                <p className="text-xs sm:text-sm text-blue-800">
                   <strong>ℹ️ Note:</strong> A random temporary password will be generated
                   automatically. The user should change it after first login.
                 </p>
@@ -217,13 +217,13 @@ export default function CreateUserPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 font-medium"
+                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 font-medium"
                 >
                   {submitting ? 'Creating User...' : 'Create User'}
                 </button>
                 <Link
                   href="/admin/users"
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50"
+                  className="px-4 py-2 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50"
                 >
                   Cancel
                 </Link>

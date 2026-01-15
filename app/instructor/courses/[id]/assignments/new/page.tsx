@@ -117,7 +117,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Assignment Title *
               </label>
@@ -127,7 +127,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Project 1: Portfolio Website"
                 maxLength={200}
               />
@@ -137,7 +137,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Description
               </label>
@@ -148,7 +148,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Provide detailed instructions for the assignment..."
               />
             </div>
@@ -158,7 +158,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
               <div>
                 <label
                   htmlFor="dueDate"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
                 >
                   Due Date *
                 </label>
@@ -171,14 +171,14 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                   onChange={(e) =>
                     setFormData({ ...formData, dueDate: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="dueTime"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
                 >
                   Due Time *
                 </label>
@@ -190,14 +190,14 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                   onChange={(e) =>
                     setFormData({ ...formData, dueTime: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             {/* Allowed File Types */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Allowed File Types (Optional)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -212,13 +212,13 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                       onChange={() => handleFileTypeToggle(type.value)}
                       className="w-4 h-4 text-[#5C2482] border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-xs sm:text-sm text-gray-700">
                       {type.label}
                     </span>
                   </label>
                 ))}
               </div>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-xs sm:text-sm text-gray-500">
                 Leave unchecked to allow all file types
               </p>
             </div>
@@ -227,7 +227,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
             <div>
               <label
                 htmlFor="maxSize"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Maximum File Size *
               </label>
@@ -238,7 +238,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
                 onChange={(e) =>
                   setFormData({ ...formData, maxSizeBytes: parseInt(e.target.value) })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value={5242880}>5 MB</option>
                 <option value={10485760}>10 MB</option>

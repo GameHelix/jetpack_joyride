@@ -44,7 +44,7 @@ export default async function InstructorExamsPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">Exams</h1>
-            <p className="text-sm md:text-base text-gray-600">Manage your timed exams and view results</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-600">Manage your timed exams and view results</p>
           </div>
           <Link
             href="/instructor/exams/new"
@@ -75,20 +75,20 @@ export default async function InstructorExamsPage() {
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-4">
                     {exam.section.course.code}: {exam.section.course.title}
                   </p>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Duration:</span>
                       <span className="font-medium text-gray-900">{exam.durationMinutes} min</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Questions:</span>
                       <span className="font-medium text-gray-900">{exam._count.questions}</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Attempts:</span>
                       <span className="font-medium text-gray-900">{exam._count.examAttempts}</span>
                     </div>
@@ -120,22 +120,22 @@ export default async function InstructorExamsPage() {
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-4">
                     {exam.section.course.code}: {exam.section.course.title}
                   </p>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Opens:</span>
                       <span className="font-medium text-gray-900">
                         {new Date(exam.startTime).toLocaleDateString()}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Duration:</span>
                       <span className="font-medium text-gray-900">{exam.durationMinutes} min</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Questions:</span>
                       <span className="font-medium text-gray-900">{exam._count.questions}</span>
                     </div>
@@ -164,16 +164,16 @@ export default async function InstructorExamsPage() {
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-4">
                     {exam.section.course.code}: {exam.section.course.title}
                   </p>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Attempts:</span>
                       <span className="font-medium text-gray-900">{exam._count.examAttempts}</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-gray-600">Closed:</span>
                       <span className="font-medium text-gray-900">
                         {new Date(exam.endTime).toLocaleDateString()}
