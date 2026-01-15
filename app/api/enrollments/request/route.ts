@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
           userId: user.id,
           sectionId: data.sectionId,
           status: 'PENDING',
+          enrolledById: user.id, // Student is enrolling themselves
         },
         include: {
           section: {

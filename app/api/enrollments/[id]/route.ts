@@ -20,6 +20,7 @@ export async function DELETE(
       where: { id: params.id },
       include: {
         user: { select: { name: true, email: true } },
+        enrolledBy: { select: { id: true, name: true, email: true, role: true } },
         section: {
           include: {
             course: true,
@@ -129,6 +130,26 @@ export async function DELETE(
           })
         )
       )
+
+      // Notify the person who enrolled this student (if different from student and not already notified)
+      if (enrollment.enrolledBy && enrollment.enrolledBy.id !== enrollment.userId && enrollment.enrolledBy.id !== enrollment.section.instructorId) {
+        await prisma.notification.create({
+          data: {
+            userId: enrollment.enrolledBy.id,
+            type: 'GENERAL',
+            payload: {
+              title: 'Student You Enrolled Left Course',
+              message: `${enrollment.user.name}, whom you enrolled in ${enrollment.section.course.code}: ${enrollment.section.course.title}, has withdrawn from the course`,
+              courseCode: enrollment.section.course.code,
+              courseTitle: enrollment.section.course.title,
+              studentName: enrollment.user.name,
+              studentEmail: enrollment.user.email,
+              enrollmentId: params.id,
+              action: 'ENROLLED_STUDENT_WITHDRAWAL',
+            },
+          },
+        })
+      }
     }
 
     const message = isOwnEnrollment

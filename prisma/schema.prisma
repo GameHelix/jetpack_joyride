@@ -100,6 +100,7 @@ model User {
   instructorSections Section[]       @relation("InstructorSections")
   createdCourses     Course[]        @relation("CourseCreator")
   enrollments        Enrollment[]
+  createdEnrollments Enrollment[]    @relation("EnrollmentCreator")
   submissions        Submission[]
   files              File[]
   notifications      Notification[]
@@ -233,11 +234,14 @@ model Enrollment {
   section     Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   status      EnrollmentStatus @default(PENDING)
   enrolledAt  DateTime         @default(now())
+  enrolledById String?          // Who enrolled this student (moderator, admin, or self)
+  enrolledBy   User?            @relation("EnrollmentCreator", fields: [enrolledById], references: [id], onDelete: SetNull)
   certificate Certificate?
 
   @@unique([userId, sectionId])
   @@index([status])
   @@index([sectionId, status])
+  @@index([enrolledById])
   @@map("enrollments")
   @@schema("educy")
 }

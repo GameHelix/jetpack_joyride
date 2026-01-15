@@ -82,7 +82,10 @@ export async function POST(
     // Update enrollment status
     const approvedEnrollment = await prisma.enrollment.update({
       where: { id: params.id },
-      data: { status: 'ENROLLED' },
+      data: {
+        status: 'ENROLLED',
+        enrolledById: user.id, // Track who approved the enrollment
+      },
       include: {
         section: {
           include: {

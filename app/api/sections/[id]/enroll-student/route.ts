@@ -106,6 +106,7 @@ export async function POST(
         sectionId: params.id,
         status: 'ENROLLED',
         enrolledAt: new Date(),
+        enrolledById: user.id, // Track who enrolled this student
       },
       include: {
         user: { select: { name: true, email: true } },
