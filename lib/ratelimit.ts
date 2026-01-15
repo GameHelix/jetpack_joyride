@@ -160,15 +160,39 @@ export function recordSuccess(identifier: string): void {
 }
 
 /**
+ * Clear all rate limits for a specific prefix (e.g., clear all login attempts)
+ * Useful for administrative purposes or testing
+ */
+export function clearRateLimitsForPrefix(prefix: string): number {
+  let cleared = 0
+  const entries = Array.from(rateLimitStore.entries())
+  for (const [key] of entries) {
+    if (key.startsWith(`${prefix}:`)) {
+      rateLimitStore.delete(key)
+      cleared++
+    }
+  }
+  return cleared
+}
+
+/**
+ * Clear all rate limits (use with caution)
+ */
+export function clearAllRateLimits(): void {
+  rateLimitStore.clear()
+}
+
+/**
  * Preset configurations for common scenarios
  */
 export const RateLimitPresets = {
-  // Login: 5 attempts per 15 minutes, 1 hour lockout after exceeding
+  // Login: 20 attempts per 15 minutes, 15 minute lockout after exceeding
+  // More lenient to avoid blocking legitimate users during testing/development
   login: {
-    maxAttempts: 5,
+    maxAttempts: 20,
     windowMs: 15 * 60 * 1000, // 15 minutes
-    lockoutDuration: 60 * 60 * 1000, // 1 hour
-    message: 'Too many login attempts. Account temporarily locked. Please try again later.',
+    lockoutDuration: 15 * 60 * 1000, // 15 minutes (reduced from 1 hour)
+    message: 'Too many login attempts. Please try again in a few minutes.',
   },
 
   // Registration: 3 per hour per IP
