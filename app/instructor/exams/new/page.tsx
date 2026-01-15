@@ -160,7 +160,7 @@ export default function NewExamPage() {
           options: q.questionType === 'multiple_choice' ? q.options.filter(o => o.trim()) : undefined,
           correctAnswer: (q.questionType === 'multiple_choice' || q.questionType === 'true_false') ? q.correctAnswer : undefined,
           points: q.points,
-          order: index,
+          orderIndex: index,
         })),
       }
 
