@@ -3,7 +3,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { RoleName } from '@prisma/client'
 
 interface DashboardLayoutProps {
@@ -63,6 +63,21 @@ const icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
+  exams: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+    </svg>
+  ),
+  caseRooms: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+    </svg>
+  ),
+  payments: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
 }
 
 const navigationByRole: Record<
@@ -83,6 +98,9 @@ const navigationByRole: Record<
     { name: 'Dashboard', href: '/instructor', icon: icons.dashboard },
     { name: 'Courses', href: '/instructor/courses', icon: icons.courses },
     { name: 'Assignments', href: '/instructor/assignments', icon: icons.assignments },
+    { name: 'Exams', href: '/instructor/exams', icon: icons.exams },
+    { name: 'Case Rooms', href: '/instructor/case-rooms', icon: icons.caseRooms },
+    { name: 'Payments', href: '/instructor/payments', icon: icons.payments },
     { name: 'Content', href: '/instructor/content', icon: icons.content },
     { name: 'Schedule', href: '/instructor/schedule', icon: icons.schedule },
     { name: 'Certificates', href: '/instructor/certificates', icon: icons.certificates },
@@ -93,10 +111,12 @@ const navigationByRole: Record<
     { name: 'Courses', href: '/moderator/courses', icon: icons.courses },
   ],
   STUDENT: [
-    { name: 'Dashboard', href: '/student', icon: icons.dashboard },
+    { name: 'Dashboard', href: '/student/dashboard', icon: icons.dashboard },
     { name: 'Courses', href: '/student/courses', icon: icons.courses },
     { name: 'Timetable', href: '/student/timetable', icon: icons.schedule },
     { name: 'Assignments', href: '/student/assignments', icon: icons.assignments },
+    { name: 'Exams', href: '/student/exams', icon: icons.exams },
+    { name: 'Case Rooms', href: '/student/case-rooms', icon: icons.caseRooms },
     { name: 'Certificates', href: '/student/certificates', icon: icons.certificates },
   ],
 }
@@ -105,6 +125,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
@@ -112,14 +133,16 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
       <nav className="bg-gradient-to-r from-[#5C2482] to-[#7B3FA3] shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
+            <div className="flex items-center">
               <Link
                 href="/dashboard"
-                className="flex items-center text-2xl font-bold text-white"
+                className="flex items-center text-xl md:text-2xl font-bold text-white"
               >
                 Educy
               </Link>
-              <div className="hidden sm:ml-8 sm:flex sm:space-x-6">
+
+              {/* Desktop Navigation */}
+              <div className="hidden lg:ml-8 lg:flex lg:space-x-4">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
@@ -131,51 +154,95 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     }`}
                   >
                     <span className="mr-2">{item.icon}</span>
-                    {item.name}
+                    <span className="hidden xl:inline">{item.name}</span>
                   </Link>
                 ))}
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-purple-100">
+
+            {/* Desktop User Menu */}
+            <div className="hidden md:flex items-center space-x-4">
+              <span className="text-xs md:text-sm text-purple-100 truncate max-w-32">
                 {session?.user?.name}
               </span>
-              <span className="px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
+              <span className="px-2 md:px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
                 {session?.user?.role}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-sm text-purple-100 hover:text-white transition px-3 py-2 rounded-lg hover:bg-white/10"
+                className="text-xs md:text-sm text-purple-100 hover:text-white transition px-3 py-2 rounded-lg hover:bg-white/10"
               >
                 Sign Out
+              </button>
+            </div>
+
+            {/* Mobile Hamburger Button */}
+            <div className="flex items-center lg:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-purple-100 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                {!mobileMenuOpen ? (
+                  <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                ) : (
+                  <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="sm:hidden border-t border-purple-400/30">
-          <div className="pt-2 pb-3 space-y-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`block pl-3 pr-4 py-2 text-base font-medium ${
-                  pathname === item.href
-                    ? 'bg-white/20 text-white border-l-4 border-white'
-                    : 'text-purple-100 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <span className="mr-2">{item.icon}</span>
-                {item.name}
-              </Link>
-            ))}
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-purple-400/30">
+            <div className="pt-2 pb-3 space-y-1">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center pl-3 pr-4 py-3 text-base font-medium ${
+                    pathname === item.href
+                      ? 'bg-white/20 text-white border-l-4 border-white'
+                      : 'text-purple-100 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span className="mr-3">{item.icon}</span>
+                  {item.name}
+                </Link>
+              ))}
+
+              {/* Mobile User Section */}
+              <div className="border-t border-purple-400/30 pt-4 pb-3 px-4">
+                <div className="flex items-center mb-3">
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-white">{session?.user?.name}</div>
+                    <div className="text-xs text-purple-200">{session?.user?.email}</div>
+                  </div>
+                  <span className="px-3 py-1 text-xs font-medium bg-[#F95B0E] text-white rounded-full">
+                    {session?.user?.role}
+                  </span>
+                </div>
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="w-full text-left px-3 py-2 text-sm text-purple-100 hover:text-white hover:bg-white/10 rounded-lg transition"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="w-full">
         {children}
       </main>
     </div>
