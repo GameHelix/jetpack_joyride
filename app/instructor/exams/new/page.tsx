@@ -110,6 +110,20 @@ export default function NewExamPage() {
     setLoading(true)
 
     try {
+      // Validate basic fields first
+      if (!formData.sectionId) {
+        throw new Error('Please select a section')
+      }
+      if (!formData.title.trim()) {
+        throw new Error('Please enter exam title')
+      }
+      if (!formData.startDate) {
+        throw new Error('Please select start date')
+      }
+      if (!formData.endDate) {
+        throw new Error('Please select end date')
+      }
+
       // Validate questions
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i]

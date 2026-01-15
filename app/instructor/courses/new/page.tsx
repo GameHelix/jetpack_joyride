@@ -185,22 +185,31 @@ export default function NewCoursePage() {
             </div>
 
             {/* Visibility */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="visibility"
-                checked={formData.visibility}
-                onChange={(e) =>
-                  setFormData({ ...formData, visibility: e.target.checked })
-                }
-                className="w-4 h-4 text-[#5C2482] border-gray-300 rounded focus:ring-blue-500"
-              />
-              <label
-                htmlFor="visibility"
-                className="ml-2 text-xs sm:text-sm font-medium text-gray-700"
-              >
-                Make course visible to students
-              </label>
+            <div className="border-2 border-blue-200 rounded-xl p-4 bg-blue-50">
+              <div className="flex items-start">
+                <input
+                  type="checkbox"
+                  id="visibility"
+                  checked={formData.visibility}
+                  onChange={(e) =>
+                    setFormData({ ...formData, visibility: e.target.checked })
+                  }
+                  className="w-5 h-5 text-[#5C2482] border-gray-300 rounded focus:ring-blue-500 mt-0.5"
+                />
+                <div className="ml-3">
+                  <label
+                    htmlFor="visibility"
+                    className="text-sm font-semibold text-gray-900 cursor-pointer"
+                  >
+                    Make course visible to students
+                  </label>
+                  <p className="text-xs text-gray-600 mt-1">
+                    {formData.visibility
+                      ? '✅ Students can see and enroll in this course'
+                      : '⚠️ Students cannot see this course (hidden)'}
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Actions */}
