@@ -23,6 +23,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const [formData, setFormData] = useState({
@@ -30,9 +31,12 @@ export default function ProfilePage() {
     surname: '',
     phone: '',
     expertise: [] as string[],
+    profileAvatarUrl: '',
   })
 
   const [newExpertise, setNewExpertise] = useState('')
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -52,7 +56,11 @@ export default function ProfilePage() {
           surname: data.user.surname || '',
           phone: data.user.phone || '',
           expertise: data.user.expertise || [],
+          profileAvatarUrl: data.user.profileAvatarUrl || '',
         })
+        if (data.user.profileAvatarUrl) {
+          setAvatarPreview(data.user.profileAvatarUrl)
+        }
       }
     } catch (error) {
       console.error('Failed to fetch profile:', error)
@@ -61,16 +69,90 @@ export default function ProfilePage() {
     }
   }
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setMessage({ type: 'error', text: 'Please select an image file' })
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage({ type: 'error', text: 'Image size must be less than 5MB' })
+      return
+    }
+
+    setAvatarFile(file)
+    // Create preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setAvatarPreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+    setMessage(null)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
     setMessage(null)
 
     try {
+      let avatarUrl = formData.profileAvatarUrl
+
+      // Upload avatar if selected
+      if (avatarFile) {
+        setUploading(true)
+        try {
+          // Get signed upload URL
+          const urlResponse = await fetch('/api/files/upload-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: avatarFile.name,
+              contentType: avatarFile.type,
+              sizeBytes: avatarFile.size,
+              context: 'profile',
+            }),
+          })
+
+          const urlData = await urlResponse.json()
+          if (!urlResponse.ok) throw new Error(urlData.error || 'Failed to get upload URL')
+
+          // Upload to R2
+          await fetch(urlData.uploadUrl, {
+            method: 'PUT',
+            body: avatarFile,
+            headers: {
+              'Content-Type': avatarFile.type,
+            },
+          })
+
+          // Confirm upload
+          await fetch(`/api/files/${urlData.fileId}/confirm`, {
+            method: 'POST',
+          })
+
+          // Get public URL (construct from file key)
+          avatarUrl = `https://pub-f850e88d52e84edba2e5b82a80ba3126.r2.dev/${urlData.fileKey}`
+        } catch (err) {
+          console.error('Avatar upload error:', err)
+          throw new Error('Failed to upload profile picture')
+        } finally {
+          setUploading(false)
+        }
+      }
+
       const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          profileAvatarUrl: avatarUrl,
+        }),
       })
 
       const data = await response.json()
@@ -78,13 +160,15 @@ export default function ProfilePage() {
       if (data.success) {
         setMessage({ type: 'success', text: 'Profile updated successfully!' })
         setProfile(data.user)
+        setAvatarFile(null)
       } else {
         setMessage({ type: 'error', text: data.error || 'Failed to update profile' })
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to update profile' })
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to update profile' })
     } finally {
       setSaving(false)
+      setUploading(false)
     }
   }
 
@@ -144,6 +228,43 @@ export default function ProfilePage() {
 
         {/* Profile Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow border border-gray-200 p-6 space-y-6">
+          {/* Profile Picture */}
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Profile Picture</h2>
+            <div className="flex items-center gap-6">
+              {/* Avatar Preview */}
+              <div className="flex-shrink-0">
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full object-cover border-4 border-[#5C2482]"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-[#5C2482] flex items-center justify-center text-white text-3xl font-bold">
+                    {formData.name ? formData.name[0].toUpperCase() : '?'}
+                  </div>
+                )}
+              </div>
+
+              {/* Upload Button */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Upload New Picture
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Recommended: Square image, max 5MB (JPG, PNG, GIF)
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Basic Information */}
           <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
@@ -292,10 +413,10 @@ export default function ProfilePage() {
           <div className="flex justify-end pt-4 border-t border-gray-200">
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || uploading}
               className="px-6 py-3 bg-[#5C2482] text-white rounded-lg hover:bg-[#7B3FA3] disabled:bg-gray-400 disabled:cursor-not-allowed transition font-medium"
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {uploading ? 'Uploading Picture...' : saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>
