@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma'
 import DashboardLayout from '@/components/dashboard-layout'
 import { ContentAgeIndicator } from '@/components/content-age-indicator'
 import { EnrollStudentsButton } from '@/components/enroll-students-button'
+import { EnrolledStudentsList } from '@/components/enrolled-students-list'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -297,27 +298,7 @@ export default async function CourseDetailPage({
             {section && <EnrollStudentsButton sectionId={section.id} />}
           </div>
           <div className="p-6">
-            {!section || section.enrollments.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
-                No students enrolled yet.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {section.enrollments.map((enrollment) => (
-                  <div
-                    key={enrollment.id}
-                    className="p-4 border border-gray-200 rounded-xl"
-                  >
-                    <p className="font-medium text-[#5C2482]">
-                      {enrollment.user.name}
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                      {enrollment.user.email}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
+            {section && <EnrolledStudentsList enrollments={section.enrollments} />}
           </div>
         </div>
       </div>
