@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
 import LessonMaterialsManager, { LessonMaterial } from '@/components/lesson-materials-manager'
+import { FormField } from '@/components/form-field'
+import { useFormValidation } from '@/hooks/use-form-validation'
 
 const DAYS_OF_WEEK = [
   { value: 'MONDAY', label: 'Monday' },
@@ -39,10 +41,10 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [rooms, setRooms] = useState<Room[]>([])
   const [roomSchedule, setRoomSchedule] = useState<RoomSchedule[]>([])
   const [loadingSchedule, setLoadingSchedule] = useState(false)
+  const { fieldErrors, generalError, setGeneralError, handleHttpError, clearAllErrors } = useFormValidation()
 
   const [formData, setFormData] = useState({
     title: '',
@@ -94,7 +96,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    clearAllErrors()
     setLoading(true)
 
     try {
@@ -113,7 +115,13 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create lesson')
+        // Handle HTTP errors with field-level error parsing
+        const handled = handleHttpError(response, data)
+        if (!handled) {
+          setGeneralError(data.error || 'Failed to create lesson')
+        }
+        setLoading(false)
+        return
       }
 
       // Redirect back to course page using the courseId from the response
@@ -126,7 +134,13 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
       }
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      // Handle network errors
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setGeneralError('Network error. Please check your internet connection and try again.')
+      } else {
+        setGeneralError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.')
+      }
+      setLoading(false)
     } finally {
       setLoading(false)
     }
@@ -150,68 +164,56 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
 
         <div className="bg-white rounded-xl shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
+            {/* General error (system-level only) */}
+            {generalError && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
-                {error}
+                {generalError}
               </div>
             )}
 
             {/* Lesson Title */}
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-              >
-                Lesson Title *
-              </label>
+            <FormField
+              label="Lesson Title"
+              required
+              error={fieldErrors.title}
+            >
               <input
                 type="text"
-                id="title"
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., Introduction to Variables"
                 maxLength={200}
               />
-            </div>
+            </FormField>
 
             {/* Description */}
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-              >
-                Description
-              </label>
+            <FormField
+              label="Description"
+              error={fieldErrors.description}
+            >
               <textarea
-                id="description"
                 rows={3}
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Brief description of the lesson..."
               />
-            </div>
+            </FormField>
 
             {/* Day of Week */}
-            <div>
-              <label
-                htmlFor="dayOfWeek"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-              >
-                Day of Week *
-              </label>
+            <FormField
+              label="Day of Week"
+              required
+              error={fieldErrors.dayOfWeek}
+            >
               <select
-                id="dayOfWeek"
                 required
                 value={formData.dayOfWeek}
                 onChange={(e) =>
                   setFormData({ ...formData, dayOfWeek: e.target.value })
                 }
-                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {DAYS_OF_WEEK.map((day) => (
                   <option key={day.value} value={day.value}>
@@ -219,64 +221,54 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                   </option>
                 ))}
               </select>
-            </div>
+            </FormField>
 
             {/* Time Range */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="startTime"
-                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-                >
-                  Start Time *
-                </label>
+              <FormField
+                label="Start Time"
+                required
+                error={fieldErrors.startTime}
+                helpText="Format: HH:MM (e.g., 09:00)"
+              >
                 <input
                   type="time"
-                  id="startTime"
                   required
                   value={formData.startTime}
                   onChange={(e) =>
                     setFormData({ ...formData, startTime: e.target.value })
                   }
-                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-              </div>
+              </FormField>
 
-              <div>
-                <label
-                  htmlFor="endTime"
-                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-                >
-                  End Time *
-                </label>
+              <FormField
+                label="End Time"
+                required
+                error={fieldErrors.endTime}
+                helpText="Format: HH:MM (e.g., 10:30)"
+              >
                 <input
                   type="time"
-                  id="endTime"
                   required
                   value={formData.endTime}
                   onChange={(e) =>
                     setFormData({ ...formData, endTime: e.target.value })
                   }
-                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-              </div>
+              </FormField>
             </div>
 
             {/* Room Selection */}
-            <div>
-              <label
-                htmlFor="roomId"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
-              >
-                Room (Optional)
-              </label>
+            <FormField
+              label="Room (Optional)"
+              error={fieldErrors.roomId}
+              helpText={rooms.length === 0 ? "No rooms available. Contact an administrator to add rooms." : undefined}
+            >
               <select
-                id="roomId"
                 value={formData.roomId}
                 onChange={(e) =>
                   setFormData({ ...formData, roomId: e.target.value })
                 }
-                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">No room assigned</option>
                 {rooms.map((room) => (
@@ -286,12 +278,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                   </option>
                 ))}
               </select>
-              {rooms.length === 0 && (
-                <p className="mt-1 text-xs sm:text-sm text-yellow-600">
-                  No rooms available. Contact an administrator to add rooms.
-                </p>
-              )}
-            </div>
+            </FormField>
 
             {/* Room Schedule Viewer */}
             {formData.roomId && (
