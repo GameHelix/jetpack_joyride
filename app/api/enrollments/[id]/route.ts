@@ -77,6 +77,60 @@ export async function DELETE(
       },
     })
 
+    // Notify instructor if student left on their own
+    if (isOwnEnrollment) {
+      await prisma.notification.create({
+        data: {
+          userId: enrollment.section.instructorId,
+          type: 'GENERAL',
+          payload: {
+            title: 'Student Left Course',
+            message: `${enrollment.user.name} has withdrawn from ${enrollment.section.course.code}: ${enrollment.section.course.title}`,
+            courseCode: enrollment.section.course.code,
+            courseTitle: enrollment.section.course.title,
+            studentName: enrollment.user.name,
+            studentEmail: enrollment.user.email,
+            enrollmentId: params.id,
+          },
+        },
+      })
+
+      // Notify all moderators and admins
+      const moderatorsAndAdmins = await prisma.user.findMany({
+        where: {
+          role: {
+            in: ['MODERATOR', 'ADMIN'],
+          },
+          status: 'ACTIVE',
+        },
+        select: {
+          id: true,
+        },
+      })
+
+      await Promise.all(
+        moderatorsAndAdmins.map((moderator) =>
+          prisma.notification.create({
+            data: {
+              userId: moderator.id,
+              type: 'GENERAL',
+              payload: {
+                title: 'Student Withdrew from Course',
+                message: `${enrollment.user.name} withdrew from ${enrollment.section.course.code}: ${enrollment.section.course.title}`,
+                courseCode: enrollment.section.course.code,
+                courseTitle: enrollment.section.course.title,
+                studentName: enrollment.user.name,
+                studentEmail: enrollment.user.email,
+                instructorName: enrollment.section.instructor.name,
+                enrollmentId: params.id,
+                action: 'STUDENT_WITHDRAWAL',
+              },
+            },
+          })
+        )
+      )
+    }
+
     const message = isOwnEnrollment
       ? `You have successfully left ${enrollment.section.course.code}`
       : `${enrollment.user.name} has been removed from ${enrollment.section.course.code}`
