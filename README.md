@@ -38,6 +38,7 @@ Educy is a comprehensive course management platform designed for data science ed
 - ✅ **User Management** - Admin-controlled user creation with secure credentials
 - ✅ **Password Recovery** - Complete forgot/reset password flow with email tokens
 - ✅ **Course Management** - Complete CRUD for courses, sections, and lessons
+- ✅ **Student Self-Unenrollment** - Students can leave courses independently
 - ✅ **Enrollment System** - Student enrollment requests with instructor approval + direct enrollment
 - ✅ **Assignment System** - Create, submit, grade with file/text support
 - ✅ **Late Submission Tracking** - Automatic detection and flagging of late submissions
@@ -49,6 +50,7 @@ Educy is a comprehensive course management platform designed for data science ed
 - ✅ **Audit Logging** - Complete activity tracking with severity levels
 - ✅ **Database Optimization** - 13 strategic indexes for performance
 - ✅ **Real-time Updates** - Dynamic rendering with no caching issues
+- ✅ **Modern UI/UX** - Responsive design with reusable Card & Button components
 - ✅ **Mobile Responsive** - Full mobile optimization with responsive tables and layouts
 
 ---
@@ -290,7 +292,13 @@ educy/
 ├── components/                  # React Components
 │   ├── ai-grading-assistant.tsx
 │   ├── ai-student-help.tsx
+│   ├── course-actions.tsx       # Course CRUD action buttons
+│   ├── delete-course-button.tsx  # Delete course with confirmation
+│   ├── leave-course-button.tsx   # Student unenroll button
 │   ├── dashboard-layout.tsx
+│   ├── ui/                      # Reusable UI Components
+│   │   ├── button.tsx           # Button component (5 variants)
+│   │   └── card.tsx             # Card component (3 sizes)
 │   └── providers/
 │       └── session-provider.tsx
 │
@@ -552,8 +560,8 @@ graph LR
 | GET | `/api/courses` | Instructor+ | List courses |
 | POST | `/api/courses` | Instructor+ | Create course |
 | GET | `/api/courses/[id]` | Instructor+ | Get course details |
-| PUT | `/api/courses/[id]` | Instructor+ | Update course |
-| DELETE | `/api/courses/[id]` | Instructor+ | Delete course |
+| PUT | `/api/courses/[id]` | Instructor+ | Update course (code, title, description, term, visibility) |
+| DELETE | `/api/courses/[id]` | Instructor+ | Delete course (blocked if has enrollments) |
 | POST | `/api/sections/[id]/lessons` | Instructor+ | Create lesson |
 | GET | `/api/lessons/[id]` | Instructor+ | Get lesson |
 | PUT | `/api/lessons/[id]` | Instructor+ | Update lesson |
@@ -577,8 +585,10 @@ graph LR
 |--------|----------|------|-------------|
 | POST | `/api/enrollments/request` | Student | Request enrollment |
 | GET | `/api/enrollments/pending` | Instructor+ | List pending enrollments |
+| GET | `/api/enrollments/my-requests` | Student | Get student's enrollment requests |
 | POST | `/api/enrollments/[id]/approve` | Instructor+ | Approve enrollment |
 | POST | `/api/enrollments/[id]/reject` | Instructor+ | Reject enrollment |
+| DELETE | `/api/enrollments/[id]` | Student/Instructor+ | Student unenroll or instructor remove |
 | POST | `/api/sections/[id]/enroll-student` | Instructor+ | Directly enroll student (bypass approval) |
 | GET | `/api/students/all` | Instructor+ | Get all active students for enrollment |
 
@@ -661,9 +671,10 @@ graph LR
 | Route | Page | Description |
 |-------|------|-------------|
 | `/instructor` | Instructor Dashboard | Course overview |
-| `/instructor/courses` | My Courses | List of courses |
+| `/instructor/courses` | My Courses | List of courses with CRUD actions |
 | `/instructor/courses/new` | New Course | Course creation |
 | `/instructor/courses/[id]` | Course Details | Sections & lessons |
+| `/instructor/courses/[id]/edit` | Edit Course | Update course information |
 | `/instructor/assignments/[id]` | Assignment Details | Submissions & grading |
 | `/instructor/schedule` | Weekly Schedule | Teaching schedule |
 
@@ -860,7 +871,10 @@ sequenceDiagram
 - ✅ User role management
 
 #### Instructor Features
-- ✅ Create and manage courses
+- ✅ Create and manage courses (full CRUD operations)
+- ✅ Edit course information (code, title, description, term, visibility)
+- ✅ Delete courses (with enrollment safety checks)
+- ✅ Remove students from courses
 - ✅ Schedule lessons with room booking
 - ✅ Create assignments with due dates
 - ✅ Grade submissions with feedback
@@ -871,6 +885,8 @@ sequenceDiagram
 
 #### Student Features
 - ✅ Browse and enroll in courses with real-time status
+- ✅ Leave/unenroll from courses independently
+- ✅ Modern dashboard with gradient cards and visual icons
 - ✅ Submit assignments (file or text) with late detection
 - ✅ View grades and feedback
 - ✅ AI-powered tutoring help
@@ -1121,7 +1137,26 @@ Student Portal:
 
 ### Recent Updates (Jan 15, 2026)
 
-**Latest Mobile UX Improvements:**
+**Latest Design & UX Improvements:**
+- ✅ Created reusable UI component library (Card & Button components)
+- ✅ Complete design overhaul for student and instructor pages
+- ✅ Modern gradient card designs with improved visual hierarchy
+- ✅ Responsive grid layouts (1 col mobile → 2-3 cols desktop)
+- ✅ Enhanced hover effects and smooth transitions (200ms)
+- ✅ Colorful stat badges (blue, green, purple themes)
+- ✅ Better empty states with friendly messaging
+- ✅ Improved button grouping and mobile stacking
+- ✅ Touch-friendly interfaces for mobile users
+
+**Latest CRUD Features:**
+- ✅ Edit course page at /instructor/courses/[id]/edit
+- ✅ Delete course functionality with safety checks
+- ✅ Student self-unenrollment feature (leave courses)
+- ✅ Instructor can remove students from courses
+- ✅ Enhanced course management with Manage/Edit/Delete actions
+- ✅ Audit logging for all enrollment changes
+
+**Mobile UX Improvements:**
 - ✅ Fixed "Failed to load sections" error on Create Exam page
 - ✅ Made instructor courses page fully responsive with mobile layout
 - ✅ Added responsive table wrappers to admin users and rooms pages
@@ -1175,11 +1210,13 @@ For issues, questions, or contributions:
 
 ---
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Last Updated:** January 15, 2026
 **Status:** Production Ready ✅
-**Bugs Fixed:** 17+ issues resolved
+**Features Added:** 25+ CRUD & UX improvements
+**Bugs Fixed:** 18+ issues resolved
 **Mobile Responsive:** ✅ YES
+**UI Components:** ✅ Reusable library created
 
 ---
 
