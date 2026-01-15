@@ -138,7 +138,7 @@ export default async function CourseDetailPage({
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <div className="bg-white rounded-xl shadow p-6">
             <p className="text-sm font-medium text-gray-600">
               Students

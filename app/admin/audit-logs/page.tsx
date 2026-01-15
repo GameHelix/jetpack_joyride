@@ -228,7 +228,7 @@ export default function AuditLogsPage() {
 
         {/* Stats */}
         <div className="bg-white rounded-xl shadow p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-600">Total Logs</p>
               <p className="text-2xl font-bold text-[#5C2482]">

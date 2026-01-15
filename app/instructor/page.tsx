@@ -167,7 +167,7 @@ export default async function InstructorDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-blue-100">
