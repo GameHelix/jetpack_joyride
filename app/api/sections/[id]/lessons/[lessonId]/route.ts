@@ -21,6 +21,7 @@ const updateLessonSchema = z.object({
   startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)').optional(),
   endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)').optional(),
   roomId: z.string().uuid().optional().nullable(),
+  isArchived: z.boolean().optional(), // Content aging: archive support
 })
 
 // GET /api/sections/[id]/lessons/[lessonId] - Get single lesson
@@ -197,6 +198,7 @@ export async function PATCH(
         ...(data.startTime && { startTime: data.startTime }),
         ...(data.endTime && { endTime: data.endTime }),
         ...(data.roomId !== undefined && { roomId: data.roomId }),
+        ...(data.isArchived !== undefined && { isArchived: data.isArchived }),
       },
       include: {
         room: true,
@@ -209,10 +211,11 @@ export async function PATCH(
     })
 
     // Create audit log
+    const action = data.isArchived ? 'LESSON_ARCHIVED' : 'LESSON_UPDATED'
     await prisma.auditLog.create({
       data: {
         userId: user.id,
-        action: 'LESSON_UPDATED',
+        action,
         targetType: 'Lesson',
         targetId: updatedLesson.id,
         details: {
@@ -220,6 +223,7 @@ export async function PATCH(
           course: existingLesson.section.course.code,
           changes: data,
         },
+        severity: data.isArchived ? 'WARNING' : 'INFO',
       },
     })
 

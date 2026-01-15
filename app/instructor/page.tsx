@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import DashboardLayout from '@/components/dashboard-layout'
+import { getContentAgeStats, filterByAgeStatus } from '@/lib/content-aging'
 import Link from 'next/link'
 
 export default async function InstructorDashboard() {
@@ -92,6 +93,66 @@ export default async function InstructorDashboard() {
     take: 10,
   })
 
+  // Fetch all content for aging analysis
+  const allLessons = await prisma.lesson.findMany({
+    where: {
+      section: {
+        instructorId: userId,
+      },
+      isArchived: false,
+    },
+    select: {
+      id: true,
+      title: true,
+      updatedAt: true,
+      section: {
+        select: {
+          id: true,
+          course: {
+            select: {
+              code: true,
+              title: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  const allAssignments = await prisma.assignment.findMany({
+    where: {
+      section: {
+        instructorId: userId,
+      },
+      isArchived: false,
+    },
+    select: {
+      id: true,
+      title: true,
+      updatedAt: true,
+      section: {
+        select: {
+          id: true,
+          course: {
+            select: {
+              code: true,
+              title: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  // Combine all content for aging stats
+  const allContent = [...allLessons, ...allAssignments].map((item) => ({
+    ...item,
+    type: 'lessons' in allLessons && allLessons.includes(item as any) ? 'lesson' : 'assignment',
+  }))
+
+  const contentStats = getContentAgeStats(allContent)
+  const outdatedContent = filterByAgeStatus(allContent, ['outdated', 'aging']).slice(0, 5)
+
   return (
     <DashboardLayout role={session.user.role}>
       <div className="space-y-6">
@@ -179,6 +240,58 @@ export default async function InstructorDashboard() {
             </div>
           </div>
         </div>
+
+        {/* Content Aging Alert */}
+        {contentStats.needsReview > 0 && (
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl shadow border-2 border-yellow-200">
+            <div className="p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-full bg-yellow-100">
+                    <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-yellow-900">
+                      Content Review Needed
+                    </h3>
+                    <p className="text-sm text-yellow-700 mt-1">
+                      You have <strong>{contentStats.needsReview}</strong> content item{contentStats.needsReview !== 1 ? 's' : ''} that may need updating
+                      ({contentStats.outdated} outdated, {contentStats.aging} aging)
+                    </p>
+                    {outdatedContent.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        {outdatedContent.map((item: any) => (
+                          <div key={item.id} className="flex items-center justify-between bg-white/60 rounded-lg p-3">
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm">
+                                {item.title}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                {item.section.course.code} • Last updated{' '}
+                                {new Date(item.updatedAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-medium">
+                              ⏰ Needs review
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Link
+                  href="/instructor/content"
+                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-xl transition font-medium text-sm flex-shrink-0"
+                >
+                  Review Content
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* My Sections */}
         <div className="bg-white rounded-xl shadow border border-gray-200">

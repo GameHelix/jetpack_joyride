@@ -94,8 +94,8 @@ model User {
   welcomeEmailSentAt DateTime?     // When welcome email was sent
 
   // Relations
-  instructorSections Section[]      @relation("InstructorSections")
-  createdCourses     Course[]       @relation("CourseCreator")
+  instructorSections Section[]       @relation("InstructorSections")
+  createdCourses     Course[]        @relation("CourseCreator")
   enrollments        Enrollment[]
   submissions        Submission[]
   files              File[]
@@ -103,7 +103,8 @@ model User {
   auditLogs          AuditLog[]
   createdAssignments Assignment[]
   certificates       Certificate[]
-  issuedCertificates Certificate[]  @relation("CertificateIssuer")
+  issuedCertificates Certificate[]   @relation("CertificateIssuer")
+  announcements      Announcement[]  @relation("AnnouncementAuthor")
 
   @@map("users")
   @@schema("educy")
@@ -138,10 +139,11 @@ model Section {
   createdAt    DateTime     @default(now())
 
   // Relations
-  lessons      Lesson[]
-  enrollments  Enrollment[]
-  assignments  Assignment[]
-  certificates Certificate[]
+  lessons       Lesson[]
+  enrollments   Enrollment[]
+  assignments   Assignment[]
+  certificates  Certificate[]
+  announcements Announcement[]
 
   @@index([term])
   @@index([instructorId])
@@ -177,11 +179,15 @@ model Lesson {
   roomId      String?
   room        Room?      @relation(fields: [roomId], references: [id])
   materialIds String[]   // Array of file IDs
+  isArchived  Boolean    @default(false) // Content aging: archived materials
   createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt // Content aging: track last update
 
   // Relations
   schedules   Schedule[]
 
+  @@index([isArchived])
+  @@index([updatedAt])
   @@map("lessons")
   @@schema("educy")
 }
@@ -227,14 +233,37 @@ model Assignment {
   maxSizeBytes     Int          @default(10485760) // 10MB default
   createdById      String
   createdBy        User         @relation(fields: [createdById], references: [id])
+  isArchived       Boolean      @default(false) // Content aging: archived assignments
   createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt // Content aging: track last update
 
   // Relations
   submissions      Submission[]
 
   @@index([sectionId])
   @@index([dueDate])
+  @@index([isArchived])
+  @@index([updatedAt])
   @@map("assignments")
+  @@schema("educy")
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  sectionId   String
+  section     Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title       String
+  content     String   // Announcement content/message
+  authorId    String
+  author      User     @relation("AnnouncementAuthor", fields: [authorId], references: [id])
+  isArchived  Boolean  @default(false) // Content aging: archived announcements
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt // Content aging: track last update
+
+  @@index([sectionId])
+  @@index([isArchived])
+  @@index([updatedAt])
+  @@map("announcements")
   @@schema("educy")
 }
 

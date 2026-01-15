@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import DashboardLayout from '@/components/dashboard-layout'
+import { ContentAgeIndicator } from '@/components/content-age-indicator'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -48,6 +49,9 @@ export default async function CourseDetailPage({
             orderBy: {
               dayOfWeek: 'asc',
             },
+            where: {
+              isArchived: false,
+            },
           },
           assignments: {
             include: {
@@ -59,6 +63,9 @@ export default async function CourseDetailPage({
             },
             orderBy: {
               dueDate: 'desc',
+            },
+            where: {
+              isArchived: false,
             },
           },
           enrollments: {
@@ -191,9 +198,9 @@ export default async function CourseDetailPage({
                 {section.lessons.map((lesson) => (
                   <div
                     key={lesson.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
+                    className="flex items-start justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
                   >
-                    <div>
+                    <div className="flex-1 min-w-0 pr-4">
                       <h3 className="font-medium text-[#5C2482]">
                         {lesson.title}
                       </h3>
@@ -206,10 +213,18 @@ export default async function CourseDetailPage({
                           {lesson.description}
                         </p>
                       )}
+                      <div className="mt-2">
+                        <ContentAgeIndicator
+                          updatedAt={lesson.updatedAt}
+                          createdAt={lesson.createdAt}
+                          contentType="lesson"
+                          compact={true}
+                        />
+                      </div>
                     </div>
                     <Link
                       href={`/instructor/courses/${section.id}/lessons/${lesson.id}/edit`}
-                      className="px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-sm font-medium"
+                      className="px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-sm font-medium flex-shrink-0"
                     >
                       Edit
                     </Link>
@@ -246,9 +261,9 @@ export default async function CourseDetailPage({
                   <Link
                     key={assignment.id}
                     href={`/instructor/assignments/${assignment.id}`}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
+                    className="flex items-start justify-between p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
                   >
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-[#5C2482]">
                         {assignment.title}
                       </h3>
@@ -256,6 +271,14 @@ export default async function CourseDetailPage({
                         Due: {new Date(assignment.dueDate).toLocaleDateString()} •{' '}
                         {assignment._count.submissions} submissions
                       </p>
+                      <div className="mt-2">
+                        <ContentAgeIndicator
+                          updatedAt={assignment.updatedAt}
+                          createdAt={assignment.createdAt}
+                          contentType="assignment"
+                          compact={true}
+                        />
+                      </div>
                     </div>
                   </Link>
                 ))}
