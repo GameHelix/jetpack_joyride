@@ -5,6 +5,7 @@ import { requireInstructor } from '@/lib/rbac'
 import { prisma } from '@/lib/prisma'
 import DashboardLayout from '@/components/dashboard-layout'
 import { ContentAgeIndicator } from '@/components/content-age-indicator'
+import { EnrollStudentsButton } from '@/components/enroll-students-button'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -289,10 +290,11 @@ export default async function CourseDetailPage({
 
         {/* Enrolled Students */}
         <div className="bg-white rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
             <h2 className="text-xl font-semibold text-[#5C2482]">
               Enrolled Students ({section?.enrollments.length || 0})
             </h2>
+            {section && <EnrollStudentsButton sectionId={section.id} />}
           </div>
           <div className="p-6">
             {!section || section.enrollments.length === 0 ? (
