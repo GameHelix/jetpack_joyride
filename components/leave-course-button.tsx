@@ -52,7 +52,7 @@ export function LeaveCourseButton({
     <button
       onClick={handleLeave}
       disabled={leaving}
-      className="px-3 py-1 text-xs sm:text-sm font-medium border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+      className="px-3 py-1.5 text-xs font-semibold border-2 border-red-500 text-red-600 rounded-lg hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {leaving ? 'Leaving...' : 'Leave Course'}
     </button>

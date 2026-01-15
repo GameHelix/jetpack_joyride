@@ -149,28 +149,30 @@ export default function StudentCoursesPage() {
           </h1>
 
           {enrolledCourses.length === 0 ? (
-            <div className="bg-white rounded-xl shadow border border-gray-200 p-8 text-center">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
               <div className="text-6xl mb-4">📚</div>
-              <p className="text-gray-500">
-                You're not enrolled in any courses yet.
+              <p className="text-gray-600 text-lg mb-2 font-medium">No courses yet</p>
+              <p className="text-gray-500 text-sm">
+                Browse available courses below to get started
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {enrolledCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
-                  className="bg-white rounded-xl shadow border border-gray-200 hover:shadow-xl transition"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-[#5C2482]/20 transition-all duration-200"
                 >
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-[#5C2482] rounded-full">
-                          {enrollment.section.course.code}
-                        </span>
-                      </div>
+                  <div className="p-5 sm:p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <span className="inline-block px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-[#5C2482]/10 to-[#7B3FA3]/10 text-[#5C2482] rounded-full border border-[#5C2482]/20">
+                        {enrollment.section.course.code}
+                      </span>
                       <div className="flex flex-col items-end gap-2">
-                        <span className="text-green-600 text-xs sm:text-sm font-medium">
+                        <span className="flex items-center gap-1 text-green-600 text-xs font-semibold">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
                           Enrolled
                         </span>
                         <LeaveCourseButton
@@ -180,22 +182,33 @@ export default function StudentCoursesPage() {
                         />
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-[#5C2482] mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                       {enrollment.section.course.title}
                     </h3>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
-                      {enrollment.section.course.description}
-                    </p>
-                    <div className="space-y-2 text-xs sm:text-sm">
-                      <p className="text-gray-600">
-                        <strong>Instructor:</strong> {enrollment.section.instructor.name}
+                    {enrollment.section.course.description && (
+                      <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
+                        {enrollment.section.course.description}
                       </p>
-                      <p className="text-gray-600">
-                        <strong>Term:</strong> {enrollment.section.term}
-                      </p>
-                      <p className="text-gray-600">
-                        <strong>Students:</strong> {enrollment.section._count.enrollments}/{enrollment.section.capacity}
-                      </p>
+                    )}
+                    <div className="space-y-2 pt-4 border-t border-gray-100">
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span className="font-medium">{enrollment.section.instructor.name}</span>
+                      </div>
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {enrollment.section.term}
+                      </div>
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                        <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        {enrollment.section._count.enrollments}/{enrollment.section.capacity} students
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -211,36 +224,45 @@ export default function StudentCoursesPage() {
               Available Courses
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {availableCourses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white rounded-xl shadow border border-gray-200 hover:shadow-xl transition"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all duration-200"
                 >
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <span className="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-[#5C2482] rounded-full">
+                  <div className="p-5 sm:p-6">
+                    <div className="mb-3">
+                      <span className="inline-block px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-700 rounded-full border border-blue-200">
                         {course.code}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-[#5C2482] mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                       {course.title}
                     </h3>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
-                      {course.description}
-                    </p>
-                    <div className="space-y-2 text-xs sm:text-sm mb-4">
+                    {course.description && (
+                      <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
+                        {course.description}
+                      </p>
+                    )}
+                    <div className="space-y-2 text-xs sm:text-sm pt-4 border-t border-gray-100">
                       {course.sections.map((section) => (
                         <div
                           key={section.id}
-                          className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                          className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-xl border border-gray-200/50"
                         >
-                          <div>
-                            <p className="text-gray-700">
+                          <div className="flex-1 min-w-0 mr-3">
+                            <p className="text-gray-900 font-medium truncate">
                               {section.instructor.name}
                             </p>
-                            <p className="text-xs text-gray-500">
-                              {section.term} • {section._count.enrollments}/{section.capacity} students
+                            <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                              <span>{section.term}</span>
+                              <span>•</span>
+                              <span className="flex items-center gap-1">
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                {section._count.enrollments}/{section.capacity}
+                              </span>
                             </p>
                           </div>
                           <button
@@ -250,16 +272,16 @@ export default function StudentCoursesPage() {
                               enrolling === section.id ||
                               pendingSections.has(section.id)
                             }
-                            className={`px-3 py-1 text-white rounded-lg transition text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
+                            className={`px-3 py-1.5 text-white rounded-lg transition text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap ${
                               pendingSections.has(section.id)
-                                ? 'bg-yellow-500'
-                                : 'bg-[#F95B0E] hover:bg-[#d94f0c]'
+                                ? 'bg-yellow-500 hover:bg-yellow-600'
+                                : 'bg-[#F95B0E] hover:bg-[#d94f0c] shadow-sm'
                             }`}
                           >
                             {enrolling === section.id
                               ? 'Enrolling...'
                               : pendingSections.has(section.id)
-                              ? 'Pending Approval'
+                              ? 'Pending'
                               : section._count.enrollments >= section.capacity
                               ? 'Full'
                               : 'Enroll'}

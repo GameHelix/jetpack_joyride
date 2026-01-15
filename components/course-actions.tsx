@@ -56,23 +56,23 @@ export function CourseActions({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
       <Link
         href={`/instructor/courses/${courseId}`}
-        className="px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-[#5C2482] rounded-xl hover:bg-purple-50 transition"
+        className="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold text-[#5C2482] border-2 border-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition-all duration-200"
       >
         Manage
       </Link>
       <Link
         href={`/instructor/courses/${courseId}/edit`}
-        className="px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition"
+        className="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#F95B0E] to-[#e05a0e] text-white rounded-xl hover:shadow-lg transition-all duration-200"
       >
         Edit
       </Link>
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium border border-red-600 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold border-2 border-red-600 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {deleting ? 'Deleting...' : 'Delete'}
       </button>
