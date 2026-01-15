@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { ContentAgeIndicator, ContentAgeStats } from '@/components/content-age-indicator'
 import {
   getContentAgeStatus,
-  getContentAgeStats,
+  getContentAgeStatsUI,
   sortByAgeStatus,
   filterByAgeStatus,
   type ContentAgeStatus,
@@ -68,7 +68,7 @@ export default function ContentOverviewClient({
   }, [content, selectedType, selectedSection, selectedStatus])
 
   // Calculate statistics
-  const stats = useMemo(() => getContentAgeStats(filteredContent), [filteredContent])
+  const stats = useMemo(() => getContentAgeStatsUI(filteredContent), [filteredContent])
 
   const handleArchive = async (itemId: string, itemType: string) => {
     if (!confirm('Are you sure you want to archive this content? It will be hidden from students.')) {

@@ -252,9 +252,11 @@ export default async function InstructorContentReviewPage() {
                                 <h3 className="font-medium text-gray-900 text-sm md:text-base break-words">
                                   {item.title}
                                 </h3>
-                                <p className="text-xs md:text-sm text-gray-600 mt-1">
-                                  {item.section.course.code}: {item.section.course.title}
-                                </p>
+                                {item.section && (
+                                  <p className="text-xs md:text-sm text-gray-600 mt-1">
+                                    {item.section.course.code}: {item.section.course.title}
+                                  </p>
+                                )}
                               </div>
                             </div>
 
@@ -289,11 +291,13 @@ export default async function InstructorContentReviewPage() {
 
                           <Link
                             href={
-                              item.type === 'lesson'
+                              item.type === 'lesson' && item.section
                                 ? `/instructor/courses/${item.section.id}/lessons/${item.id}/edit`
                                 : item.type === 'assignment'
                                 ? `/instructor/assignments/${item.id}`
-                                : `/instructor/courses/${item.section.course.id}`
+                                : item.section
+                                ? `/instructor/courses/${item.section.course.id}`
+                                : '#'
                             }
                             className="px-3 md:px-4 py-2 border border-[#5C2482] text-[#5C2482] rounded-xl hover:bg-[#5C2482] hover:text-white transition text-xs md:text-sm font-medium flex-shrink-0"
                           >
