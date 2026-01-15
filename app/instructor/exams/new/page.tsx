@@ -124,6 +124,33 @@ export default function NewExamPage() {
         throw new Error('Please select end date')
       }
 
+      // Validate date/time logic
+      const startDateTime = new Date(`${formData.startDate}T${formData.startTime}:00`)
+      const endDateTime = new Date(`${formData.endDate}T${formData.endTime}:00`)
+
+      if (isNaN(startDateTime.getTime())) {
+        throw new Error('Invalid start date or time. Please check your input.')
+      }
+      if (isNaN(endDateTime.getTime())) {
+        throw new Error('Invalid end date or time. Please check your input.')
+      }
+
+      if (startDateTime >= endDateTime) {
+        throw new Error('End date/time must be after start date/time. Please adjust your exam schedule.')
+      }
+
+      const now = new Date()
+      if (startDateTime < now) {
+        throw new Error('Start date/time cannot be in the past.')
+      }
+
+      // Check if dates are too far in the future (more than 2 years)
+      const twoYearsFromNow = new Date()
+      twoYearsFromNow.setFullYear(twoYearsFromNow.getFullYear() + 2)
+      if (startDateTime > twoYearsFromNow || endDateTime > twoYearsFromNow) {
+        throw new Error('Exam dates cannot be more than 2 years in the future. Please select a more reasonable date.')
+      }
+
       // Validate questions
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i]
@@ -197,6 +224,10 @@ export default function NewExamPage() {
   }
 
   const today = new Date().toISOString().split('T')[0]
+  // Set max date to 2 years from now to prevent absurd future dates
+  const maxDate = new Date()
+  maxDate.setFullYear(maxDate.getFullYear() + 2)
+  const maxDateStr = maxDate.toISOString().split('T')[0]
 
   return (
     <DashboardLayout role="INSTRUCTOR">
@@ -280,10 +311,14 @@ export default function NewExamPage() {
                     type="date"
                     required
                     min={today}
+                    max={maxDateStr}
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Must be within the next 2 years
+                  </p>
                 </div>
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
@@ -308,10 +343,14 @@ export default function NewExamPage() {
                     type="date"
                     required
                     min={formData.startDate || today}
+                    max={maxDateStr}
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                     className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Must be after start date
+                  </p>
                 </div>
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">

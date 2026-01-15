@@ -93,8 +93,45 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Provide more specific error messages based on field
+      const firstError = error.errors[0]
+      let errorMessage = 'Validation error'
+
+      if (firstError) {
+        const field = firstError.path.join('.')
+
+        switch (field) {
+          case 'sectionId':
+            errorMessage = 'Please select a valid section'
+            break
+          case 'title':
+            errorMessage = 'Exam title is required and must be less than 200 characters'
+            break
+          case 'durationMinutes':
+            errorMessage = 'Duration must be between 1 and 480 minutes'
+            break
+          case 'startTime':
+            errorMessage = 'Invalid start date/time format'
+            break
+          case 'endTime':
+            errorMessage = 'Invalid end date/time format'
+            break
+          case 'questions':
+            errorMessage = 'At least one question is required'
+            break
+          default:
+            if (field.startsWith('questions.')) {
+              const questionIndex = field.split('.')[1]
+              errorMessage = `Question ${parseInt(questionIndex) + 1}: ${firstError.message}`
+            } else {
+              errorMessage = firstError.message
+            }
+        }
+      }
+
+      console.error('Validation error:', error.errors)
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: error.errors },
+        { success: false, error: errorMessage, details: error.errors },
         { status: 400 }
       )
     }
