@@ -38,7 +38,7 @@ Educy is a comprehensive course management platform designed for data science ed
 - ✅ **User Management** - Admin-controlled user creation with secure credentials
 - ✅ **Password Recovery** - Complete forgot/reset password flow with email tokens
 - ✅ **Course Management** - Complete CRUD for courses, sections, and lessons
-- ✅ **Enrollment System** - Student enrollment requests with instructor approval
+- ✅ **Enrollment System** - Student enrollment requests with instructor approval + direct enrollment
 - ✅ **Assignment System** - Create, submit, grade with file/text support
 - ✅ **Late Submission Tracking** - Automatic detection and flagging of late submissions
 - ✅ **AI Integration** - Student tutoring, grading assistance, concept explanations
@@ -49,6 +49,7 @@ Educy is a comprehensive course management platform designed for data science ed
 - ✅ **Audit Logging** - Complete activity tracking with severity levels
 - ✅ **Database Optimization** - 13 strategic indexes for performance
 - ✅ **Real-time Updates** - Dynamic rendering with no caching issues
+- ✅ **Mobile Responsive** - Full mobile optimization with responsive tables and layouts
 
 ---
 
@@ -578,6 +579,8 @@ graph LR
 | GET | `/api/enrollments/pending` | Instructor+ | List pending enrollments |
 | POST | `/api/enrollments/[id]/approve` | Instructor+ | Approve enrollment |
 | POST | `/api/enrollments/[id]/reject` | Instructor+ | Reject enrollment |
+| POST | `/api/sections/[id]/enroll-student` | Instructor+ | Directly enroll student (bypass approval) |
+| GET | `/api/students/all` | Instructor+ | Get all active students for enrollment |
 
 ### File APIs
 
@@ -611,6 +614,14 @@ graph LR
 |--------|----------|------|-------------|
 | GET | `/api/student/enrollments` | Student | Get enrolled courses |
 | GET | `/api/student/courses/available` | Student | Get available courses for enrollment |
+
+### Instructor APIs
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/instructor/sections` | Instructor | Get instructor's sections |
+| POST | `/api/exams` | Instructor+ | Create new exam |
+| GET | `/api/exams/[id]` | Instructor+ | Get exam details |
 
 ### Moderator APIs
 
@@ -1108,25 +1119,31 @@ Student Portal:
 **Documentation:** ✅ Complete with test reports
 **Production Ready:** ✅ YES
 
-### Recent Updates (Jan 13, 2026)
+### Recent Updates (Jan 15, 2026)
 
-**Fixed 14 Functional Bugs:**
+**Latest Mobile UX Improvements:**
+- ✅ Fixed "Failed to load sections" error on Create Exam page
+- ✅ Made instructor courses page fully responsive with mobile layout
+- ✅ Added responsive table wrappers to admin users and rooms pages
+- ✅ Fixed admin page headers to stack vertically on mobile
+- ✅ Consistent purple theme colors across all pages
+
+**Previous Bug Fixes (Jan 13, 2026):**
 - ✅ Password recovery system (forgot/reset password)
 - ✅ Course/section routing issues
-- ✅ Enrollment functionality
+- ✅ Enrollment functionality & direct student enrollment
 - ✅ MODERATOR portal implementation
-- ✅ File upload status tracking
+- ✅ File upload status tracking (two-phase confirmation)
 - ✅ Late submission detection
-- ✅ Database performance (13 indexes)
-- ✅ Email rate limiting
+- ✅ Database performance (13 strategic indexes)
+- ✅ Email rate limiting (600ms delay for bulk operations)
 - ✅ File ownership validation
 - ✅ API pagination
+- ✅ NextAuth production error fixes
+- ✅ DashboardLayout consistency across all pages
+- ✅ Navbar UX improvements for all user roles
 
-**2 Commits:**
-- Commit 022379a: Fixed 9 critical/high/medium priority issues
-- Commit 488c61e: Fixed 5 functional bugs + password recovery
-
-See [TEST_REPORT.md](./docs/TEST_REPORT.md) for full test results.
+See [ERRORS_AND_BUGS.md](./docs/development/ERRORS_AND_BUGS.md) for comprehensive error analysis.
 
 ---
 
@@ -1158,10 +1175,11 @@ For issues, questions, or contributions:
 
 ---
 
-**Version:** 1.1.0
-**Last Updated:** January 13, 2026
+**Version:** 1.2.0
+**Last Updated:** January 15, 2026
 **Status:** Production Ready ✅
-**Bugs Fixed:** 14 issues resolved
+**Bugs Fixed:** 17+ issues resolved
+**Mobile Responsive:** ✅ YES
 
 ---
 
