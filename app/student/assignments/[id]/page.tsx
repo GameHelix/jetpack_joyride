@@ -107,7 +107,7 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
         if (!urlResponse.ok) throw new Error(urlData.error || 'Failed to get upload URL')
 
         // Upload to R2
-        await fetch(urlData.uploadUrl, {
+        const uploadResponse = await fetch(urlData.uploadUrl, {
           method: 'PUT',
           body: file,
           headers: {
@@ -115,7 +115,26 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
           },
         })
 
+        if (!uploadResponse.ok) {
+          console.error('R2 upload failed:', uploadResponse.status, uploadResponse.statusText)
+          throw new Error('File upload to storage failed. Please check your connection and try again.')
+        }
+
         fileKey = urlData.fileKey
+
+        // Confirm file upload
+        const confirmResponse = await fetch('/api/files/confirm-upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileKey }),
+        })
+
+        const confirmData = await confirmResponse.json()
+        if (!confirmResponse.ok) {
+          console.error('File confirmation failed:', confirmResponse.status, confirmData)
+          throw new Error(confirmData.error || 'Failed to confirm file upload. Please try again.')
+        }
+
         setUploading(false)
       }
 
@@ -130,12 +149,37 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
       })
 
       const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Failed to submit assignment')
+
+      if (!response.ok) {
+        console.error('Submission failed:', response.status, data)
+
+        // Provide more specific error messages based on status code
+        if (response.status === 401) {
+          throw new Error('Session expired. Please log in again.')
+        } else if (response.status === 403) {
+          throw new Error('You do not have permission to submit this assignment. Make sure you are enrolled in the course.')
+        } else if (response.status === 409) {
+          throw new Error('You have already submitted this assignment.')
+        } else if (response.status === 400 && data.error) {
+          throw new Error(data.error)
+        } else if (response.status >= 500) {
+          throw new Error('Server error. Please try again later or contact support if the problem persists.')
+        } else {
+          throw new Error(data.error || 'Failed to submit assignment. Please try again.')
+        }
+      }
 
       router.push('/student/assignments')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      console.error('Assignment submission error:', err)
+
+      // Handle network errors
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your internet connection and try again.')
+      } else {
+        setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.')
+      }
     } finally {
       setLoading(false)
       setUploading(false)
