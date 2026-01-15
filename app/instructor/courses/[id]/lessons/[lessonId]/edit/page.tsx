@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import LessonMaterialsManager, { LessonMaterial } from '@/components/lesson-materials-manager'
 
 const DAYS_OF_WEEK = [
   { value: 'MONDAY', label: 'Monday' },
@@ -30,6 +31,7 @@ interface Lesson {
   startTime: string
   endTime: string
   roomId: string | null
+  materialIds: string[]
   section: {
     id: string
     course: {
@@ -73,6 +75,8 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
     roomId: '',
   })
 
+  const [materials, setMaterials] = useState<LessonMaterial[]>([])
+
   // Fetch lesson data
   useEffect(() => {
     const fetchLesson = async () => {
@@ -90,6 +94,17 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
             endTime: data.lesson.endTime,
             roomId: data.lesson.roomId || '',
           })
+          // Load existing materials (simplified - just IDs/keys)
+          if (data.lesson.materialIds && data.lesson.materialIds.length > 0) {
+            const loadedMaterials: LessonMaterial[] = data.lesson.materialIds.map((id: string) => ({
+              fileId: id.startsWith('http') ? '' : id,
+              fileKey: id,
+              filename: id.includes('/') ? id.split('/').pop() || id : id,
+              url: id.startsWith('http') ? id : `https://pub-f850e88d52e84edba2e5b82a80ba3126.r2.dev/${id}`,
+              type: id.startsWith('http') ? 'link' : 'file',
+            }))
+            setMaterials(loadedMaterials)
+          }
         } else {
           setError('Failed to load lesson')
         }
@@ -156,6 +171,7 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
         body: JSON.stringify({
           ...formData,
           roomId: formData.roomId || null,
+          materialIds: materials.map(m => m.fileId || m.fileKey),
         }),
       })
 
@@ -431,6 +447,15 @@ export default function EditLessonPage({ params }: { params: { id: string; lesso
                 )}
               </div>
             )}
+
+            {/* Course Materials */}
+            <div>
+              <LessonMaterialsManager
+                materials={materials}
+                onMaterialsChange={setMaterials}
+                disabled={loading}
+              />
+            </div>
 
             {/* Actions */}
             <div className="flex items-center justify-between pt-4 border-t border-gray-200">

@@ -21,6 +21,7 @@ const updateLessonSchema = z.object({
   startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)').optional(),
   endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)').optional(),
   roomId: z.string().uuid().optional().nullable(),
+  materialIds: z.array(z.string()).optional(),
   isArchived: z.boolean().optional(), // Content aging: archive support
 })
 
@@ -198,6 +199,7 @@ export async function PATCH(
         ...(data.startTime && { startTime: data.startTime }),
         ...(data.endTime && { endTime: data.endTime }),
         ...(data.roomId !== undefined && { roomId: data.roomId }),
+        ...(data.materialIds !== undefined && { materialIds: data.materialIds }),
         ...(data.isArchived !== undefined && { isArchived: data.isArchived }),
       },
       include: {

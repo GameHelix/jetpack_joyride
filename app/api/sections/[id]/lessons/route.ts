@@ -21,6 +21,7 @@ const createLessonSchema = z.object({
   startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
   endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
   roomId: z.string().uuid().optional(),
+  materialIds: z.array(z.string()).optional().default([]),
 })
 
 // POST /api/sections/[id]/lessons - Create lesson
@@ -126,6 +127,7 @@ export async function POST(
         startTime: data.startTime,
         endTime: data.endTime,
         roomId: data.roomId,
+        materialIds: data.materialIds || [],
       },
       include: {
         room: true,

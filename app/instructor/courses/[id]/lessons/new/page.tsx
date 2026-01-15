@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import LessonMaterialsManager, { LessonMaterial } from '@/components/lesson-materials-manager'
 
 const DAYS_OF_WEEK = [
   { value: 'MONDAY', label: 'Monday' },
@@ -51,6 +52,8 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
     endTime: '10:30',
     roomId: '',
   })
+
+  const [materials, setMaterials] = useState<LessonMaterial[]>([])
 
   // Fetch available rooms
   useEffect(() => {
@@ -103,6 +106,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           ...formData,
           roomId: formData.roomId || undefined,
+          materialIds: materials.map(m => m.fileId || m.fileKey),
         }),
       })
 
@@ -336,6 +340,15 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
                 )}
               </div>
             )}
+
+            {/* Course Materials */}
+            <div>
+              <LessonMaterialsManager
+                materials={materials}
+                onMaterialsChange={setMaterials}
+                disabled={loading}
+              />
+            </div>
 
             {/* Actions */}
             <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
