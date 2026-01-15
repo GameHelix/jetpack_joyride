@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import { ResponsiveTableWithHint } from '@/components/responsive-table'
 
 type Room = {
   id: string
@@ -187,18 +188,18 @@ export default function RoomsManagement() {
     <DashboardLayout role={session?.user?.role || 'ADMIN'}>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#5C2482]">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#5C2482]">
               Room Management
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
               Manage classroom and facility spaces
             </p>
           </div>
           <button
             onClick={() => handleOpenModal()}
-            className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition shadow-lg font-medium"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition shadow-lg font-medium text-sm sm:text-base"
           >
             + Add Room
           </button>
@@ -230,7 +231,7 @@ export default function RoomsManagement() {
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <ResponsiveTableWithHint>
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -305,7 +306,7 @@ export default function RoomsManagement() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTableWithHint>
           )}
         </div>
       </div>

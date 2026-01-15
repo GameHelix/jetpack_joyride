@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import { ResponsiveTableWithHint } from '@/components/responsive-table'
 import Link from 'next/link'
 
 type User = {
@@ -155,25 +156,25 @@ export default function UsersManagement() {
     <DashboardLayout role={session?.user?.role || 'ADMIN'}>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#5C2482]">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#5C2482]">
               User Management
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
               Manage user accounts and roles
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Link
               href="/admin/users/import"
-              className="px-4 py-2 sm:px-6 sm:py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition shadow-lg font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] transition shadow-lg font-medium text-center text-sm sm:text-base"
             >
               📊 Bulk Import
             </Link>
             <Link
               href="/admin/users/create"
-              className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg font-medium text-center text-sm sm:text-base"
             >
               + Create User
             </Link>
@@ -187,7 +188,7 @@ export default function UsersManagement() {
               <p className="text-gray-500">No users found</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <ResponsiveTableWithHint>
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -276,7 +277,7 @@ export default function UsersManagement() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ResponsiveTableWithHint>
           )}
         </div>
       </div>

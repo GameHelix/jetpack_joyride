@@ -50,7 +50,7 @@ export default function NewExamPage() {
 
   async function loadSections() {
     try {
-      const response = await fetch('/api/sections')
+      const response = await fetch('/api/instructor/sections')
       if (!response.ok) throw new Error('Failed to load sections')
       const data = await response.json()
       setSections(data.sections || [])

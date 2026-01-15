@@ -97,7 +97,7 @@ export default async function InstructorCoursesPage() {
                   key={section.id}
                   className="p-6 hover:bg-gray-50/50 transition"
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
                       <Link
                         href={`/instructor/courses/${section.course.id}`}
@@ -112,10 +112,10 @@ export default async function InstructorCoursesPage() {
                           {section.course.description}
                         </p>
                       )}
-                      <div className="mt-4 flex items-center space-x-6 text-xs sm:text-sm text-gray-500">
+                      <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-gray-500">
                         <div className="flex items-center">
                           <svg
-                            className="mr-1.5 h-5 w-5"
+                            className="mr-1.5 h-4 w-4 sm:h-5 sm:w-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ export default async function InstructorCoursesPage() {
                         </div>
                         <div className="flex items-center">
                           <svg
-                            className="mr-1.5 h-5 w-5"
+                            className="mr-1.5 h-4 w-4 sm:h-5 sm:w-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -147,7 +147,7 @@ export default async function InstructorCoursesPage() {
                         </div>
                         <div className="flex items-center">
                           <svg
-                            className="mr-1.5 h-5 w-5"
+                            className="mr-1.5 h-4 w-4 sm:h-5 sm:w-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -163,7 +163,7 @@ export default async function InstructorCoursesPage() {
                         </div>
                         <div className="flex items-center">
                           <svg
-                            className="mr-1.5 h-5 w-5"
+                            className="mr-1.5 h-4 w-4 sm:h-5 sm:w-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -179,10 +179,10 @@ export default async function InstructorCoursesPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="ml-4 flex space-x-2">
+                    <div className="ml-0 mt-4 sm:ml-4 sm:mt-0">
                       <Link
                         href={`/instructor/courses/${section.course.id}`}
-                        className="px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-blue-600 rounded-xl hover:bg-blue-50 transition"
+                        className="inline-block px-3 py-2 sm:px-4 text-xs sm:text-sm font-medium text-[#5C2482] border border-[#5C2482] rounded-xl hover:bg-purple-50 transition"
                       >
                         Manage
                       </Link>
