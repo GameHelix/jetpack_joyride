@@ -12,7 +12,10 @@ const updateProfileSchema = z.object({
   surname: z.string().min(1).optional().nullable(),
   phone: z.string().optional().nullable(),
   expertise: z.array(z.string()).optional(),
-  profileAvatarUrl: z.string().optional().nullable().transform(val => val === '' ? null : val).pipe(z.string().url().optional().nullable()),
+  profileAvatarUrl: z.string().optional().nullable().transform(val => {
+    if (!val || val === '') return null
+    return val
+  }),
 })
 
 // GET /api/profile - Get current user's profile
