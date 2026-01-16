@@ -1,9 +1,49 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+
+// Predefined filter options for better UX
+const PREDEFINED_ACTIONS = [
+  'LOGIN_SUCCESS',
+  'LOGIN_FAILED',
+  'USER_CREATED',
+  'USER_UPDATED',
+  'USER_DELETED',
+  'ROLE_CHANGED',
+  'PROFILE_UPDATED',
+  'COURSE_CREATED',
+  'COURSE_UPDATED',
+  'SECTION_CREATED',
+  'ENROLLMENT_REQUESTED',
+  'ENROLLMENT_APPROVED',
+  'ENROLLMENT_REJECTED',
+  'ASSIGNMENT_CREATED',
+  'SUBMISSION_CREATED',
+  'SUBMISSION_GRADED',
+  'EXAM_CREATED',
+  'EXAM_ATTEMPT_STARTED',
+  'EXAM_SUBMITTED',
+  'CERTIFICATE_ISSUED',
+  'SYSTEM_SETTINGS_UPDATED',
+]
+
+const PREDEFINED_TARGET_TYPES = [
+  'User',
+  'Course',
+  'Section',
+  'Enrollment',
+  'Assignment',
+  'Submission',
+  'Exam',
+  'ExamAttempt',
+  'Certificate',
+  'CaseRoom',
+  'CasePost',
+  'SystemSettings',
+]
 
 type AuditLog = {
   id: string
@@ -43,15 +83,25 @@ export default function AuditLogsPage() {
   const [error, setError] = useState<string | null>(null)
 
   // Filter states
-  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [actionFilter, setActionFilter] = useState('')
   const [targetTypeFilter, setTargetTypeFilter] = useState('')
   const [severityFilter, setSeverityFilter] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [availableActions, setAvailableActions] = useState<string[]>([])
-  const [availableTargetTypes, setAvailableTargetTypes] = useState<string[]>([])
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput)
+      if (searchInput !== debouncedSearch) {
+        setPagination(prev => ({ ...prev, page: 1 }))
+      }
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
   // Redirect if not authenticated or not admin
   useEffect(() => {
@@ -70,7 +120,7 @@ export default function AuditLogsPage() {
     if (session?.user?.role === 'ADMIN') {
       fetchLogs()
     }
-  }, [session, pagination.page, search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate])
+  }, [session, pagination.page, debouncedSearch, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate])
 
   const fetchLogs = async () => {
     try {
@@ -79,7 +129,7 @@ export default function AuditLogsPage() {
         page: pagination.page.toString(),
         limit: pagination.limit.toString(),
       })
-      if (search) params.append('search', search)
+      if (debouncedSearch) params.append('search', debouncedSearch)
       if (actionFilter) params.append('action', actionFilter)
       if (targetTypeFilter) params.append('targetType', targetTypeFilter)
       if (severityFilter) params.append('severity', severityFilter)
@@ -93,16 +143,6 @@ export default function AuditLogsPage() {
       if (data.success) {
         setLogs(data.logs)
         setPagination(data.pagination)
-
-        // Extract unique actions and target types
-        const actions = new Set<string>()
-        const targetTypes = new Set<string>()
-        data.logs.forEach((log: AuditLog) => {
-          if (log.action) actions.add(log.action)
-          if (log.targetType) targetTypes.add(log.targetType)
-        })
-        setAvailableActions(Array.from(actions).sort())
-        setAvailableTargetTypes(Array.from(targetTypes).sort())
       } else {
         setError(data.error)
       }
@@ -154,7 +194,8 @@ export default function AuditLogsPage() {
   }
 
   const resetFilters = () => {
-    setSearch('')
+    setSearchInput('')
+    setDebouncedSearch('')
     setActionFilter('')
     setTargetTypeFilter('')
     setSeverityFilter('')
@@ -250,7 +291,7 @@ export default function AuditLogsPage() {
             <div>
               <p className="text-xs sm:text-sm text-gray-600">Active Filters</p>
               <p className="text-2xl font-bold text-[#5C2482]">
-                {[search, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate].filter(Boolean).length}
+                {[debouncedSearch, actionFilter, targetTypeFilter, severityFilter, categoryFilter, startDate, endDate].filter(Boolean).length}
               </p>
             </div>
           </div>
@@ -276,12 +317,9 @@ export default function AuditLogsPage() {
               </label>
               <input
                 type="text"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value)
-                  setPagination({ ...pagination, page: 1 })
-                }}
-                placeholder="Search logs..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search logs... (debounced)"
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               />
             </div>
@@ -300,8 +338,8 @@ export default function AuditLogsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Actions</option>
-                {availableActions.map((action) => (
-                  <option key={action} value={action}>{action}</option>
+                {PREDEFINED_ACTIONS.map((action) => (
+                  <option key={action} value={action}>{action.replace(/_/g, ' ')}</option>
                 ))}
               </select>
             </div>
@@ -320,7 +358,7 @@ export default function AuditLogsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
               >
                 <option value="">All Types</option>
-                {availableTargetTypes.map((type) => (
+                {PREDEFINED_TARGET_TYPES.map((type) => (
                   <option key={type} value={type}>{type}</option>
                 ))}
               </select>

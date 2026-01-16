@@ -31,6 +31,9 @@ const updateSettingsSchema = z.object({
   enableExams: z.boolean().optional(),
   enableCertificates: z.boolean().optional(),
   enablePayments: z.boolean().optional(),
+
+  // Enrollment Limits
+  maxEnrollmentsPerStudent: z.number().min(1).max(20).optional().nullable(),
 })
 
 // GET /api/admin/system-settings - Get system settings

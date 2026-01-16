@@ -310,12 +310,12 @@ export default function UsersManagement() {
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
               >
-                <option value="STUDENT">Student</option>
-                <option value="INSTRUCTOR">Instructor</option>
-                <option value="MODERATOR">Moderator</option>
-                <option value="ADMIN">Admin</option>
+                <option value="STUDENT" className="text-gray-900 bg-white">Student</option>
+                <option value="INSTRUCTOR" className="text-gray-900 bg-white">Instructor</option>
+                <option value="MODERATOR" className="text-gray-900 bg-white">Moderator</option>
+                <option value="ADMIN" className="text-gray-900 bg-white">Admin</option>
               </select>
             </div>
 

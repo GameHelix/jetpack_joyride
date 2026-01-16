@@ -696,7 +696,10 @@ model SystemSettings {
   enableExams         Boolean  @default(true)
   enableCertificates  Boolean  @default(true)
   enablePayments      Boolean  @default(true)
-  
+
+  // Enrollment Limits
+  maxEnrollmentsPerStudent Int?  // Max active enrollments per student (null = unlimited)
+
   // Metadata
   lastModifiedBy      String?  // User ID of last admin who modified
   createdAt           DateTime @default(now())

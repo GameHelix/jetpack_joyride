@@ -30,6 +30,21 @@ export async function POST(request: NextRequest) {
 
     // Use transaction to prevent race conditions with capacity check
     const enrollment = await prisma.$transaction(async (tx) => {
+      // Check enrollment limit from system settings
+      const settings = await tx.systemSettings.findFirst()
+      if (settings?.maxEnrollmentsPerStudent) {
+        const activeEnrollments = await tx.enrollment.count({
+          where: {
+            userId: user.id,
+            status: 'ENROLLED',
+          },
+        })
+
+        if (activeEnrollments >= settings.maxEnrollmentsPerStudent) {
+          throw new Error(`You have reached the maximum of ${settings.maxEnrollmentsPerStudent} active course enrollments. Please complete or withdraw from a course before enrolling in another.`)
+        }
+      }
+
       // Get section details within transaction
       const section = await tx.section.findUnique({
         where: { id: data.sectionId },
@@ -154,7 +169,9 @@ export async function POST(request: NextRequest) {
       if (
         error.message.includes('already enrolled') ||
         error.message.includes('pending enrollment') ||
-        error.message.includes('full capacity')
+        error.message.includes('full capacity') ||
+        error.message.includes('maximum') ||
+        error.message.includes('reached the maximum')
       ) {
         return NextResponse.json(
           { success: false, error: error.message },
