@@ -19,7 +19,9 @@ export default function ForgotPasswordPage() {
     try {
       const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email }),
       })
 
@@ -31,7 +33,7 @@ export default function ForgotPasswordPage() {
       } else {
         setError(data.error || 'Failed to process request')
       }
-    } catch {
+    } catch (err) {
       setError('An error occurred. Please try again.')
     } finally {
       setLoading(false)
@@ -40,16 +42,13 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
-
       {/* LEFT SIDE */}
-      <div className="w-1/2 hidden md:flex items-center justify-center bg-no-repeat bg-center bg-cover rounded-br-[100px]"
-           style={{ backgroundImage: "url('/assets/rectangle_left.png')" }}>
+      <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
         <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Reset Password" />
       </div>
 
       {/* RIGHT SIDE */}
       <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-white rounded-tl-[100px] p-8">
-        
         <h1 className="text-[#5C2482] text-4xl font-semibold mb-4">
           Forgot Password?
         </h1>
@@ -58,15 +57,14 @@ export default function ForgotPasswordPage() {
         </p>
 
         <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-6">
-
           {message && (
-            <div className="text-green-600 bg-green-50 px-4 py-2 rounded-lg text-sm border border-green-200">
+            <div className="text-green-600 bg-green-50 px-4 py-3 rounded-lg text-xs sm:text-sm border border-green-200">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg text-sm border border-red-200">
+            <div className="text-red-600 bg-red-50 px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm">
               {error}
             </div>
           )}
@@ -97,12 +95,11 @@ export default function ForgotPasswordPage() {
           </button>
 
           <Link
-            href="/"
-            className="text-center text-xs sm:text-sm text-[#5C2482] hover:text-[#7B3FA3] transition font-medium mt-2"
+            href="/auth/signin"
+            className="text-center text-xs sm:text-sm text-gray-500 hover:text-[#5C2482] transition"
           >
             ← Back to Sign In
           </Link>
-
         </form>
       </div>
     </div>
