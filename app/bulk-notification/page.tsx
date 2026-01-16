@@ -224,7 +224,7 @@ export default function BulkNotificationPage() {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
                   placeholder="e.g., Important Update"
                   maxLength={200}
                 />
@@ -240,7 +240,7 @@ export default function BulkNotificationPage() {
                   rows={6}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
                   placeholder="Enter your message here..."
                 />
               </div>
@@ -254,7 +254,7 @@ export default function BulkNotificationPage() {
                   required
                   value={formData.recipientType}
                   onChange={(e) => setFormData({ ...formData, recipientType: e.target.value, sectionId: '', courseId: '' })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
                 >
                   <option value="">Select recipient group</option>
                   {getRecipientOptions().map(option => (
@@ -275,7 +275,7 @@ export default function BulkNotificationPage() {
                     required
                     value={formData.sectionId}
                     onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
                   >
                     <option value="">Select a section</option>
                     {sections.map(section => (
@@ -297,7 +297,7 @@ export default function BulkNotificationPage() {
                     required
                     value={formData.courseId}
                     onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-[#5C2482] focus:border-transparent"
                   >
                     <option value="">Select a course</option>
                     {courses.map(course => (
