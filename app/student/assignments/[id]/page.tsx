@@ -123,10 +123,9 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
         fileKey = urlData.fileKey
 
         // Confirm file upload
-        const confirmResponse = await fetch('/api/files/confirm-upload', {
+        const confirmResponse = await fetch(`/api/files/${urlData.fileId}/confirm`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fileKey }),
         })
 
         const confirmData = await confirmResponse.json()

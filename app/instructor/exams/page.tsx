@@ -3,23 +3,57 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard-layout'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
 async function getInstructorExams() {
   const session = await getServerSession(authOptions)
-  if (!session?.user) return []
+  if (!session?.user) {
+    console.log('[EXAMS DEBUG] No session found')
+    return []
+  }
 
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/exams`, {
-    headers: {
-      'Cookie': `next-auth.session-token=${session.user.id}`,
-    },
-    cache: 'no-store',
-  })
+  try {
+    console.log('[EXAMS DEBUG] Fetching exams for instructor:', session.user.id, session.user.email)
 
-  if (!response.ok) return []
-  const data = await response.json()
-  return data.exams || []
+    const exams = await prisma.exam.findMany({
+      where: {
+        section: {
+          instructorId: session.user.id,
+        },
+      },
+      include: {
+        section: {
+          include: {
+            course: true,
+          },
+        },
+        _count: {
+          select: {
+            questions: true,
+            examAttempts: true,
+          },
+        },
+      },
+      orderBy: { startTime: 'desc' },
+    })
+
+    console.log('[EXAMS DEBUG] Found exams:', exams.length)
+    if (exams.length > 0) {
+      console.log('[EXAMS DEBUG] First exam:', {
+        id: exams[0].id,
+        title: exams[0].title,
+        sectionId: exams[0].sectionId,
+        instructorId: exams[0].section?.instructorId
+      })
+    }
+
+    return exams
+  } catch (error) {
+    console.error('[EXAMS DEBUG] Failed to fetch instructor exams:', error)
+    return []
+  }
 }
 
 export default async function InstructorExamsPage() {

@@ -140,10 +140,9 @@ export default function ProfilePage() {
           }
 
           // Confirm upload
-          const confirmResponse = await fetch('/api/files/confirm-upload', {
+          const confirmResponse = await fetch(`/api/files/${urlData.fileId}/confirm`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fileKey: urlData.fileKey }),
           })
 
           if (!confirmResponse.ok) {

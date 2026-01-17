@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
       where: { id: data.sectionId },
     })
 
+    console.log('[EXAM CREATE] Section found:', section?.id, 'instructor:', section?.instructorId, 'user:', user.id)
+
     if (!section || (section.instructorId !== user.id && user.role !== 'ADMIN')) {
+      console.log('[EXAM CREATE] Access denied - section instructor mismatch')
       return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
     }
 
@@ -53,6 +56,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    console.log('[EXAM CREATE] Creating exam for user:', user.id, 'section:', data.sectionId)
 
     // Create exam with questions
     const exam = await prisma.exam.create({
@@ -85,6 +90,8 @@ export async function POST(request: NextRequest) {
         },
       },
     })
+
+    console.log('[EXAM CREATE] Exam created successfully:', exam.id, 'for section instructor:', exam.section?.instructorId)
 
     return NextResponse.json({
       success: true,
