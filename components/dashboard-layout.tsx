@@ -242,9 +242,17 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
             {/* Mobile & Expanded Desktop: Show full user info */}
             <div className={collapsed ? 'lg:hidden' : ''}>
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
-                  {session?.user?.name?.charAt(0).toUpperCase()}
-                </div>
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || 'Profile'}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
+                    {session?.user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">
                     {session?.user?.name}
@@ -263,9 +271,18 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
             {/* Collapsed Desktop: Show only avatar */}
             {collapsed && (
               <div className="hidden lg:flex justify-center">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} (${session?.user?.role})`}>
-                  {session?.user?.name?.charAt(0).toUpperCase()}
-                </div>
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || 'Profile'}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                    title={`${session?.user?.name} (${session?.user?.role})`}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} (${session?.user?.role})`}>
+                    {session?.user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
             )}
           </div>

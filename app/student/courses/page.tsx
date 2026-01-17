@@ -450,8 +450,8 @@ export default function StudentCoursesPage() {
 
         {/* Enrollment Confirmation Dialog */}
         {enrollDialog && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-8">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-8 my-8 max-h-[90vh] overflow-y-auto">
               <div className="mb-6">
                 <h3 className="text-2xl font-bold text-[#5C2482] mb-2">
                   Confirm Enrollment
@@ -511,19 +511,19 @@ export default function StudentCoursesPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={closeEnrollDialog}
-                  className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+                  className="flex-1 px-4 sm:px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium text-sm sm:text-base"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmEnroll}
                   disabled={enrolling !== null}
-                  className="flex-1 px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium shadow-lg"
+                  className="flex-1 px-4 sm:px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium shadow-lg text-sm sm:text-base"
                 >
-                  {enrolling ? 'Submitting...' : 'Confirm Enrollment'}
+                  {enrolling ? 'Submitting...' : 'Confirm'}
                 </button>
               </div>
             </div>

@@ -20,7 +20,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession()
+  const { data: session, status, update: updateSession } = useSession()
   const router = useRouter()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -184,6 +184,8 @@ export default function ProfilePage() {
         setMessage({ type: 'success', text: 'Profile updated successfully!' })
         setProfile(data.user)
         setAvatarFile(null)
+        // Update session to reflect new profile data
+        await updateSession()
       } else {
         setMessage({ type: 'error', text: data.error || 'Failed to update profile' })
       }

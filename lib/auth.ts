@@ -99,6 +99,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.email = user.email
         token.name = user.name
+        token.image = user.image
         token.iat = Math.floor(Date.now() / 1000) // Set issued at time
       }
 
@@ -106,7 +107,7 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'update' && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { role: true, name: true, email: true },
+          select: { role: true, name: true, email: true, profileAvatarUrl: true },
         })
         if (dbUser) {
           // Check if role changed - if so, rotate token
@@ -117,6 +118,7 @@ export const authOptions: NextAuthOptions = {
           token.role = dbUser.role
           token.name = dbUser.name
           token.email = dbUser.email
+          token.image = dbUser.profileAvatarUrl
         }
       }
 
@@ -128,6 +130,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
         session.user.email = token.email as string
         session.user.name = token.name as string
+        session.user.image = token.image as string | null
       }
       return session
     },
