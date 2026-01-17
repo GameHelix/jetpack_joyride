@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import { AIQuestionGenerator } from '@/components/ai-question-generator'
+import { ExcelQuestionImporter } from '@/components/excel-question-importer'
 
 interface Question {
   questionText: string
@@ -39,6 +41,9 @@ export default function NewExamPage() {
     correctAnswer: '',
     points: 1,
   }])
+
+  const [showAIGenerator, setShowAIGenerator] = useState(false)
+  const [showExcelImporter, setShowExcelImporter] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -102,6 +107,14 @@ export default function NewExamPage() {
     const newQuestions = [...questions]
     newQuestions[questionIndex].options[optionIndex] = value
     setQuestions(newQuestions)
+  }
+
+  function handleAIGenerate(generatedQuestions: Question[]) {
+    setQuestions([...questions, ...generatedQuestions])
+  }
+
+  function handleExcelImport(importedQuestions: Question[]) {
+    setQuestions([...questions, ...importedQuestions])
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -384,15 +397,37 @@ export default function NewExamPage() {
 
           {/* Questions */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
               <h2 className="text-xl font-bold text-gray-900">Questions</h2>
-              <button
-                type="button"
-                onClick={addQuestion}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-colors"
-              >
-                + Add Question
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAIGenerator(true)}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  AI Generate
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowExcelImporter(true)}
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Import Excel
+                </button>
+                <button
+                  type="button"
+                  onClick={addQuestion}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-colors"
+                >
+                  + Add Manually
+                </button>
+              </div>
             </div>
 
             <div className="space-y-6">
@@ -588,6 +623,20 @@ export default function NewExamPage() {
             </button>
           </div>
         </form>
+
+        {/* AI Question Generator Modal */}
+        <AIQuestionGenerator
+          isOpen={showAIGenerator}
+          onClose={() => setShowAIGenerator(false)}
+          onGenerate={handleAIGenerate}
+        />
+
+        {/* Excel Question Importer Modal */}
+        <ExcelQuestionImporter
+          isOpen={showExcelImporter}
+          onClose={() => setShowExcelImporter(false)}
+          onImport={handleExcelImport}
+        />
       </div>
     </div>
     </DashboardLayout>
