@@ -190,7 +190,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
 
       {/* Sidebar - Fixed and Persistent */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 z-50 h-screen bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${collapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
       >
