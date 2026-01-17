@@ -499,13 +499,13 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      {/* Fixed submit button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
+      {/* Fixed submit button - account for sidebar */}
+      <div className="fixed bottom-0 left-0 lg:left-64 right-0 bg-white border-t shadow-lg z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <button
             onClick={() => setShowConfirmSubmit(true)}
             disabled={submitting}
-            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-xl transition-colors"
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-xl transition-colors text-lg shadow-lg"
           >
             {submitting ? 'Submitting...' : 'Submit Exam'}
           </button>

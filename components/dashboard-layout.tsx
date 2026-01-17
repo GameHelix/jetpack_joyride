@@ -271,7 +271,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto py-4 px-3">
+          <nav className="flex-1 overflow-y-auto py-4 px-3 sidebar-scrollbar">
             <div className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href

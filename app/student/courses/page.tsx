@@ -185,7 +185,7 @@ export default function StudentCoursesPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {ongoingCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
@@ -252,7 +252,7 @@ export default function StudentCoursesPage() {
               ✅ Completed Courses ({completedCourses.length})
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {completedCourses.map((enrollment) => (
                 <div
                   key={enrollment.id}
@@ -307,7 +307,7 @@ export default function StudentCoursesPage() {
               Available Courses
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {availableCourses.map((course) => (
                 <div
                   key={course.id}

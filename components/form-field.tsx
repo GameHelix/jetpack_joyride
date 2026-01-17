@@ -35,7 +35,7 @@ export function FormField({
             ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
             : 'border-gray-300 focus:ring-blue-500 focus:border-transparent'
 
-          const baseClasses = 'w-full px-3 py-2 sm:px-4 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2'
+          const baseClasses = 'w-full px-3 py-2 sm:px-4 rounded-xl text-gray-900 bg-white border focus:outline-none focus:ring-2'
 
           return React.cloneElement(child as React.ReactElement<any>, {
             className: `${baseClasses} ${errorClasses} ${child.props.className || ''}`,
