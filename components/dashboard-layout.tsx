@@ -3,7 +3,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 import { RoleName } from '@prisma/client'
 
 interface DashboardLayoutProps {
@@ -141,7 +141,23 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false) // Mobile sidebar state
+  const [collapsed, setCollapsed] = useState(false) // Desktop sidebar collapse state
+
+  // Load collapsed state from localStorage on mount
+  useEffect(() => {
+    const savedState = localStorage.getItem('sidebar-collapsed')
+    if (savedState !== null) {
+      setCollapsed(savedState === 'true')
+    }
+  }, [])
+
+  // Save collapsed state to localStorage whenever it changes
+  const toggleCollapsed = () => {
+    const newState = !collapsed
+    setCollapsed(newState)
+    localStorage.setItem('sidebar-collapsed', String(newState))
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
@@ -155,19 +171,43 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed top-0 left-0 z-50 h-full bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        } ${collapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-6 border-b border-purple-400/30">
-            <Link
-              href="/dashboard"
-              className="text-2xl font-bold text-white"
+          {/* Logo and Toggle */}
+          <div className="flex items-center justify-between h-16 px-4 border-b border-purple-400/30">
+            {!collapsed ? (
+              <Link
+                href="/dashboard"
+                className="text-2xl font-bold text-white"
+              >
+                Educy
+              </Link>
+            ) : (
+              <Link
+                href="/dashboard"
+                className="text-2xl font-bold text-white mx-auto"
+              >
+                E
+              </Link>
+            )}
+            {/* Desktop toggle button */}
+            <button
+              onClick={toggleCollapsed}
+              className="hidden lg:block text-white hover:bg-white/10 rounded-lg p-2 transition-colors"
+              title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             >
-              Educy
-            </Link>
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {collapsed ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                )}
+              </svg>
+            </button>
+            {/* Mobile close button */}
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden text-white hover:bg-white/10 rounded-lg p-2"
@@ -179,25 +219,36 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </div>
 
           {/* User Info */}
-          <div className="px-4 py-4 border-b border-purple-400/30">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
-                {session?.user?.name?.charAt(0).toUpperCase()}
+          <div className={`px-4 py-4 border-b border-purple-400/30 ${collapsed ? 'lg:px-2' : ''}`}>
+            {/* Mobile & Expanded Desktop: Show full user info */}
+            <div className={collapsed ? 'lg:hidden' : ''}>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
+                  {session?.user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">
+                    {session?.user?.name}
+                  </p>
+                  <p className="text-xs text-purple-200 truncate">
+                    {session?.user?.email}
+                  </p>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
-                  {session?.user?.name}
-                </p>
-                <p className="text-xs text-purple-200 truncate">
-                  {session?.user?.email}
-                </p>
+              <div className="mt-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#F95B0E] text-white">
+                  {session?.user?.role}
+                </span>
               </div>
             </div>
-            <div className="mt-3">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#F95B0E] text-white">
-                {session?.user?.role}
-              </span>
-            </div>
+            {/* Collapsed Desktop: Show only avatar */}
+            {collapsed && (
+              <div className="hidden lg:flex justify-center">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} (${session?.user?.role})`}>
+                  {session?.user?.name?.charAt(0).toUpperCase()}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
@@ -210,14 +261,17 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     key={item.name}
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center ${
+                      collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
+                    } py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive
                         ? 'bg-white text-[#5C2482] shadow-lg'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
                     }`}
+                    title={collapsed ? item.name : ''}
                   >
                     <span className={isActive ? 'text-[#5C2482]' : ''}>{item.icon}</span>
-                    <span className="ml-3">{item.name}</span>
+                    {!collapsed && <span className="ml-3">{item.name}</span>}
                   </Link>
                 )
               })}
@@ -229,18 +283,19 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
               className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-all"
+              title={collapsed ? 'Sign Out' : ''}
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${!collapsed ? 'mr-2' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              Sign Out
+              {!collapsed && <span>Sign Out</span>}
             </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="lg:pl-64">
+      <div className={`transition-all duration-300 ${collapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
         {/* Mobile Top Bar */}
         <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 shadow-sm">
           <button
