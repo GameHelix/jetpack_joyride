@@ -121,9 +121,14 @@ export default async function InstructorCoursesPage() {
                                 {section.course.code}: {section.course.title}
                               </h3>
                             </Link>
-                            <span className="inline-block mt-1 px-2.5 py-0.5 text-xs font-semibold bg-gradient-to-r from-[#5C2482]/10 to-[#7B3FA3]/10 text-[#5C2482] rounded-full border border-[#5C2482]/20">
-                              {section.term}
-                            </span>
+                            <div className="flex items-center gap-2 mt-1 flex-wrap">
+                              <span className="inline-block px-2.5 py-0.5 text-xs font-semibold bg-gradient-to-r from-[#5C2482]/10 to-[#7B3FA3]/10 text-[#5C2482] rounded-full border border-[#5C2482]/20">
+                                {section.term}
+                              </span>
+                              <span className="inline-block px-2.5 py-0.5 text-xs font-semibold bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 rounded-full border border-blue-200">
+                                Section #{section.id.substring(0, 8)}
+                              </span>
+                            </div>
                           </div>
                         </div>
                         {section.course.description && (

@@ -83,6 +83,9 @@ export default async function CourseDetailPage({
                 },
               },
             },
+            orderBy: {
+              enrolledAt: 'desc',
+            },
           },
         },
       },
@@ -125,7 +128,13 @@ export default async function CourseDetailPage({
                 {course.visibility ? 'Visible' : 'Hidden'}
               </span>
             </div>
-            <p className="mt-2 text-gray-600">{course.term}</p>
+            <div className="mt-2 flex items-center gap-3 flex-wrap">
+              <span className="text-gray-600">{course.term}</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-sm text-gray-500">
+                Created {new Date(course.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </div>
             {course.description && (
               <p className="mt-3 text-gray-700">
                 {course.description}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 interface EnrolledStudent {
   id: string
+  enrolledAt: Date | string
   user: {
     name: string
     email: string
@@ -63,8 +64,11 @@ export function EnrolledStudentsList({ enrollments }: EnrolledStudentsListProps)
           <p className="font-medium text-[#5C2482] pr-8">
             {enrollment.user.name}
           </p>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1 mb-3">
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
             {enrollment.user.email}
+          </p>
+          <p className="text-xs text-gray-500 mt-2 mb-3">
+            Enrolled: {new Date(enrollment.enrolledAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </p>
           <button
             onClick={() => handleRemoveStudent(enrollment.id, enrollment.user.name)}
