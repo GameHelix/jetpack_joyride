@@ -92,10 +92,14 @@ export async function POST(request: NextRequest) {
     })
     console.log('[FILE UPLOAD] File record created:', file.id)
 
+    // Get public URL
+    const publicUrl = `${process.env.R2_PUBLIC_URL}/${fileKey}`
+
     return NextResponse.json({
       uploadUrl,
       fileId: file.id,
       fileKey,
+      publicUrl, // Include public URL for client
     })
   } catch (error) {
     console.error('Error generating upload URL:', error)

@@ -149,8 +149,8 @@ export default function ProfilePage() {
             throw new Error('Failed to confirm file upload')
           }
 
-          // Get public URL (construct from file key)
-          avatarUrl = `https://pub-f850e88d52e84edba2e5b82a80ba3126.r2.dev/${urlData.fileKey}`
+          // Use public URL from upload response
+          avatarUrl = urlData.publicUrl
         } catch (err) {
           console.error('Avatar upload error:', err)
           throw new Error('Failed to upload profile picture')
