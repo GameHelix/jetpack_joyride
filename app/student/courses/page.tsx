@@ -62,6 +62,8 @@ export default function StudentCoursesPage() {
   const [pendingSections, setPendingSections] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [enrolling, setEnrolling] = useState<string | null>(null)
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [enrollDialog, setEnrollDialog] = useState<{ isOpen: boolean; section: any; course: any } | null>(null)
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -111,8 +113,30 @@ export default function StudentCoursesPage() {
     }
   }
 
-  const handleEnroll = async (sectionId: string) => {
+  // Auto-clear message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [message])
+
+  const openEnrollDialog = (section: any, course: any) => {
+    setEnrollDialog({ isOpen: true, section, course })
+  }
+
+  const closeEnrollDialog = () => {
+    setEnrollDialog(null)
+  }
+
+  const confirmEnroll = async () => {
+    if (!enrollDialog) return
+
+    const sectionId = enrollDialog.section.id
     setEnrolling(sectionId)
+    setMessage(null)
+    closeEnrollDialog()
+
     try {
       const response = await fetch('/api/enrollments/request', {
         method: 'POST',
@@ -125,14 +149,23 @@ export default function StudentCoursesPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('Enrollment request submitted successfully! Waiting for instructor approval.')
+        setMessage({
+          type: 'success',
+          text: 'Enrollment request submitted successfully! You will be notified once the instructor approves your request.'
+        })
         fetchCourses() // Refresh the course list
       } else {
-        alert(data.error || 'Failed to submit enrollment request')
+        setMessage({
+          type: 'error',
+          text: data.error || 'Failed to submit enrollment request'
+        })
       }
     } catch (error) {
       console.error('Enrollment error:', error)
-      alert('Failed to submit enrollment request')
+      setMessage({
+        type: 'error',
+        text: 'Network error. Please check your connection and try again.'
+      })
     } finally {
       setEnrolling(null)
     }
@@ -169,6 +202,42 @@ export default function StudentCoursesPage() {
             {ongoingCourses.length} ongoing, {completedCourses.length} completed
           </p>
         </div>
+
+        {/* Toast Message */}
+        {message && (
+          <div
+            className={`fixed top-4 right-4 z-50 max-w-md rounded-xl shadow-2xl border-2 p-4 animate-in slide-in-from-top-5 ${
+              message.type === 'success'
+                ? 'bg-green-50 border-green-500 text-green-900'
+                : 'bg-red-50 border-red-500 text-red-900'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                {message.type === 'success' ? (
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">{message.text}</p>
+              </div>
+              <button
+                onClick={() => setMessage(null)}
+                className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Ongoing Courses */}
         <div>
@@ -349,7 +418,7 @@ export default function StudentCoursesPage() {
                             </p>
                           </div>
                           <button
-                            onClick={() => handleEnroll(section.id)}
+                            onClick={() => openEnrollDialog(section, course)}
                             disabled={
                               section._count.enrollments >= section.capacity ||
                               enrolling === section.id ||
@@ -375,6 +444,88 @@ export default function StudentCoursesPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Enrollment Confirmation Dialog */}
+        {enrollDialog && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-8">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-[#5C2482] mb-2">
+                  Confirm Enrollment
+                </h3>
+                <p className="text-gray-600">
+                  You are about to request enrollment in the following course:
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-5 mb-6 border border-purple-200">
+                <div className="mb-3">
+                  <span className="inline-block px-3 py-1 text-xs font-semibold bg-[#5C2482] text-white rounded-full">
+                    {enrollDialog.course.code}
+                  </span>
+                </div>
+                <h4 className="text-lg font-bold text-gray-900 mb-3">
+                  {enrollDialog.course.title}
+                </h4>
+                {enrollDialog.course.description && (
+                  <p className="text-sm text-gray-600 mb-4">
+                    {enrollDialog.course.description}
+                  </p>
+                )}
+                <div className="space-y-2 pt-3 border-t border-purple-200">
+                  <div className="flex items-center text-sm text-gray-700">
+                    <svg className="w-4 h-4 mr-2 text-[#5C2482]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span className="font-medium">Instructor:</span>
+                    <span className="ml-2">{enrollDialog.section.instructor.name}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <svg className="w-4 h-4 mr-2 text-[#5C2482]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="font-medium">Term:</span>
+                    <span className="ml-2">{enrollDialog.section.term}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-700">
+                    <svg className="w-4 h-4 mr-2 text-[#5C2482]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span className="font-medium">Enrolled:</span>
+                    <span className="ml-2">{enrollDialog.section._count.enrollments}/{enrollDialog.section.capacity} students</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                <div className="flex items-start gap-2">
+                  <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-sm text-blue-900">
+                    Your enrollment request will be sent to the instructor for approval. You will receive a notification once your request is reviewed.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={closeEnrollDialog}
+                  className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmEnroll}
+                  disabled={enrolling !== null}
+                  className="flex-1 px-6 py-3 bg-[#F95B0E] text-white rounded-xl hover:bg-[#d94f0c] disabled:opacity-50 disabled:cursor-not-allowed transition font-medium shadow-lg"
+                >
+                  {enrolling ? 'Submitting...' : 'Confirm Enrollment'}
+                </button>
+              </div>
             </div>
           </div>
         )}
