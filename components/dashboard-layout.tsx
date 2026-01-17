@@ -141,6 +141,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false) // Mobile sidebar state
   const [collapsed, setCollapsed] = useState(false) // Desktop sidebar collapse state
   const [isNavigating, setIsNavigating] = useState(false) // Track navigation state
@@ -152,6 +153,13 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
       setCollapsed(savedState === 'true')
     }
   }, [])
+
+  // Prefetch all navigation routes on mount to prevent full page reloads
+  useEffect(() => {
+    navigation.forEach((item) => {
+      router.prefetch(item.href)
+    })
+  }, [navigation, router])
 
   // Save collapsed state to localStorage whenever it changes
   const toggleCollapsed = () => {
@@ -271,7 +279,13 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                   <Link
                     key={item.name}
                     href={item.href}
-                    onClick={() => setSidebarOpen(false)}
+                    prefetch={true}
+                    onClick={() => {
+                      setSidebarOpen(false)
+                      if (!isActive) {
+                        setIsNavigating(true)
+                      }
+                    }}
                     className={`flex items-center ${
                       collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
                     } py-3 rounded-lg text-sm font-medium transition-all ${
