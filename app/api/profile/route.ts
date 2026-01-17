@@ -9,8 +9,14 @@ export const dynamic = 'force-dynamic'
 
 const updateProfileSchema = z.object({
   name: z.string().min(1).optional(),
-  surname: z.string().min(1).optional().nullable(),
-  phone: z.string().optional().nullable(),
+  surname: z.string().optional().nullable().transform(val => {
+    if (!val || val === '') return null
+    return val
+  }),
+  phone: z.string().optional().nullable().transform(val => {
+    if (!val || val === '') return null
+    return val
+  }),
   expertise: z.array(z.string()).optional(),
   profileAvatarUrl: z.string().optional().nullable().transform(val => {
     if (!val || val === '') return null
