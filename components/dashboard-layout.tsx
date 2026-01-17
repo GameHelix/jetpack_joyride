@@ -2,8 +2,8 @@
 
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ReactNode, useState, useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { ReactNode, useState, useEffect, useTransition } from 'react'
 import { RoleName } from '@prisma/client'
 
 interface DashboardLayoutProps {
@@ -143,6 +143,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false) // Mobile sidebar state
   const [collapsed, setCollapsed] = useState(false) // Desktop sidebar collapse state
+  const [isNavigating, setIsNavigating] = useState(false) // Track navigation state
 
   // Load collapsed state from localStorage on mount
   useEffect(() => {
@@ -159,8 +160,18 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
     localStorage.setItem('sidebar-collapsed', String(newState))
   }
 
+  // Detect route changes for loading indicator
+  useEffect(() => {
+    setIsNavigating(false) // Reset loading state when route changes
+  }, [pathname])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
+      {/* Top loading bar */}
+      {isNavigating && (
+        <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-gradient-to-r from-[#5C2482] to-[#F95B0E] animate-pulse" />
+      )}
+
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -169,7 +180,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed and Persistent */}
       <aside
         className={`fixed top-0 left-0 z-50 h-full bg-gradient-to-b from-[#5C2482] to-[#7B3FA3] shadow-2xl transform transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
@@ -312,9 +323,11 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           <div className="w-10" /> {/* Spacer for balance */}
         </div>
 
-        {/* Page Content */}
-        <main className="p-4 sm:p-6 lg:p-8">
-          {children}
+        {/* Page Content with smooth transition */}
+        <main className="p-4 sm:p-6 lg:p-8 min-h-screen">
+          <div className="transition-opacity duration-200" style={{ opacity: isNavigating ? 0.6 : 1 }}>
+            {children}
+          </div>
         </main>
       </div>
     </div>
@@ -322,4 +335,3 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
 }
 
 export default DashboardLayout
-export { DashboardLayout }
