@@ -28,12 +28,21 @@ export function AddStudentsDialog({
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [enrolling, setEnrolling] = useState<string | null>(null)
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   useEffect(() => {
     if (isOpen) {
       fetchStudents()
     }
   }, [isOpen, search, sectionId])
+
+  // Auto-clear message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [message])
 
   const fetchStudents = async () => {
     setLoading(true)
@@ -68,16 +77,25 @@ export function AddStudentsDialog({
       const data = await response.json()
 
       if (data.success) {
-        alert(data.message || 'Student enrolled successfully')
+        setMessage({
+          type: 'success',
+          text: data.message || 'Student enrolled successfully!'
+        })
         // Remove enrolled student from list
         setStudents(students.filter((s) => s.id !== studentId))
         onSuccess()
       } else {
-        alert(data.error || 'Failed to enroll student')
+        setMessage({
+          type: 'error',
+          text: data.error || 'Failed to enroll student'
+        })
       }
     } catch (error) {
       console.error('Enrollment error:', error)
-      alert('Failed to enroll student')
+      setMessage({
+        type: 'error',
+        text: 'Network error. Please check your connection and try again.'
+      })
     } finally {
       setEnrolling(null)
     }
@@ -109,6 +127,42 @@ export function AddStudentsDialog({
           <p className="mt-2 text-sm text-gray-600">
             Search and enroll students in your course
           </p>
+
+          {/* Toast Message */}
+          {message && (
+            <div
+              className={`mt-4 rounded-xl border-2 p-3 animate-in slide-in-from-top-2 ${
+                message.type === 'success'
+                  ? 'bg-green-50 border-green-500 text-green-900'
+                  : 'bg-red-50 border-red-500 text-red-900'
+              }`}
+            >
+              <div className="flex items-start gap-2">
+                <div className="flex-shrink-0">
+                  {message.type === 'success' ? (
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{message.text}</p>
+                </div>
+                <button
+                  onClick={() => setMessage(null)}
+                  className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Search */}
