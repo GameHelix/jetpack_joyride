@@ -10,7 +10,10 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('[FILE CONFIRM] Confirming upload for file:', params.id)
+
     const user = await requireAuth()
+    console.log('[FILE CONFIRM] User authenticated:', user.id)
 
     // Get file record
     const file = await prisma.file.findUnique({
@@ -18,14 +21,18 @@ export async function POST(
     })
 
     if (!file) {
+      console.log('[FILE CONFIRM] File not found:', params.id)
       return NextResponse.json(
         { error: 'File not found' },
         { status: 404 }
       )
     }
 
+    console.log('[FILE CONFIRM] File found:', file.key, 'owner:', file.ownerId)
+
     // Only file owner can confirm upload
     if (file.ownerId !== user.id && user.role !== 'ADMIN') {
+      console.log('[FILE CONFIRM] Permission denied - not owner')
       return NextResponse.json(
         { error: 'You do not have permission to confirm this upload' },
         { status: 403 }
@@ -38,12 +45,14 @@ export async function POST(
       data: { status: 'UPLOADED' },
     })
 
+    console.log('[FILE CONFIRM] File status updated to UPLOADED')
+
     return NextResponse.json({
       success: true,
       file: updatedFile,
     })
   } catch (error) {
-    console.error('Error confirming upload:', error)
+    console.error('[FILE CONFIRM] Error confirming upload:', error)
 
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

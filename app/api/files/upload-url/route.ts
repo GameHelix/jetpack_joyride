@@ -25,10 +25,16 @@ const uploadUrlSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('[FILE UPLOAD] Request received')
+
     const user = await requireAuth()
+    console.log('[FILE UPLOAD] User authenticated:', user.id, user.email)
+
     const body = await request.json()
+    console.log('[FILE UPLOAD] Request body:', { ...body, sizeBytes: body.sizeBytes })
 
     const data = uploadUrlSchema.parse(body)
+    console.log('[FILE UPLOAD] Validation passed')
 
     // SECURITY: Enforce server-side file size limits based on context
     // Client cannot override these limits
@@ -65,11 +71,15 @@ export async function POST(request: NextRequest) {
 
     // Generate unique file key
     const fileKey = generateFileKey(user.id, data.filename, data.prefix)
+    console.log('[FILE UPLOAD] Generated file key:', fileKey)
 
     // Generate signed upload URL
+    console.log('[FILE UPLOAD] Generating signed upload URL...')
     const uploadUrl = await generateUploadUrl(fileKey, data.contentType)
+    console.log('[FILE UPLOAD] Upload URL generated successfully')
 
     // Create file record in database with PENDING status
+    console.log('[FILE UPLOAD] Creating file record in database...')
     const file = await prisma.file.create({
       data: {
         ownerId: user.id,
@@ -80,6 +90,7 @@ export async function POST(request: NextRequest) {
         status: 'PENDING', // Will be updated to UPLOADED after successful upload
       },
     })
+    console.log('[FILE UPLOAD] File record created:', file.id)
 
     return NextResponse.json({
       uploadUrl,
