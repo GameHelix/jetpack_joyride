@@ -305,7 +305,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     }}
                     className={`flex items-center ${
                       collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
-                    } py-3 rounded-lg text-sm font-medium transition-all ${
+                    } py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
                       isActive
                         ? 'bg-white text-[#5C2482] shadow-lg'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
@@ -324,7 +324,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           <div className="p-4 border-t border-purple-400/30">
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-all"
+              className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
               title={collapsed ? 'Sign Out' : ''}
             >
               <svg className={`w-5 h-5 ${!collapsed ? 'mr-2' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
