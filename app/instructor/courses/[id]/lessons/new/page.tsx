@@ -7,6 +7,8 @@ import DashboardLayout from '@/components/dashboard-layout'
 import LessonMaterialsManager, { LessonMaterial } from '@/components/lesson-materials-manager'
 import { FormField } from '@/components/form-field'
 import { useFormValidation } from '@/hooks/use-form-validation'
+import { useAutosave } from '@/hooks/use-autosave'
+import { AutosaveIndicator } from '@/components/autosave-indicator'
 
 const DAYS_OF_WEEK = [
   { value: 'MONDAY', label: 'Monday' },
@@ -44,6 +46,7 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
   const [rooms, setRooms] = useState<Room[]>([])
   const [roomSchedule, setRoomSchedule] = useState<RoomSchedule[]>([])
   const [loadingSchedule, setLoadingSchedule] = useState(false)
+  const [showDraftRestore, setShowDraftRestore] = useState(false)
   const { fieldErrors, generalError, setGeneralError, handleHttpError, clearAllErrors } = useFormValidation()
 
   const [formData, setFormData] = useState({
@@ -56,6 +59,26 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
   })
 
   const [materials, setMaterials] = useState<LessonMaterial[]>([])
+
+  // Autosave functionality - combine formData and materials
+  const autosaveData = { formData, materials }
+  const { lastSaved, isSaving, hasDraft, clearDraft, save } = useAutosave({
+    key: `lesson-create-${params.id}-${session?.user?.id}`,
+    data: autosaveData,
+    enabled: !loading, // Disable during submission
+    onRestore: (savedData) => {
+      if (savedData.formData) setFormData(savedData.formData)
+      if (savedData.materials) setMaterials(savedData.materials)
+      setShowDraftRestore(false)
+    },
+  })
+
+  // Show draft restore notification on mount if draft exists
+  useEffect(() => {
+    if (hasDraft) {
+      setShowDraftRestore(true)
+    }
+  }, [hasDraft])
 
   // Fetch available rooms
   useEffect(() => {
@@ -124,6 +147,9 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
         return
       }
 
+      // Clear autosave draft on successful submission
+      clearDraft()
+
       // Redirect back to course page using the courseId from the response
       const courseId = data.lesson?.section?.course?.id || data.lesson?.section?.courseId
       if (courseId) {
@@ -163,6 +189,51 @@ export default function NewLessonPage({ params }: { params: { id: string } }) {
         </div>
 
         <div className="bg-white rounded-xl shadow p-6">
+          {/* Draft Restore Notification */}
+          {showDraftRestore && hasDraft && (
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                    Unsaved Draft Found
+                  </h3>
+                  <p className="text-xs sm:text-sm text-blue-700">
+                    You have an unsaved draft from a previous session. Would you like to restore it?
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDraftRestore(false)}
+                  className="px-4 py-2 bg-[#5C2482] text-white text-xs sm:text-sm rounded-lg hover:bg-[#7B3FA3] transition font-medium"
+                >
+                  Use Draft
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearDraft()
+                    setShowDraftRestore(false)
+                  }}
+                  className="px-4 py-2 border border-blue-300 text-blue-700 text-xs sm:text-sm rounded-lg hover:bg-blue-100 transition"
+                >
+                  Start Fresh
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Autosave Indicator */}
+          <div className="mb-4">
+            <AutosaveIndicator
+              lastSaved={lastSaved}
+              isSaving={isSaving}
+              hasDraft={hasDraft}
+              onClearDraft={clearDraft}
+            />
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* General error (system-level only) */}
             {generalError && (

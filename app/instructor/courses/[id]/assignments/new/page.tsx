@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
+import { useAutosave } from '@/hooks/use-autosave'
+import { AutosaveIndicator } from '@/components/autosave-indicator'
 
 const FILE_TYPES = [
   { value: 'pdf', label: 'PDF (.pdf)' },
@@ -22,6 +24,7 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showDraftRestore, setShowDraftRestore] = useState(false)
 
   const [formData, setFormData] = useState({
     title: '',
@@ -31,6 +34,24 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
     allowedFileTypes: [] as string[],
     maxSizeBytes: 10485760, // 10MB default
   })
+
+  // Autosave functionality
+  const { lastSaved, isSaving, hasDraft, clearDraft, save } = useAutosave({
+    key: `assignment-create-${params.id}-${session?.user?.id}`,
+    data: formData,
+    enabled: !loading, // Disable during submission
+    onRestore: (savedData) => {
+      setFormData(savedData)
+      setShowDraftRestore(false)
+    },
+  })
+
+  // Show draft restore notification on mount if draft exists
+  useEffect(() => {
+    if (hasDraft) {
+      setShowDraftRestore(true)
+    }
+  }, [hasDraft])
 
   const handleFileTypeToggle = (type: string) => {
     setFormData((prev) => ({
@@ -70,6 +91,9 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
         throw new Error(data.error || 'Failed to create assignment')
       }
 
+      // Clear autosave draft on successful submission
+      clearDraft()
+
       // Redirect back to course page using the courseId from the response
       const courseId = data.assignment?.section?.course?.id || data.assignment?.section?.courseId
       if (courseId) {
@@ -106,6 +130,51 @@ export default function NewAssignmentPage({ params }: { params: { id: string } }
         </div>
 
         <div className="bg-white rounded-xl shadow p-6">
+          {/* Draft Restore Notification */}
+          {showDraftRestore && hasDraft && (
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                    Unsaved Draft Found
+                  </h3>
+                  <p className="text-xs sm:text-sm text-blue-700">
+                    You have an unsaved draft from a previous session. Would you like to restore it?
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDraftRestore(false)}
+                  className="px-4 py-2 bg-[#5C2482] text-white text-xs sm:text-sm rounded-lg hover:bg-[#7B3FA3] transition font-medium"
+                >
+                  Use Draft
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearDraft()
+                    setShowDraftRestore(false)
+                  }}
+                  className="px-4 py-2 border border-blue-300 text-blue-700 text-xs sm:text-sm rounded-lg hover:bg-blue-100 transition"
+                >
+                  Start Fresh
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Autosave Indicator */}
+          <div className="mb-4">
+            <AutosaveIndicator
+              lastSaved={lastSaved}
+              isSaving={isSaving}
+              hasDraft={hasDraft}
+              onClearDraft={clearDraft}
+            />
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
