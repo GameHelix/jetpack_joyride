@@ -20,7 +20,7 @@ export default function CreateUserPage() {
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<{ password: string } | null>(null)
+  const [success, setSuccess] = useState<{ password: string; emailSent?: boolean; emailError?: string | null } | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,7 +38,11 @@ export default function CreateUserPage() {
       const data = await response.json()
 
       if (data.success) {
-        setSuccess({ password: data.temporaryPassword })
+        setSuccess({
+          password: data.temporaryPassword,
+          emailSent: data.emailSent,
+          emailError: data.emailError
+        })
         // Reset form
         setFormData({
           name: '',
@@ -96,9 +100,11 @@ export default function CreateUserPage() {
               ✅ User Created Successfully!
             </h3>
             <p className="text-green-800 mb-4">
-              {formData.sendEmail
-                ? 'An email with login credentials has been sent to the user.'
-                : 'User created. Make sure to save the temporary password below:'}
+              {success.emailSent
+                ? '✉️ An email with login credentials has been sent to the user.'
+                : success.emailError
+                  ? `⚠️ User created but email failed to send: ${success.emailError}. Please share the password below manually.`
+                  : 'User created. Make sure to save the temporary password below:'}
             </p>
             <div className="bg-white p-4 rounded border border-green-300">
               <p className="text-xs sm:text-sm text-gray-600 mb-1">

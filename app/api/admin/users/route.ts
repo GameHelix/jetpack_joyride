@@ -165,22 +165,36 @@ export async function POST(request: NextRequest) {
     })
 
     // Send welcome email with credentials
+    let emailSent = false
+    let emailError = null
+
     if (data.sendEmail) {
-      sendWelcomeEmail({
-        to: newUser.email,
-        userName: newUser.name,
-        temporaryPassword,
-        role: newUser.role,
-      }).catch((error) => {
-        console.error(`Failed to send welcome email to ${newUser.email}:`, error)
-      })
+      try {
+        await sendWelcomeEmail({
+          to: newUser.email,
+          userName: newUser.name,
+          temporaryPassword,
+          role: newUser.role,
+        })
+        emailSent = true
+        console.log(`✅ Welcome email sent successfully to ${newUser.email}`)
+      } catch (error: any) {
+        emailError = error?.message || 'Unknown error'
+        console.error(`❌ Failed to send welcome email to ${newUser.email}:`, error)
+      }
     }
 
     return NextResponse.json({
       success: true,
       user: newUser,
       temporaryPassword: temporaryPassword, // Return password so admin can share it if email fails
-      message: 'User created successfully',
+      emailSent,
+      emailError,
+      message: emailSent
+        ? 'User created successfully and welcome email sent'
+        : data.sendEmail
+          ? 'User created successfully but email failed to send. Please share the password manually.'
+          : 'User created successfully',
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
