@@ -6,9 +6,9 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const updateRoomSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  location: z.string().optional(),
-  capacity: z.number().int().min(1).max(1000).optional(),
+  name: z.string().trim().min(1, 'Room name is required').max(100, 'Room name must be 100 characters or less').optional(),
+  location: z.string().trim().optional(),
+  capacity: z.number().int().min(1, 'Capacity must be at least 1').max(1000, 'Capacity cannot exceed 1000').optional(),
   resources: z.record(z.any()).optional(),
 })
 

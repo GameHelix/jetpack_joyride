@@ -121,6 +121,21 @@ export default function RoomsManagement() {
     setSubmitting(true)
     setError(null)
 
+    // Validate room name is not empty or whitespace-only
+    const trimmedName = formData.name.trim()
+    if (!trimmedName) {
+      setError('Room name cannot be empty or contain only spaces')
+      setSubmitting(false)
+      return
+    }
+
+    // Validate capacity is positive
+    if (formData.capacity < 1) {
+      setError('Capacity must be at least 1')
+      setSubmitting(false)
+      return
+    }
+
     try {
       const url = editingRoom
         ? `/api/admin/rooms/${editingRoom.id}`
@@ -131,7 +146,11 @@ export default function RoomsManagement() {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          name: trimmedName,
+          location: formData.location.trim(),
+        }),
       })
 
       const data = await response.json()
