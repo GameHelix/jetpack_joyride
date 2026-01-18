@@ -15,7 +15,15 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Email validation with TLD requirement
+  const validateEmail = (email: string): boolean => {
+    // Regex requires: localpart@domain.tld (with at least 2 char TLD)
+    const emailRegex = /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
 
   useEffect(() => {
     if (session?.user) {
@@ -26,6 +34,14 @@ export default function SignInPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setEmailError('');
+
+    // Validate email format
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address with a domain (e.g., user@example.com)');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -126,13 +142,26 @@ export default function SignInPage() {
                   <input
                     type="email"
                     placeholder="you@example.com"
-                    className="w-full h-12 border border-gray-300 rounded-xl pl-12 pr-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#5C2482] focus:border-transparent transition"
+                    className={`w-full h-12 border rounded-xl pl-12 pr-4 text-gray-900 focus:outline-none focus:ring-2 focus:border-transparent transition ${
+                      emailError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-[#5C2482]'
+                    }`}
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError('');
+                    }}
+                    onBlur={() => {
+                      if (email && !validateEmail(email)) {
+                        setEmailError('Please enter a valid email address with a domain (e.g., user@example.com)');
+                      }
+                    }}
                     autoComplete="email"
                     required
                   />
                 </div>
+                {emailError && (
+                  <p className="text-xs sm:text-sm text-red-600">{emailError}</p>
+                )}
               </div>
 
               {/* PASSWORD */}
