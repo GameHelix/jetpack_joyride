@@ -29,7 +29,7 @@ export function ConfirmationDialog({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      <div className="flex min-h-screen items-end justify-center p-4 text-center sm:items-center sm:p-0">
         {/* Backdrop */}
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -37,8 +37,8 @@ export function ConfirmationDialog({
         />
 
         {/* Dialog */}
-        <div className="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-          <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div className="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all my-8 w-full max-w-lg max-h-[90vh] flex flex-col">
+          <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 overflow-y-auto flex-1">
             <div className="sm:flex sm:items-start">
               {/* Icon */}
               <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -72,7 +72,7 @@ export function ConfirmationDialog({
           </div>
 
           {/* Actions */}
-          <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2">
+          <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2 flex-shrink-0">
             <button
               type="button"
               onClick={onConfirm}
@@ -139,7 +139,7 @@ export function InputDialog({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      <div className="flex min-h-screen items-end justify-center p-4 text-center sm:items-center sm:p-0">
         {/* Backdrop */}
         <div
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -147,9 +147,9 @@ export function InputDialog({
         />
 
         {/* Dialog */}
-        <div className="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-          <form onSubmit={handleSubmit}>
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div className="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all my-8 w-full max-w-lg max-h-[90vh] flex flex-col">
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 overflow-y-auto flex-1">
               <div className="sm:flex sm:items-start">
                 {/* Icon */}
                 <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -202,7 +202,7 @@ export function InputDialog({
             </div>
 
             {/* Actions */}
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2">
+            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2 flex-shrink-0">
               <button
                 type="submit"
                 disabled={isProcessing || (required && !inputValue.trim())}
