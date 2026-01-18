@@ -99,6 +99,176 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 - **Code Quality**: Prettier
 - **Version Control**: Git
 
+## Architecture Overview
+
+The following diagram illustrates the high-level architecture of the Educy Learning Management System:
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        Browser[Browser/User Interface]
+    end
+
+    subgraph "Next.js Application"
+        subgraph "App Router - Pages"
+            AdminUI[Admin Portal]
+            InstructorUI[Instructor Portal]
+            ModeratorUI[Moderator Portal]
+            StudentUI[Student Portal]
+            AuthUI[Authentication Pages]
+        end
+
+        subgraph "Components Layer"
+            Layout[Dashboard Layout]
+            Forms[Form Components]
+            Modals[Modal Components]
+            UI[UI Components]
+        end
+
+        subgraph "API Routes"
+            AuthAPI[/api/auth/*]
+            CoursesAPI[/api/courses/*]
+            AssignmentsAPI[/api/assignments/*]
+            ExamsAPI[/api/exams/*]
+            AdminAPI[/api/admin/*]
+            AIAPI[/api/ai/*]
+        end
+
+        subgraph "Business Logic Layer"
+            AuthLib[auth.ts - NextAuth Config]
+            RBAC[rbac.ts - Access Control]
+            PrismaClient[prisma.ts - DB Client]
+            AILib[ai.ts - AI Integration]
+            Validation[Zod Schemas]
+        end
+    end
+
+    subgraph "External Services"
+        DB[(PostgreSQL Database)]
+        R2[Cloudflare R2<br/>File Storage]
+        Email[Resend<br/>Email Service]
+        AI[Google Gemini<br/>AI Service]
+    end
+
+    subgraph "Data Layer"
+        Prisma[Prisma ORM]
+        Schema[Database Schema<br/>Users, Courses, Assignments, etc.]
+    end
+
+    Browser --> AdminUI
+    Browser --> InstructorUI
+    Browser --> ModeratorUI
+    Browser --> StudentUI
+    Browser --> AuthUI
+
+    AdminUI --> Layout
+    InstructorUI --> Layout
+    ModeratorUI --> Layout
+    StudentUI --> Layout
+
+    AdminUI --> AdminAPI
+    InstructorUI --> CoursesAPI
+    InstructorUI --> AssignmentsAPI
+    InstructorUI --> ExamsAPI
+    ModeratorUI --> AdminAPI
+    StudentUI --> CoursesAPI
+    StudentUI --> AssignmentsAPI
+    StudentUI --> ExamsAPI
+    AuthUI --> AuthAPI
+
+    Layout --> Forms
+    Layout --> Modals
+    Layout --> UI
+
+    AuthAPI --> AuthLib
+    CoursesAPI --> RBAC
+    AssignmentsAPI --> RBAC
+    ExamsAPI --> RBAC
+    AdminAPI --> RBAC
+    AIAPI --> AILib
+
+    AuthLib --> PrismaClient
+    RBAC --> PrismaClient
+    AILib --> AI
+
+    CoursesAPI --> Validation
+    AssignmentsAPI --> Validation
+    ExamsAPI --> Validation
+
+    PrismaClient --> Prisma
+    Prisma --> Schema
+    Schema --> DB
+
+    AssignmentsAPI --> R2
+    CoursesAPI --> R2
+
+    AuthAPI --> Email
+    AdminAPI --> Email
+
+    AIAPI --> AI
+
+    style Browser fill:#e1f5ff
+    style DB fill:#fff4e1
+    style R2 fill:#fff4e1
+    style Email fill:#fff4e1
+    style AI fill:#fff4e1
+    style AdminUI fill:#f3e5f5
+    style InstructorUI fill:#e8f5e9
+    style ModeratorUI fill:#fff9c4
+    style StudentUI fill:#e3f2fd
+```
+
+### Architecture Layers
+
+#### 1. Client Layer
+- User interface rendered in the browser
+- Responsive design supporting desktop and mobile devices
+- Role-based UI components and navigation
+
+#### 2. Next.js Application Layer
+
+**App Router Pages**
+- Separate portals for each user role (Admin, Instructor, Moderator, Student)
+- Server-side rendering for optimal performance
+- Authentication-protected routes
+
+**Components**
+- Reusable UI components (Layout, Forms, Modals)
+- Shared across different role portals
+- Tailwind CSS for styling
+
+**API Routes**
+- RESTful API endpoints
+- Role-based middleware protection
+- Input validation with Zod schemas
+
+**Business Logic**
+- Authentication configuration (NextAuth.js)
+- Role-based access control (RBAC)
+- Database client management (Prisma)
+- AI service integration
+
+#### 3. Data Layer
+- Prisma ORM for type-safe database queries
+- PostgreSQL for data persistence
+- Comprehensive schema with relations
+
+#### 4. External Services
+- **Cloudflare R2**: Scalable file storage for assignments and uploads
+- **Resend**: Reliable email delivery for notifications
+- **Google Gemini**: AI-powered features (question generation, grading)
+
+### Data Flow Example
+
+1. **User Request**: Student submits an assignment
+2. **Authentication**: NextAuth validates session
+3. **Authorization**: RBAC checks student permissions
+4. **Validation**: Zod validates submission data
+5. **File Upload**: Assignment file uploaded to Cloudflare R2
+6. **Database**: Submission record created via Prisma
+7. **Notification**: Email sent to instructor via Resend
+8. **Response**: Success message returned to student
+
 ## Getting Started
 
 ### Prerequisites
