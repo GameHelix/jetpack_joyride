@@ -107,7 +107,10 @@ export default async function AdminDashboard() {
             </div>
           </Link>
 
-          <div className="bg-white rounded-xl shadow p-6">
+          <Link
+            href="/moderator/courses"
+            className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition group"
+          >
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-green-100">
                 <svg
@@ -128,12 +131,12 @@ export default async function AdminDashboard() {
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Total Courses
                 </p>
-                <p className="text-2xl font-bold text-[#5C2482]">
+                <p className="text-2xl font-bold text-[#5C2482] group-hover:text-green-600">
                   {totalCourses}
                 </p>
               </div>
             </div>
-          </div>
+          </Link>
 
           <Link
             href="/admin/rooms"
@@ -166,7 +169,10 @@ export default async function AdminDashboard() {
             </div>
           </Link>
 
-          <div className="bg-white rounded-xl shadow p-6">
+          <Link
+            href="/moderator/enrollments"
+            className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition group"
+          >
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-orange-100">
                 <svg
@@ -187,12 +193,12 @@ export default async function AdminDashboard() {
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Active Enrollments
                 </p>
-                <p className="text-2xl font-bold text-[#5C2482]">
+                <p className="text-2xl font-bold text-[#5C2482] group-hover:text-orange-600">
                   {totalEnrollments}
                 </p>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* User Stats by Role */}
