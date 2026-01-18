@@ -85,6 +85,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
+          surname: user.surname,
           role: user.role,
           image: user.profileAvatarUrl,
         }
@@ -99,6 +100,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.email = user.email
         token.name = user.name
+        token.surname = user.surname
         token.image = user.image
         token.iat = Math.floor(Date.now() / 1000) // Set issued at time
       }
@@ -107,7 +109,7 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'update' && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { role: true, name: true, email: true, profileAvatarUrl: true },
+          select: { role: true, name: true, surname: true, email: true, profileAvatarUrl: true },
         })
         if (dbUser) {
           // Check if role changed - if so, rotate token
@@ -117,6 +119,7 @@ export const authOptions: NextAuthOptions = {
           }
           token.role = dbUser.role
           token.name = dbUser.name
+          token.surname = dbUser.surname
           token.email = dbUser.email
           token.image = dbUser.profileAvatarUrl
         }
@@ -130,6 +133,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
         session.user.email = token.email as string
         session.user.name = token.name as string
+        session.user.surname = token.surname as string | null
         session.user.image = token.image as string | null
       }
       return session
@@ -184,12 +188,14 @@ export const authOptions: NextAuthOptions = {
 declare module 'next-auth' {
   interface User {
     role: RoleName
+    surname?: string | null
   }
   interface Session {
     user: {
       id: string
       email: string
       name: string
+      surname?: string | null
       role: RoleName
       image?: string | null
     }
@@ -200,5 +206,6 @@ declare module 'next-auth/jwt' {
   interface JWT {
     role: RoleName
     id: string
+    surname?: string | null
   }
 }

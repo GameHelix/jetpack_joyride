@@ -255,7 +255,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">
-                    {session?.user?.name}
+                    {session?.user?.name} {session?.user?.surname}
                   </p>
                   <p className="text-xs text-purple-200 truncate">
                     {session?.user?.email}
@@ -276,10 +276,10 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     src={session.user.image}
                     alt={session.user.name || 'Profile'}
                     className="w-10 h-10 rounded-full object-cover border-2 border-white/20"
-                    title={`${session?.user?.name} (${session?.user?.role})`}
+                    title={`${session?.user?.name} ${session?.user?.surname || ''} (${session?.user?.role})`}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} (${session?.user?.role})`}>
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold" title={`${session?.user?.name} ${session?.user?.surname || ''} (${session?.user?.role})`}>
                     {session?.user?.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
