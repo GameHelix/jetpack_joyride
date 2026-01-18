@@ -47,7 +47,13 @@ export async function GET(request: NextRequest) {
           include: {
             instructor: { select: { name: true } },
             _count: {
-              select: { enrollments: true },
+              select: {
+                enrollments: {
+                  where: {
+                    status: 'ENROLLED',
+                  },
+                },
+              },
             },
           },
         },
