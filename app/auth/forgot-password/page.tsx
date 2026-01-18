@@ -28,7 +28,7 @@ export default function ForgotPasswordPage() {
       const data = await response.json()
 
       if (data.success) {
-        setMessage('Password reset instructions have been sent to your email.')
+        setMessage(data.message || 'Password reset instructions have been sent to your email.')
         setEmail('')
       } else {
         setError(data.error || 'Failed to process request')
