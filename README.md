@@ -106,53 +106,53 @@ The following diagram illustrates the high-level architecture of the Educy Learn
 ```mermaid
 graph TB
     subgraph "Client Layer"
-        Browser[Browser/User Interface]
+        Browser["Browser/User Interface"]
     end
 
     subgraph "Next.js Application"
         subgraph "App Router - Pages"
-            AdminUI[Admin Portal]
-            InstructorUI[Instructor Portal]
-            ModeratorUI[Moderator Portal]
-            StudentUI[Student Portal]
-            AuthUI[Authentication Pages]
+            AdminUI["Admin Portal"]
+            InstructorUI["Instructor Portal"]
+            ModeratorUI["Moderator Portal"]
+            StudentUI["Student Portal"]
+            AuthUI["Authentication Pages"]
         end
 
         subgraph "Components Layer"
-            Layout[Dashboard Layout]
-            Forms[Form Components]
-            Modals[Modal Components]
-            UI[UI Components]
+            Layout["Dashboard Layout"]
+            Forms["Form Components"]
+            Modals["Modal Components"]
+            UI["UI Components"]
         end
 
         subgraph "API Routes"
-            AuthAPI[/api/auth/*]
-            CoursesAPI[/api/courses/*]
-            AssignmentsAPI[/api/assignments/*]
-            ExamsAPI[/api/exams/*]
-            AdminAPI[/api/admin/*]
-            AIAPI[/api/ai/*]
+            AuthAPI["Authentication API"]
+            CoursesAPI["Courses API"]
+            AssignmentsAPI["Assignments API"]
+            ExamsAPI["Exams API"]
+            AdminAPI["Admin API"]
+            AIAPI["AI API"]
         end
 
         subgraph "Business Logic Layer"
-            AuthLib[auth.ts - NextAuth Config]
-            RBAC[rbac.ts - Access Control]
-            PrismaClient[prisma.ts - DB Client]
-            AILib[ai.ts - AI Integration]
-            Validation[Zod Schemas]
+            AuthLib["auth.ts - NextAuth Config"]
+            RBAC["rbac.ts - Access Control"]
+            PrismaClient["prisma.ts - DB Client"]
+            AILib["ai.ts - AI Integration"]
+            Validation["Zod Schemas"]
         end
     end
 
     subgraph "External Services"
-        DB[(PostgreSQL Database)]
-        R2[Cloudflare R2<br/>File Storage]
-        Email[Resend<br/>Email Service]
-        AI[Google Gemini<br/>AI Service]
+        DB[("PostgreSQL Database")]
+        R2["Cloudflare R2 Storage"]
+        Email["Resend Email Service"]
+        AI["Google Gemini AI"]
     end
 
     subgraph "Data Layer"
-        Prisma[Prisma ORM]
-        Schema[Database Schema<br/>Users, Courses, Assignments, etc.]
+        Prisma["Prisma ORM"]
+        Schema["Database Schema"]
     end
 
     Browser --> AdminUI
