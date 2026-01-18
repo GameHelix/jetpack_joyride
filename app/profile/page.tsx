@@ -45,8 +45,9 @@ export default function ProfilePage() {
 
   // Validate name/surname: only letters and spaces
   const validateName = (value: string): boolean => {
-    // Allow letters (including unicode letters for international names), spaces, hyphens, and apostrophes
-    const nameRegex = /^[\p{L}\s'-]+$/u
+    // Allow letters (A-Z, a-z, including accented characters), spaces, hyphens, and apostrophes
+    // This regex is ES5 compatible and covers most Latin-based alphabets
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿğəıöüçşĞƏİÖÜÇŞ\s'-]+$/
     return nameRegex.test(value)
   }
 
