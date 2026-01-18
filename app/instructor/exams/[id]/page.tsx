@@ -3,23 +3,54 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard-layout'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-async function getExamDetails(id: string) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user) return null
+async function getExamDetails(id: string, userId: string) {
+  try {
+    const exam = await prisma.exam.findFirst({
+      where: {
+        id,
+        section: {
+          instructorId: userId,
+        },
+      },
+      include: {
+        section: {
+          include: {
+            course: true,
+          },
+        },
+        questions: {
+          orderBy: { orderIndex: 'asc' },
+        },
+        examAttempts: {
+          include: {
+            student: {
+              select: {
+                id: true,
+                name: true,
+                surname: true,
+                email: true,
+              },
+            },
+            group: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    })
 
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/exams/${id}`, {
-    headers: {
-      'Cookie': `next-auth.session-token=${session.user.id}`,
-    },
-    cache: 'no-store',
-  })
-
-  if (!response.ok) return null
-  const data = await response.json()
-  return data.exam
+    return exam
+  } catch (error) {
+    console.error('[EXAM DETAILS] Error fetching exam:', error)
+    return null
+  }
 }
 
 export default async function ExamDetailsPage({ params }: { params: { id: string } }) {
@@ -28,7 +59,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
     redirect('/signin')
   }
 
-  const exam = await getExamDetails(params.id)
+  const exam = await getExamDetails(params.id, session.user.id)
 
   if (!exam) {
     return (
@@ -262,7 +293,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
           <h2 className="text-xl font-bold text-gray-900 mb-4">Questions Preview</h2>
           <div className="space-y-4">
             {exam.questions
-              .sort((a: any, b: any) => a.order - b.order)
+              .sort((a: any, b: any) => a.orderIndex - b.orderIndex)
               .map((question: any, index: number) => (
                 <div key={question.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-start">
