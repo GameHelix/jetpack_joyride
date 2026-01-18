@@ -40,6 +40,15 @@ export default function ProfilePage() {
   const [newExpertise, setNewExpertise] = useState('')
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [nameError, setNameError] = useState('')
+  const [surnameError, setSurnameError] = useState('')
+
+  // Validate name/surname: only letters and spaces
+  const validateName = (value: string): boolean => {
+    // Allow letters (including unicode letters for international names), spaces, hyphens, and apostrophes
+    const nameRegex = /^[\p{L}\s'-]+$/u
+    return nameRegex.test(value)
+  }
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -103,6 +112,29 @@ export default function ProfilePage() {
     setSaving(true)
     setMessage(null)
     clearAllErrors()
+    setNameError('')
+    setSurnameError('')
+
+    // Validate name
+    const trimmedName = formData.name.trim()
+    if (!trimmedName) {
+      setNameError('Name is required')
+      setSaving(false)
+      return
+    }
+    if (!validateName(trimmedName)) {
+      setNameError('Name can only contain letters, spaces, hyphens, and apostrophes')
+      setSaving(false)
+      return
+    }
+
+    // Validate surname if provided
+    const trimmedSurname = formData.surname.trim()
+    if (trimmedSurname && !validateName(trimmedSurname)) {
+      setSurnameError('Surname can only contain letters, spaces, hyphens, and apostrophes')
+      setSaving(false)
+      return
+    }
 
     try {
       let avatarUrl = formData.profileAvatarUrl
@@ -164,6 +196,8 @@ export default function ProfilePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          name: trimmedName,
+          surname: trimmedSurname,
           profileAvatarUrl: avatarUrl,
         }),
       })
@@ -320,10 +354,25 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   required
+                  maxLength={100}
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent text-gray-900 bg-white"
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value })
+                    setNameError('')
+                  }}
+                  onBlur={() => {
+                    const trimmed = formData.name.trim()
+                    if (trimmed && !validateName(trimmed)) {
+                      setNameError('Name can only contain letters, spaces, hyphens, and apostrophes')
+                    }
+                  }}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent text-gray-900 bg-white ${
+                    nameError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-[#5C2482]'
+                  }`}
                 />
+                {nameError && (
+                  <p className="text-xs sm:text-sm text-red-600 mt-1">{nameError}</p>
+                )}
               </div>
 
               <div>
@@ -332,10 +381,25 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="text"
+                  maxLength={100}
                   value={formData.surname}
-                  onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent text-gray-900 bg-white"
+                  onChange={(e) => {
+                    setFormData({ ...formData, surname: e.target.value })
+                    setSurnameError('')
+                  }}
+                  onBlur={() => {
+                    const trimmed = formData.surname.trim()
+                    if (trimmed && !validateName(trimmed)) {
+                      setSurnameError('Surname can only contain letters, spaces, hyphens, and apostrophes')
+                    }
+                  }}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent text-gray-900 bg-white ${
+                    surnameError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-[#5C2482]'
+                  }`}
                 />
+                {surnameError && (
+                  <p className="text-xs sm:text-sm text-red-600 mt-1">{surnameError}</p>
+                )}
               </div>
 
               <div>
