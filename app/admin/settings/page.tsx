@@ -245,7 +245,25 @@ export default function SystemSettingsPage() {
                   min={6}
                   max={20}
                   value={formData.passwordMinLength}
-                  onChange={(e) => setFormData({ ...formData, passwordMinLength: parseInt(e.target.value) || 8 })}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    // Allow empty value during typing, will validate on blur
+                    if (value === '') {
+                      setFormData({ ...formData, passwordMinLength: 0 })
+                    } else {
+                      const num = parseInt(value)
+                      if (!isNaN(num)) {
+                        setFormData({ ...formData, passwordMinLength: num })
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    // On blur, ensure we have a valid value
+                    const value = parseInt(e.target.value)
+                    if (isNaN(value) || value < 6) {
+                      setFormData({ ...formData, passwordMinLength: 8 })
+                    }
+                  }}
                   className="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent text-gray-900 bg-white"
                 />
                 <p className="text-xs text-gray-500 mt-1">Recommended: 8-12 characters</p>
