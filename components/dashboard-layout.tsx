@@ -297,10 +297,10 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
             </button>
 
             {/* Desktop: Sign out + Collapse toggle */}
-            <div className="hidden lg:flex items-center justify-between gap-2">
+            <div className={`hidden lg:flex ${collapsed ? 'flex-col gap-2' : 'items-center justify-between gap-2'}`}>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="flex items-center justify-center p-2 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
+                className={`flex items-center ${collapsed ? 'justify-center w-full' : 'justify-center'} p-2 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200`}
                 title="Sign Out"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,7 +311,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
 
               <button
                 onClick={toggleCollapsed}
-                className="flex items-center justify-center p-2 rounded-lg text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
+                className={`flex items-center ${collapsed ? 'justify-center w-full' : 'justify-center'} p-2 rounded-lg text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200`}
                 title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               >
                 <svg
