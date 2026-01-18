@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [demoModalOpen, setDemoModalOpen] = useState(false)
   const { data: session, status } = useSession()
   const router = useRouter()
 
@@ -139,7 +140,10 @@ export default function LandingPage() {
                 >
                   Start Free Trial →
                 </Link>
-                <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition border-2 border-white/30">
+                <button
+                  onClick={() => setDemoModalOpen(true)}
+                  className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition border-2 border-white/30"
+                >
                   Watch Demo
                 </button>
               </div>
@@ -578,8 +582,11 @@ export default function LandingPage() {
             >
               Start Free Trial →
             </Link>
-            <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-10 py-4 rounded-xl font-bold text-lg transition border-2 border-white/30">
-              Schedule Demo
+            <button
+              onClick={() => setDemoModalOpen(true)}
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white px-10 py-4 rounded-xl font-bold text-lg transition border-2 border-white/30"
+            >
+              Watch Demo
             </button>
           </div>
           <p className="mt-6 text-xs sm:text-sm text-purple-200">
@@ -623,6 +630,119 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Demo Modal */}
+      {demoModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 flex items-center justify-center p-4">
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Close Button */}
+            <button
+              onClick={() => setDemoModalOpen(false)}
+              className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition"
+            >
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Modal Content */}
+            <div className="p-8">
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-[#5C2482] mb-2">Educy Platform Demo</h2>
+                <p className="text-gray-600">See how Educy transforms course management</p>
+              </div>
+
+              {/* Video Container */}
+              <div className="aspect-video bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl mb-6 flex items-center justify-center border-2 border-purple-200">
+                <div className="text-center p-8">
+                  <div className="text-6xl mb-4">🎥</div>
+                  <h3 className="text-2xl font-bold text-[#5C2482] mb-3">Demo Video Coming Soon</h3>
+                  <p className="text-gray-600 mb-6">
+                    In the meantime, explore our platform with demo credentials below
+                  </p>
+                  <Link
+                    href="/auth/signin"
+                    onClick={() => setDemoModalOpen(false)}
+                    className="inline-block bg-[#F95B0E] hover:bg-[#d94f0c] text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg"
+                  >
+                    Try Live Demo →
+                  </Link>
+                </div>
+              </div>
+
+              {/* Demo Credentials */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Demo Login Credentials</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="text-2xl">👨‍💼</div>
+                      <div className="font-bold text-[#5C2482]">Admin Account</div>
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <p className="text-gray-700"><strong>Email:</strong> admin@educy.com</p>
+                      <p className="text-gray-700"><strong>Password:</strong> admin123</p>
+                      <p className="text-xs text-gray-500 mt-2">Full system access, analytics, user management</p>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="text-2xl">👩‍🏫</div>
+                      <div className="font-bold text-[#F95B0E]">Instructor Account</div>
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <p className="text-gray-700"><strong>Email:</strong> alice.instructor@educy.com</p>
+                      <p className="text-gray-700"><strong>Password:</strong> instructor123</p>
+                      <p className="text-xs text-gray-500 mt-2">Course creation, grading, student management</p>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="text-2xl">👮</div>
+                      <div className="font-bold text-green-600">Moderator Account</div>
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <p className="text-gray-700"><strong>Email:</strong> moderator@educy.com</p>
+                      <p className="text-gray-700"><strong>Password:</strong> moderator123</p>
+                      <p className="text-xs text-gray-500 mt-2">Enrollment approval, content moderation</p>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="text-2xl">🎓</div>
+                      <div className="font-bold text-blue-600">Student Account</div>
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <p className="text-gray-700"><strong>Email:</strong> bob.student@educy.com</p>
+                      <p className="text-gray-700"><strong>Password:</strong> student123</p>
+                      <p className="text-xs text-gray-500 mt-2">Course enrollment, assignments, grades</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Key Features Highlight */}
+              <div className="mt-6 grid md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-3xl mb-2">⚡</div>
+                  <div className="font-semibold text-gray-900">Quick Setup</div>
+                  <div className="text-xs text-gray-600 mt-1">Launch in 5 minutes</div>
+                </div>
+                <div className="text-center p-4 bg-orange-50 rounded-lg">
+                  <div className="text-3xl mb-2">🤖</div>
+                  <div className="font-semibold text-gray-900">AI-Powered</div>
+                  <div className="text-xs text-gray-600 mt-1">Smart grading & tutoring</div>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-3xl mb-2">📊</div>
+                  <div className="font-semibold text-gray-900">Real-time Analytics</div>
+                  <div className="text-xs text-gray-600 mt-1">Track everything</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-4">

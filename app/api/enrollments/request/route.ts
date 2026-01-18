@@ -117,33 +117,43 @@ export async function POST(request: NextRequest) {
     // Get section info for notification (outside transaction)
     const section = enrollment.section
 
-    // Create audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'ENROLLMENT_REQUESTED',
-        targetType: 'Enrollment',
-        targetId: enrollment.id,
-        details: {
-          sectionId: data.sectionId,
-          courseCode: section.course.code,
+    // Create audit log (non-critical, don't fail request if this fails)
+    try {
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'ENROLLMENT_REQUESTED',
+          targetType: 'Enrollment',
+          targetId: enrollment.id,
+          details: {
+            sectionId: data.sectionId,
+            courseCode: section.course.code,
+          },
         },
-      },
-    })
+      })
+    } catch (auditError) {
+      console.error('Failed to create audit log:', auditError)
+      // Continue - audit log failure shouldn't block enrollment
+    }
 
-    // Notify instructor
-    await prisma.notification.create({
-      data: {
-        userId: section.instructorId,
-        type: 'GENERAL',
-        payload: {
-          message: `New enrollment request from ${user.name} for ${section.course.code}`,
-          enrollmentId: enrollment.id,
-          studentName: user.name,
-          courseCode: section.course.code,
+    // Notify instructor (non-critical, don't fail request if this fails)
+    try {
+      await prisma.notification.create({
+        data: {
+          userId: section.instructorId,
+          type: 'GENERAL',
+          payload: {
+            message: `New enrollment request from ${user.name} for ${section.course.code}`,
+            enrollmentId: enrollment.id,
+            studentName: user.name,
+            courseCode: section.course.code,
+          },
         },
-      },
-    })
+      })
+    } catch (notificationError) {
+      console.error('Failed to create notification:', notificationError)
+      // Continue - notification failure shouldn't block enrollment
+    }
 
     return NextResponse.json({
       success: true,

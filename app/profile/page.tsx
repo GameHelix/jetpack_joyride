@@ -183,9 +183,22 @@ export default function ProfilePage() {
       if (data.success) {
         setMessage({ type: 'success', text: 'Profile updated successfully!' })
         setProfile(data.user)
+        setFormData({
+          name: data.user.name || '',
+          surname: data.user.surname || '',
+          phone: data.user.phone || '',
+          expertise: data.user.expertise || [],
+          profileAvatarUrl: data.user.profileAvatarUrl || '',
+        })
         setAvatarFile(null)
         // Update session to reflect new profile data
-        await updateSession()
+        await updateSession({
+          name: data.user.name,
+          surname: data.user.surname,
+          image: data.user.profileAvatarUrl,
+        })
+        // Force a fresh fetch of profile data
+        await fetchProfile()
       } else {
         setMessage({ type: 'error', text: data.error || 'Failed to update profile' })
       }

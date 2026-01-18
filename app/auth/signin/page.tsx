@@ -189,6 +189,19 @@ export default function SignInPage() {
               </button>
             </form>
 
+            {/* Sign Up Link */}
+            <div className="text-center mt-6">
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Don't have an account?{' '}
+                <Link
+                  href="/auth/register"
+                  className="text-[#F95B0E] hover:text-[#d94f0c] font-semibold transition"
+                >
+                  Sign Up
+                </Link>
+              </p>
+            </div>
+
             {/* Demo Credentials */}
             <div className="w-full mt-8 p-6 bg-gradient-to-br from-purple-50 to-orange-50 rounded-2xl border border-purple-200">
               <div className="flex items-center justify-center gap-2 mb-4">

@@ -141,6 +141,14 @@ export default function StudentDashboardPage() {
   // Active case rooms
   const activeCaseRooms = caseRooms.filter(c => c.isActive)
 
+  // Recently submitted assignments (last 7 days)
+  const recentlySubmitted = assignments.filter(a => {
+    if (!a.submission) return false
+    const submittedDate = new Date(a.submission.submittedAt)
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    return submittedDate >= sevenDaysAgo
+  })
+
   return (
     <DashboardLayout role="STUDENT">
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
@@ -336,6 +344,52 @@ export default function StudentDashboardPage() {
               </div>
             )}
           </div>
+
+          {/* Recently Submitted */}
+          {recentlySubmitted.length > 0 && (
+            <div className="bg-green-50 rounded-xl shadow-sm border border-green-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-900">✅ Recently Submitted</h2>
+                <Link href="/student/assignments" className="text-xs sm:text-sm text-green-600 hover:text-green-800">
+                  View all →
+                </Link>
+              </div>
+
+              <div className="space-y-2">
+                {recentlySubmitted.slice(0, 3).map((assignment) => (
+                  <Link
+                    key={assignment.id}
+                    href={`/student/assignments/${assignment.id}`}
+                    className="block bg-white rounded-lg p-3 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 text-xs sm:text-sm">{assignment.title}</p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          {assignment.section.course.code}
+                        </p>
+                      </div>
+                      <div className="text-right ml-2">
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Submitted
+                        </span>
+                        {assignment.submission && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(assignment.submission.submittedAt).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+                {recentlySubmitted.length > 3 && (
+                  <p className="text-xs text-gray-500 text-center pt-2">
+                    +{recentlySubmitted.length - 3} more
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Quick Actions */}
           <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl shadow-sm border border-blue-200 p-6">
