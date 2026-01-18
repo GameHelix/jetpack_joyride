@@ -56,7 +56,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#5C2482]">Educy</h1>
+              <Link href="/" className="text-xl sm:text-2xl font-bold text-[#5C2482] hover:text-[#7B3FA3] transition">
+                Educy
+              </Link>
             </div>
 
             {/* Desktop Menu */}
@@ -757,28 +759,38 @@ export default function LandingPage() {
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-xs sm:text-sm">
-                <li><a href="#features" className="hover:text-white transition">Features</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition">How It Works</a></li>
-                <li><a href="#" className="hover:text-white transition">Security</a></li>
-                <li><a href="#" className="hover:text-white transition">Roadmap</a></li>
+                <li><a href="#features" className="hover:text-white transition cursor-pointer">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition cursor-pointer">How It Works</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <h4 className="text-white font-semibold mb-4">Get Started</h4>
               <ul className="space-y-2 text-xs sm:text-sm">
-                <li><a href="#" className="hover:text-white transition">About</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                <li>
+                  <Link href="/auth/signin" className="hover:text-white transition">
+                    Sign In
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/auth/register" className="hover:text-white transition">
+                    Register
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <h4 className="text-white font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-xs sm:text-sm">
-                <li><a href="#" className="hover:text-white transition">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition">API Reference</a></li>
-                <li><a href="#" className="hover:text-white transition">Support</a></li>
-                <li><a href="#" className="hover:text-white transition">Status</a></li>
+                <li>
+                  <a href="https://github.com/Ismat-Samadov/educy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                    GitHub Repository
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/Ismat-Samadov/educy/issues" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                    Report an Issue
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
