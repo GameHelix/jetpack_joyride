@@ -2,8 +2,8 @@
 
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { ReactNode, useState, useEffect, useTransition } from 'react'
+import { usePathname } from 'next/navigation'
+import { ReactNode, useState } from 'react'
 import { RoleName } from '@prisma/client'
 
 interface DashboardLayoutProps {
@@ -141,45 +141,28 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const navigation = navigationByRole[role]
   const { data: session } = useSession()
   const pathname = usePathname()
-  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false) // Mobile sidebar state
-  const [collapsed, setCollapsed] = useState(false) // Desktop sidebar collapse state
-  const [isNavigating, setIsNavigating] = useState(false) // Track navigation state
 
-  // Load collapsed state from localStorage on mount
-  useEffect(() => {
-    const savedState = localStorage.getItem('sidebar-collapsed')
-    if (savedState !== null) {
-      setCollapsed(savedState === 'true')
+  // Initialize collapsed state from localStorage
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sidebar-collapsed')
+      return saved === 'true'
     }
-  }, [])
+    return false
+  })
 
-  // Prefetch all navigation routes on mount to prevent full page reloads
-  useEffect(() => {
-    navigation.forEach((item) => {
-      router.prefetch(item.href)
-    })
-  }, [navigation, router])
-
-  // Save collapsed state to localStorage whenever it changes
+  // Toggle collapsed state and save to localStorage
   const toggleCollapsed = () => {
     const newState = !collapsed
     setCollapsed(newState)
-    localStorage.setItem('sidebar-collapsed', String(newState))
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sidebar-collapsed', String(newState))
+    }
   }
-
-  // Detect route changes for loading indicator
-  useEffect(() => {
-    setIsNavigating(false) // Reset loading state when route changes
-  }, [pathname])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
-      {/* Top loading bar */}
-      {isNavigating && (
-        <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-gradient-to-r from-[#5C2482] to-[#F95B0E] animate-pulse" />
-      )}
-
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -195,7 +178,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
         } ${collapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo and Toggle */}
+          {/* Logo */}
           <div className="flex items-center justify-between h-16 px-4 border-b border-purple-400/30">
             {!collapsed ? (
               <Link
@@ -212,20 +195,6 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                 E
               </Link>
             )}
-            {/* Desktop toggle button */}
-            <button
-              onClick={toggleCollapsed}
-              className="hidden lg:block text-white hover:bg-white/10 rounded-lg p-2 transition-colors"
-              title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {collapsed ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                )}
-              </svg>
-            </button>
             {/* Mobile close button */}
             <button
               onClick={() => setSidebarOpen(false)}
@@ -296,13 +265,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                   <Link
                     key={item.name}
                     href={item.href}
-                    prefetch={true}
-                    onClick={() => {
-                      setSidebarOpen(false)
-                      if (!isActive) {
-                        setIsNavigating(true)
-                      }
-                    }}
+                    onClick={() => setSidebarOpen(false)}
                     className={`flex items-center ${
                       collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
                     } py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
@@ -320,18 +283,47 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
             </div>
           </nav>
 
-          {/* Sign Out */}
+          {/* Bottom Actions */}
           <div className="p-4 border-t border-purple-400/30">
+            {/* Mobile: Sign out only */}
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
-              title={collapsed ? 'Sign Out' : ''}
+              className="lg:hidden w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
             >
-              <svg className={`w-5 h-5 ${!collapsed ? 'mr-2' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              {!collapsed && <span>Sign Out</span>}
+              <span>Sign Out</span>
             </button>
+
+            {/* Desktop: Sign out + Collapse toggle */}
+            <div className="hidden lg:flex items-center justify-between gap-2">
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="flex items-center justify-center p-2 rounded-lg text-sm font-medium text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
+                title="Sign Out"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                {!collapsed && <span className="ml-2">Sign Out</span>}
+              </button>
+
+              <button
+                onClick={toggleCollapsed}
+                className="flex items-center justify-center p-2 rounded-lg text-purple-100 hover:bg-white/10 hover:text-white transition-colors duration-200"
+                title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                <svg
+                  className={`w-5 h-5 transition-transform duration-200 ${collapsed ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </aside>
@@ -354,11 +346,9 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           <div className="w-10" /> {/* Spacer for balance */}
         </div>
 
-        {/* Page Content with smooth transition */}
+        {/* Page Content */}
         <main className="p-4 sm:p-6 lg:p-8 min-h-screen">
-          <div className="transition-opacity duration-200" style={{ opacity: isNavigating ? 0.6 : 1 }}>
-            {children}
-          </div>
+          {children}
         </main>
       </div>
     </div>
