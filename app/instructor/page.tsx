@@ -155,7 +155,8 @@ export default async function InstructorDashboard() {
 
   return (
     <DashboardLayout role={session.user.role}>
-      <div className="space-y-6">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
+        <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-[#5C2482]">
@@ -385,6 +386,7 @@ export default async function InstructorDashboard() {
             )}
           </div>
         </div>
+      </div>
       </div>
     </DashboardLayout>
   )
