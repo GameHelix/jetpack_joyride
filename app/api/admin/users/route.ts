@@ -10,6 +10,10 @@ export const dynamic = 'force-dynamic'
 
 const createUserSchema = z.object({
   name: z.string().min(1).max(200),
+  surname: z.string().optional().nullable().transform(val => {
+    if (!val || val === '') return null
+    return val
+  }),
   email: z.string().email(),
   role: z.enum(['ADMIN', 'MODERATOR', 'INSTRUCTOR', 'STUDENT']),
   sendEmail: z.boolean().default(true),
@@ -130,6 +134,7 @@ export async function POST(request: NextRequest) {
     const newUser = await prisma.user.create({
       data: {
         name: data.name,
+        surname: data.surname,
         email: data.email,
         hashedPassword,
         role: data.role,
@@ -137,6 +142,7 @@ export async function POST(request: NextRequest) {
       select: {
         id: true,
         name: true,
+        surname: true,
         email: true,
         role: true,
         createdAt: true,
