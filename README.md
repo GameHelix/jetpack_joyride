@@ -101,41 +101,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 
 ## Architecture Overview
 
-The following diagram illustrates the high-level architecture of the Educy Learning Management System:
-
-```mermaid
-graph LR
-    User[User Browser] --> Portal[Role-Based Portal]
-    Portal --> Admin[Admin Dashboard]
-    Portal --> Instructor[Instructor Dashboard]
-    Portal --> Moderator[Moderator Dashboard]
-    Portal --> Student[Student Dashboard]
-
-    Admin --> API[API Layer]
-    Instructor --> API
-    Moderator --> API
-    Student --> API
-
-    API --> Auth[Authentication]
-    API --> RBAC[Access Control]
-    API --> Business[Business Logic]
-
-    Business --> DB[(PostgreSQL)]
-    Business --> R2[File Storage]
-    Business --> Email[Email Service]
-    Business --> AIService[AI Service]
-
-    style User fill:#e1f5ff
-    style DB fill:#fff4e1
-    style R2 fill:#fff4e1
-    style Email fill:#fff4e1
-    style AIService fill:#fff4e1
-    style Admin fill:#f3e5f5
-    style Instructor fill:#e8f5e9
-    style Moderator fill:#fff9c4
-    style Student fill:#e3f2fd
-```
-
 ### Architecture Layers
 
 #### 1. Client Layer
