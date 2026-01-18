@@ -104,118 +104,36 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 The following diagram illustrates the high-level architecture of the Educy Learning Management System:
 
 ```mermaid
-graph TB
-    subgraph "Client Layer"
-        Browser["Browser/User Interface"]
-    end
+graph LR
+    User[User Browser] --> Portal[Role-Based Portal]
+    Portal --> Admin[Admin Dashboard]
+    Portal --> Instructor[Instructor Dashboard]
+    Portal --> Moderator[Moderator Dashboard]
+    Portal --> Student[Student Dashboard]
 
-    subgraph "Next.js Application"
-        subgraph "App Router - Pages"
-            AdminUI["Admin Portal"]
-            InstructorUI["Instructor Portal"]
-            ModeratorUI["Moderator Portal"]
-            StudentUI["Student Portal"]
-            AuthUI["Authentication Pages"]
-        end
+    Admin --> API[API Layer]
+    Instructor --> API
+    Moderator --> API
+    Student --> API
 
-        subgraph "Components Layer"
-            Layout["Dashboard Layout"]
-            Forms["Form Components"]
-            Modals["Modal Components"]
-            UI["UI Components"]
-        end
+    API --> Auth[Authentication]
+    API --> RBAC[Access Control]
+    API --> Business[Business Logic]
 
-        subgraph "API Routes"
-            AuthAPI["Authentication API"]
-            CoursesAPI["Courses API"]
-            AssignmentsAPI["Assignments API"]
-            ExamsAPI["Exams API"]
-            AdminAPI["Admin API"]
-            AIAPI["AI API"]
-        end
+    Business --> DB[(PostgreSQL)]
+    Business --> R2[File Storage]
+    Business --> Email[Email Service]
+    Business --> AIService[AI Service]
 
-        subgraph "Business Logic Layer"
-            AuthLib["auth.ts - NextAuth Config"]
-            RBAC["rbac.ts - Access Control"]
-            PrismaClient["prisma.ts - DB Client"]
-            AILib["ai.ts - AI Integration"]
-            Validation["Zod Schemas"]
-        end
-    end
-
-    subgraph "External Services"
-        DB[("PostgreSQL Database")]
-        R2["Cloudflare R2 Storage"]
-        Email["Resend Email Service"]
-        AI["Google Gemini AI"]
-    end
-
-    subgraph "Data Layer"
-        Prisma["Prisma ORM"]
-        Schema["Database Schema"]
-    end
-
-    Browser --> AdminUI
-    Browser --> InstructorUI
-    Browser --> ModeratorUI
-    Browser --> StudentUI
-    Browser --> AuthUI
-
-    AdminUI --> Layout
-    InstructorUI --> Layout
-    ModeratorUI --> Layout
-    StudentUI --> Layout
-
-    AdminUI --> AdminAPI
-    InstructorUI --> CoursesAPI
-    InstructorUI --> AssignmentsAPI
-    InstructorUI --> ExamsAPI
-    ModeratorUI --> AdminAPI
-    StudentUI --> CoursesAPI
-    StudentUI --> AssignmentsAPI
-    StudentUI --> ExamsAPI
-    AuthUI --> AuthAPI
-
-    Layout --> Forms
-    Layout --> Modals
-    Layout --> UI
-
-    AuthAPI --> AuthLib
-    CoursesAPI --> RBAC
-    AssignmentsAPI --> RBAC
-    ExamsAPI --> RBAC
-    AdminAPI --> RBAC
-    AIAPI --> AILib
-
-    AuthLib --> PrismaClient
-    RBAC --> PrismaClient
-    AILib --> AI
-
-    CoursesAPI --> Validation
-    AssignmentsAPI --> Validation
-    ExamsAPI --> Validation
-
-    PrismaClient --> Prisma
-    Prisma --> Schema
-    Schema --> DB
-
-    AssignmentsAPI --> R2
-    CoursesAPI --> R2
-
-    AuthAPI --> Email
-    AdminAPI --> Email
-
-    AIAPI --> AI
-
-    style Browser fill:#e1f5ff
+    style User fill:#e1f5ff
     style DB fill:#fff4e1
     style R2 fill:#fff4e1
     style Email fill:#fff4e1
-    style AI fill:#fff4e1
-    style AdminUI fill:#f3e5f5
-    style InstructorUI fill:#e8f5e9
-    style ModeratorUI fill:#fff9c4
-    style StudentUI fill:#e3f2fd
+    style AIService fill:#fff4e1
+    style Admin fill:#f3e5f5
+    style Instructor fill:#e8f5e9
+    style Moderator fill:#fff9c4
+    style Student fill:#e3f2fd
 ```
 
 ### Architecture Layers
