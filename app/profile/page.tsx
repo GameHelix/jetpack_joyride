@@ -42,6 +42,7 @@ export default function ProfilePage() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const [nameError, setNameError] = useState('')
   const [surnameError, setSurnameError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
 
   // Validate name/surname: only letters and spaces
   const validateName = (value: string): boolean => {
@@ -49,6 +50,13 @@ export default function ProfilePage() {
     // This regex is ES5 compatible and covers most Latin-based alphabets
     const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿğəıöüçşĞƏİÖÜÇŞ\s'-]+$/
     return nameRegex.test(value)
+  }
+
+  // Validate phone: only numbers, +, -, and spaces
+  const validatePhone = (value: string): boolean => {
+    // Allow numbers, +, -, and spaces
+    const phoneRegex = /^[0-9+\-\s]+$/
+    return phoneRegex.test(value)
   }
 
   useEffect(() => {
@@ -115,6 +123,7 @@ export default function ProfilePage() {
     clearAllErrors()
     setNameError('')
     setSurnameError('')
+    setPhoneError('')
 
     // Validate name
     const trimmedName = formData.name.trim()
@@ -135,6 +144,21 @@ export default function ProfilePage() {
       setSurnameError('Surname can only contain letters, spaces, hyphens, and apostrophes')
       setSaving(false)
       return
+    }
+
+    // Validate phone if provided
+    const trimmedPhone = formData.phone.trim()
+    if (trimmedPhone) {
+      if (!validatePhone(trimmedPhone)) {
+        setPhoneError('Phone number can only contain numbers, +, -, and spaces')
+        setSaving(false)
+        return
+      }
+      if (trimmedPhone.length > 20) {
+        setPhoneError('Phone number must be 20 characters or less')
+        setSaving(false)
+        return
+      }
     }
 
     try {
@@ -199,6 +223,7 @@ export default function ProfilePage() {
           ...formData,
           name: trimmedName,
           surname: trimmedSurname,
+          phone: trimmedPhone,
           profileAvatarUrl: avatarUrl,
         }),
       })
@@ -422,11 +447,29 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="tel"
+                  maxLength={20}
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#5C2482] focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400"
+                  onChange={(e) => {
+                    setFormData({ ...formData, phone: e.target.value })
+                    setPhoneError('')
+                  }}
+                  onBlur={() => {
+                    const trimmed = formData.phone.trim()
+                    if (trimmed && !validatePhone(trimmed)) {
+                      setPhoneError('Phone number can only contain numbers, +, -, and spaces')
+                    } else if (trimmed && trimmed.length > 20) {
+                      setPhoneError('Phone number must be 20 characters or less')
+                    }
+                  }}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400 ${
+                    phoneError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-[#5C2482]'
+                  }`}
                   placeholder="+1234567890"
                 />
+                {phoneError && (
+                  <p className="text-xs sm:text-sm text-red-600 mt-1">{phoneError}</p>
+                )}
+                <p className="text-xs text-gray-500 mt-1">Only numbers, +, -, and spaces allowed (max 20 characters)</p>
               </div>
             </div>
           </div>
