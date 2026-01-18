@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard-layout'
+import ScrollToTop from '@/components/scroll-to-top'
 
 export const dynamic = 'force-dynamic'
 
@@ -214,6 +215,9 @@ export default async function StudentExamsPage() {
         )}
       </div>
     </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </DashboardLayout>
   )
 }

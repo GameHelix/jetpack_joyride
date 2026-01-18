@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard-layout'
 import { LeaveCourseButton } from '@/components/leave-course-button'
+import ScrollToTop from '@/components/scroll-to-top'
 
 interface Course {
   id: string
@@ -530,6 +531,9 @@ export default function StudentCoursesPage() {
           </div>
         )}
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </DashboardLayout>
   )
 }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard-layout'
+import ScrollToTop from '@/components/scroll-to-top'
 
 interface Room {
   id: string
@@ -184,6 +185,9 @@ export default function StudentCaseRoomsPage() {
         )}
         </div>
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </DashboardLayout>
   )
 }

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard-layout'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import ScrollToTop from '@/components/scroll-to-top'
 
 interface Certificate {
   id: string
@@ -206,6 +207,9 @@ export default function StudentCertificatesPage() {
           </div>
         )}
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </DashboardLayout>
   )
 }
