@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Comprehensive README.md documentation
 - CHANGELOG.md to track project updates
+- High-level Mermaid architecture diagram in README
+  - Visual representation of system architecture
+  - Client, application, data, and external service layers
+  - Component relationships and data flow
+  - Color-coded role-based portals
+  - Example data flow walkthrough
 - Profile picture support in sidebar with surname display
 - Field-level validation errors for better UX
 - Global form validation system
