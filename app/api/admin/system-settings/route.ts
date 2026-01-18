@@ -7,14 +7,24 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 // Validation schema for system settings with safeguards
+// Transform empty strings to null for optional fields
 const updateSettingsSchema = z.object({
   // Platform Identity
   platformName: z.string().min(1).max(50).optional(),
-  platformLogoUrl: z.string().url().optional().nullable(),
+  platformLogoUrl: z.preprocess(
+    (val) => (val === '' ? null : val),
+    z.string().url().optional().nullable()
+  ),
 
   // Email Configuration
-  systemEmailFrom: z.string().email().optional().nullable(),
-  systemEmailName: z.string().min(1).max(100).optional().nullable(),
+  systemEmailFrom: z.preprocess(
+    (val) => (val === '' ? null : val),
+    z.string().email().optional().nullable()
+  ),
+  systemEmailName: z.preprocess(
+    (val) => (val === '' ? null : val),
+    z.string().min(1).max(100).optional().nullable()
+  ),
 
   // Security Settings (with hard limits)
   passwordMinLength: z.number().min(6).max(32).optional(),
