@@ -382,7 +382,7 @@ export default function ProfilePage() {
                     type="text"
                     value={newExpertise}
                     onChange={(e) => setNewExpertise(e.target.value)}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault()
                         handleAddExpertise()
