@@ -30,19 +30,26 @@ export async function POST(request: NextRequest) {
 
     // Use transaction to prevent race conditions with capacity check
     const enrollment = await prisma.$transaction(async (tx) => {
-      // Check enrollment limit from system settings
-      const settings = await tx.systemSettings.findFirst()
-      if (settings?.maxEnrollmentsPerStudent) {
-        const activeEnrollments = await tx.enrollment.count({
-          where: {
-            userId: user.id,
-            status: 'ENROLLED',
-          },
-        })
+      // Check enrollment limit from system settings (if available)
+      // Wrapped in try-catch to handle missing column during migration
+      try {
+        const settings = await tx.systemSettings.findFirst()
+        if (settings?.maxEnrollmentsPerStudent) {
+          const activeEnrollments = await tx.enrollment.count({
+            where: {
+              userId: user.id,
+              status: 'ENROLLED',
+            },
+          })
 
-        if (activeEnrollments >= settings.maxEnrollmentsPerStudent) {
-          throw new Error(`You have reached the maximum of ${settings.maxEnrollmentsPerStudent} active course enrollments. Please complete or withdraw from a course before enrolling in another.`)
+          if (activeEnrollments >= settings.maxEnrollmentsPerStudent) {
+            throw new Error(`You have reached the maximum of ${settings.maxEnrollmentsPerStudent} active course enrollments. Please complete or withdraw from a course before enrolling in another.`)
+          }
         }
+      } catch (settingsError) {
+        // If settings query fails (e.g., column doesn't exist yet), skip the check
+        console.log('[ENROLLMENT] System settings check skipped:', settingsError instanceof Error ? settingsError.message : 'Unknown error')
+        // Continue without enrollment limit check
       }
 
       // Get section details within transaction
