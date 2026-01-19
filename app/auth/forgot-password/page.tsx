@@ -1,10 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { MdEmail } from 'react-icons/md'
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordForm() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -40,11 +45,30 @@ export default function ForgotPasswordPage() {
     }
   }
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#5C2482] to-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+          <p className="mt-4 text-white">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex bg-gradient-to-b from-[#5C2482] to-white">
       {/* LEFT SIDE */}
       <div className="w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-[#5C2482] to-[#8B4AB8] rounded-br-[100px]">
-        <img src="/login.png" className="w-3/5 h-3/5 object-contain" alt="Reset Password" />
+        <img
+          src="/login.png"
+          className="w-3/5 h-3/5 object-contain"
+          alt="Reset Password"
+          onError={(e) => {
+            console.error('Image failed to load')
+            e.currentTarget.style.display = 'none'
+          }}
+        />
       </div>
 
       {/* RIGHT SIDE */}
@@ -103,5 +127,20 @@ export default function ForgotPasswordPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#5C2482] to-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+          <p className="mt-4 text-white">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ForgotPasswordForm />
+    </Suspense>
   )
 }
