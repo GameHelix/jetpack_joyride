@@ -102,8 +102,10 @@ const navigationByRole: Record<
   ADMIN: [
     { name: 'Dashboard', href: '/admin', icon: icons.dashboard },
     { name: 'Users', href: '/admin/users', icon: icons.users },
+    { name: 'Courses', href: '/admin/courses', icon: icons.courses },
     { name: 'Rooms', href: '/admin/rooms', icon: icons.rooms },
     { name: 'Audit Logs', href: '/admin/audit-logs', icon: icons.auditLogs },
+    { name: 'Analytics', href: '/admin/analytics', icon: icons.dashboard },
     { name: 'Settings', href: '/admin/settings', icon: icons.settings },
     { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
