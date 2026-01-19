@@ -216,16 +216,23 @@ export default function ProfilePage() {
         }
       }
 
+      // Build update payload - only include expertise for instructors/moderators/admins
+      const updatePayload: any = {
+        name: trimmedName,
+        surname: trimmedSurname,
+        phone: trimmedPhone,
+        profileAvatarUrl: avatarUrl,
+      }
+
+      // Only include expertise for authorized roles
+      if (isInstructorRole) {
+        updatePayload.expertise = formData.expertise
+      }
+
       const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          name: trimmedName,
-          surname: trimmedSurname,
-          phone: trimmedPhone,
-          profileAvatarUrl: avatarUrl,
-        }),
+        body: JSON.stringify(updatePayload),
       })
 
       const data = await response.json()
