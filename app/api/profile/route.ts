@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { rateLimitByIdentifier, RateLimitPresets } from '@/lib/ratelimit'
+import { formatName } from '@/lib/format-name'
 
 export const dynamic = 'force-dynamic'
 
@@ -95,8 +96,8 @@ export async function PUT(request: NextRequest) {
 
     // Build update object only with provided fields
     const updateData: any = {}
-    if (data.name !== undefined) updateData.name = data.name
-    if (data.surname !== undefined) updateData.surname = data.surname
+    if (data.name !== undefined) updateData.name = formatName(data.name) || data.name
+    if (data.surname !== undefined) updateData.surname = formatName(data.surname)
     if (data.phone !== undefined) updateData.phone = data.phone
     if (data.profileAvatarUrl !== undefined) updateData.profileAvatarUrl = data.profileAvatarUrl
 

@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx'
 import { auditLog } from '@/lib/audit'
 import { sendWelcomeWithSetupEmail } from '@/lib/email'
 import crypto from 'crypto'
+import { formatName } from '@/lib/format-name'
 
 export const dynamic = 'force-dynamic'
 
@@ -231,8 +232,11 @@ export async function POST(request: NextRequest) {
         continue
       }
 
+      // Format name with proper capitalization and whitespace cleaning
+      const formattedName = formatName(row.name.toString())
+
       validUsers.push({
-        name: row.name.toString().trim(),
+        name: formattedName || row.name.toString().trim(), // Fallback to trimmed if formatting returns null
         email: row.email.toString().trim().toLowerCase(),
         role: roleUpper as any,
       })

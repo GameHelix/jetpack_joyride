@@ -5,6 +5,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { sendWelcomeEmail } from '@/lib/email'
 import crypto from 'crypto'
+import { formatName } from '@/lib/format-name'
 
 export const dynamic = 'force-dynamic'
 
@@ -130,11 +131,15 @@ export async function POST(request: NextRequest) {
     const temporaryPassword = crypto.randomBytes(12).toString('base64').slice(0, 16)
     const hashedPassword = await bcrypt.hash(temporaryPassword, 10)
 
+    // Format name and surname (capitalize, clean whitespace)
+    const formattedName = formatName(data.name)
+    const formattedSurname = formatName(data.surname)
+
     // Create user
     const newUser = await prisma.user.create({
       data: {
-        name: data.name,
-        surname: data.surname,
+        name: formattedName || data.name, // Fallback to original if formatting returns null
+        surname: formattedSurname,
         email: data.email,
         hashedPassword,
         role: data.role,
