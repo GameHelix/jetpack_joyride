@@ -154,7 +154,7 @@ export default function StudentDashboardPage() {
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 mt-[15px]">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
             Welcome back, {session?.user?.name?.split(' ')[0] || 'Student'}
           </h1>
