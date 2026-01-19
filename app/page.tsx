@@ -93,7 +93,7 @@ export default function LandingPage() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
+            <div className="md:hidden py-4 border-t border-gray-200 animate-slideDown">
               <div className="flex flex-col space-y-4">
                 <a
                   href="#features"
@@ -750,7 +750,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
             <div>
               <h3 className="text-white text-xl font-bold mb-4">Educy</h3>
               <p className="text-xs sm:text-sm">

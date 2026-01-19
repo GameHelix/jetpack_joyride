@@ -245,9 +245,9 @@ export default function StudentDashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Assignments */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">📝 Assignments This Week</h2>
-              <Link href="/student/assignments" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h2 className="text-lg font-bold text-gray-900 truncate min-w-0 flex-1">📝 Assignments This Week</h2>
+              <Link href="/student/assignments" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 whitespace-nowrap flex-shrink-0">
                 View all →
               </Link>
             </div>
@@ -282,9 +282,9 @@ export default function StudentDashboardPage() {
 
           {/* Exams */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">📊 Upcoming Exams</h2>
-              <Link href="/student/exams" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h2 className="text-lg font-bold text-gray-900 truncate min-w-0 flex-1">📊 Upcoming Exams</h2>
+              <Link href="/student/exams" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 whitespace-nowrap flex-shrink-0">
                 View all →
               </Link>
             </div>
@@ -313,9 +313,9 @@ export default function StudentDashboardPage() {
 
           {/* Case Rooms */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">💬 Case Discussions</h2>
-              <Link href="/student/case-rooms" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h2 className="text-lg font-bold text-gray-900 truncate min-w-0 flex-1">💬 Case Discussions</h2>
+              <Link href="/student/case-rooms" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 whitespace-nowrap flex-shrink-0">
                 View all →
               </Link>
             </div>
@@ -348,9 +348,9 @@ export default function StudentDashboardPage() {
           {/* Recently Submitted */}
           {recentlySubmitted.length > 0 && (
             <div className="bg-green-50 rounded-xl shadow-sm border border-green-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-900">✅ Recently Submitted</h2>
-                <Link href="/student/assignments" className="text-xs sm:text-sm text-green-600 hover:text-green-800">
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h2 className="text-lg font-bold text-gray-900 truncate min-w-0 flex-1">✅ Recently Submitted</h2>
+                <Link href="/student/assignments" className="text-xs sm:text-sm text-green-600 hover:text-green-800 whitespace-nowrap flex-shrink-0">
                   View all →
                 </Link>
               </div>
@@ -422,7 +422,7 @@ export default function StudentDashboardPage() {
 
         {/* Empty state */}
         {thisWeekAssignments.length === 0 && upcomingExams.length === 0 && activeCaseRooms.length === 0 && overdueAssignments.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-200 mb-[10px]">
             <div className="text-6xl mb-4">🎉</div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">All caught up!</h3>
             <p className="text-gray-600">You have no upcoming tasks this week</p>

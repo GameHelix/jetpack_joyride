@@ -161,6 +161,15 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
     }
   }
 
+  // Prevent body scroll when mobile sidebar is open
+  if (typeof window !== 'undefined') {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
       {/* Mobile sidebar overlay */}
@@ -257,8 +266,8 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto py-4 px-3 sidebar-scrollbar">
-            <div className="space-y-1">
+          <nav className="flex-1 overflow-y-auto py-2 px-3 sidebar-scrollbar">
+            <div className="space-y-0.5">
               {navigation.map((item) => {
                 const isActive = pathname === item.href
                 return (
@@ -268,7 +277,7 @@ function DashboardLayout({ children, role }: DashboardLayoutProps) {
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center ${
                       collapsed ? 'lg:justify-center lg:px-0' : 'px-3'
-                    } py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    } py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                       isActive
                         ? 'bg-white text-[#5C2482] shadow-lg'
                         : 'text-purple-100 hover:bg-white/10 hover:text-white'
