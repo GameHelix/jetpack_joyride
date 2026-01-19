@@ -123,6 +123,8 @@ const navigationByRole: Record<
     { name: 'Dashboard', href: '/moderator', icon: icons.dashboard },
     { name: 'Enrollments', href: '/moderator/enrollments', icon: icons.enrollments },
     { name: 'Courses', href: '/moderator/courses', icon: icons.courses },
+    { name: 'Schedule', href: '/moderator/schedule', icon: icons.schedule },
+    { name: 'Attendance', href: '/moderator/attendance', icon: icons.users },
     { name: 'Profile', href: '/profile', icon: icons.profile },
   ],
   STUDENT: [
