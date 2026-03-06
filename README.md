@@ -2,6 +2,44 @@
 
 A modern, full-featured Learning Management System (LMS) built with Next.js 14, Prisma, and PostgreSQL. Educy provides a comprehensive platform for educational institutions to manage courses, assignments, exams, and student interactions.
 
+## Screenshots
+
+### Landing & Onboarding
+
+| Landing Page | Features Overview |
+|:---:|:---:|
+| ![Landing Page](screens/landing%20page.png) | ![Features](screens/features.png) |
+
+| How It Works | Sign In |
+|:---:|:---:|
+| ![How It Works](screens/how%20it%20works.png) | ![Sign In](screens/sign%20in%20page.png) |
+
+### Instructor Portal
+
+| Instructor Dashboard | Courses |
+|:---:|:---:|
+| ![Instructor Dashboard](screens/instructor%20dashboard.png) | ![Courses](screens/courses%20page.png) |
+
+| Assignments | Exams |
+|:---:|:---:|
+| ![Assignments](screens/assignments.png) | ![Exams](screens/exams.png) |
+
+| Content Review | Schedule |
+|:---:|:---:|
+| ![Content Review](screens/content%20review.png) | ![Schedule](screens/schedule.png) |
+
+### Student Features
+
+| Case Rooms | Payments |
+|:---:|:---:|
+| ![Case Rooms](screens/case%20rooms.png) | ![Payments](screens/payments.png) |
+
+| Certificates | Profile |
+|:---:|:---:|
+| ![Certificates](screens/certificates.png) | ![Profile](screens/profile.png) |
+
+---
+
 ## Features
 
 ### Multi-Role Support
