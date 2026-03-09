@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         }
       } catch (settingsError) {
         // If settings query fails (e.g., column doesn't exist yet), skip the check
-        console.log('[ENROLLMENT] System settings check skipped:', settingsError instanceof Error ? settingsError.message : 'Unknown error')
+        console.error('System settings check skipped:', settingsError instanceof Error ? settingsError.message : 'Unknown error')
         // Continue without enrollment limit check
       }
 
