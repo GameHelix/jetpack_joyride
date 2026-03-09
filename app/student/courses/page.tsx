@@ -174,7 +174,7 @@ export default function StudentCoursesPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="flex items-center justify-center h-64">
           <div className="text-gray-500">Loading...</div>
         </div>

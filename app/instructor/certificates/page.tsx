@@ -123,7 +123,7 @@ export default function InstructorCertificatesPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <DashboardLayout role="INSTRUCTOR">
+      <DashboardLayout role={session?.user?.role || 'INSTRUCTOR'}>
         <div className="flex items-center justify-center h-64">
           <div className="text-gray-500">Loading...</div>
         </div>

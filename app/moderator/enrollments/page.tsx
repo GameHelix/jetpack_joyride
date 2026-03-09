@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
 import { format } from 'date-fns'
 import { ConfirmationDialog, InputDialog } from '@/components/confirmation-dialog'
@@ -27,6 +28,7 @@ interface Enrollment {
 }
 
 export default function ModeratorEnrollments() {
+  const { data: session } = useSession()
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState<string | null>(null)
@@ -112,7 +114,7 @@ export default function ModeratorEnrollments() {
   }
 
   return (
-    <DashboardLayout role="MODERATOR">
+    <DashboardLayout role={session?.user?.role || 'MODERATOR'}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-[#5C2482]">Pending Enrollments</h1>

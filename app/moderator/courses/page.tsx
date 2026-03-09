@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
 
 interface Course {
@@ -26,6 +27,7 @@ interface Course {
 }
 
 export default function ModeratorCourses() {
+  const { data: session } = useSession()
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
@@ -56,7 +58,7 @@ export default function ModeratorCourses() {
   )
 
   return (
-    <DashboardLayout role="MODERATOR">
+    <DashboardLayout role={session?.user?.role || 'MODERATOR'}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
