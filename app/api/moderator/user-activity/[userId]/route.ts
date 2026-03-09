@@ -58,7 +58,7 @@ export async function GET(
       where.action = actionType
     }
 
-    if (severity && ['INFO', 'WARNING', 'ERROR', 'CRITICAL'].includes(severity)) {
+    if (severity && ['INFO', 'WARNING', 'CRITICAL'].includes(severity)) {
       where.severity = severity
     }
 
