@@ -124,7 +124,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
 
   if (status === 'loading' || loading) {
     return (
-      <DashboardLayout role="INSTRUCTOR">
+      <DashboardLayout role={session?.user?.role || 'INSTRUCTOR'}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
@@ -137,7 +137,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
 
   if (!room) {
     return (
-      <DashboardLayout role="INSTRUCTOR">
+      <DashboardLayout role={session?.user?.role || 'INSTRUCTOR'}>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-600 mb-4">Case room not found</p>
@@ -164,7 +164,7 @@ export default function InstructorCaseRoomPage({ params }: { params: { id: strin
     posts
 
   return (
-    <DashboardLayout role="INSTRUCTOR">
+    <DashboardLayout role={session?.user?.role || 'INSTRUCTOR'}>
       <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
         {/* Header */}

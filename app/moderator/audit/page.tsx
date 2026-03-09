@@ -66,7 +66,7 @@ export default function ModeratorAuditPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <DashboardLayout role="MODERATOR">
+      <DashboardLayout role={session?.user?.role || 'MODERATOR'}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
@@ -116,7 +116,7 @@ export default function ModeratorAuditPage() {
   }
 
   return (
-    <DashboardLayout role="MODERATOR">
+    <DashboardLayout role={session?.user?.role || 'MODERATOR'}>
       <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}

@@ -94,7 +94,7 @@ export default async function ExamDetailsPage({ params }: { params: { id: string
     : 0
 
   return (
-    <DashboardLayout role="INSTRUCTOR">
+    <DashboardLayout role={session.user.role}>
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
         {/* Header */}

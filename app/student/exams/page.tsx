@@ -38,7 +38,7 @@ export default async function StudentExamsPage() {
         },
       },
       examAttempts: {
-        where: { userId: session.user.id },
+        where: { studentId: session.user.id },
         select: {
           id: true,
           isCompleted: true,

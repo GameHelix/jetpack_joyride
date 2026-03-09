@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
 
 interface Stats {
@@ -10,6 +11,7 @@ interface Stats {
 }
 
 export default function ModeratorDashboard() {
+  const { data: session } = useSession()
   const [stats, setStats] = useState<Stats>({
     pendingEnrollments: 0,
     totalEnrollments: 0,
@@ -36,7 +38,7 @@ export default function ModeratorDashboard() {
   }
 
   return (
-    <DashboardLayout role="MODERATOR">
+    <DashboardLayout role={session?.user?.role || 'MODERATOR'}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-[#5C2482]">Moderator Dashboard</h1>

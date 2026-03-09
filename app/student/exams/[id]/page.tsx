@@ -204,7 +204,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (loading || status === 'loading') {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -217,7 +217,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (error || !exam) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center">
             <p className="text-red-600 mb-4">{error || 'Exam not found'}</p>
@@ -240,7 +240,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (now < startTime) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center max-w-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Not Yet Available</h2>
@@ -261,7 +261,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   if (now > endTime && (!attempt || !attempt.isCompleted)) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center max-w-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Exam Closed</h2>
@@ -283,7 +283,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   // Show results if completed
   if (attempt?.isCompleted) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="bg-gradient-to-br from-green-50 via-white to-blue-50 -my-8 p-4 md:p-8 min-h-screen">
           <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -337,7 +337,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   // Show start screen
   if (!attempt) {
     return (
-      <DashboardLayout role="STUDENT">
+      <DashboardLayout role={session?.user?.role || 'STUDENT'}>
         <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
           <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -396,7 +396,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   const progressPercent = (answeredCount / exam.questions.length) * 100
 
   return (
-    <DashboardLayout role="STUDENT">
+    <DashboardLayout role={session?.user?.role || 'STUDENT'}>
       <div className="bg-gray-50 -my-8 p-0 min-h-screen pb-24">
         {/* Fixed header with timer */}
       <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
