@@ -125,6 +125,7 @@ export default function BulkUserImportPage() {
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
+      let importSucceeded = false
 
       while (true) {
         const { done, value } = await reader.read()
@@ -162,6 +163,7 @@ export default function BulkUserImportPage() {
                   failed: data.failed,
                   errors: data.errors
                 })
+                importSucceeded = true
                 setProgress(null)
               } else if (data.type === 'error') {
                 setResult({
@@ -180,7 +182,7 @@ export default function BulkUserImportPage() {
       }
 
       // Clear file after successful completion
-      if (result?.success) {
+      if (importSucceeded) {
         setFile(null)
         const fileInput = document.getElementById('file-input') as HTMLInputElement
         if (fileInput) fileInput.value = ''
