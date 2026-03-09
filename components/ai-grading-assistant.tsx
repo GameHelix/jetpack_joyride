@@ -42,7 +42,7 @@ export default function AIGradingAssistant({
         throw new Error(data.error || 'Failed to get AI analysis')
       }
 
-      if (data.analysis.mode === 'full') {
+      if (data.analysis?.mode === 'full') {
         setAnalysis({
           suggestedGrade: data.analysis.suggestedGrade,
           feedback: data.analysis.feedback,

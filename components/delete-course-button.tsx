@@ -46,7 +46,6 @@ export function DeleteCourseButton({
       if (data.success) {
         alert('Course deleted successfully')
         router.push('/instructor/courses')
-        router.refresh()
       }
     } catch (error) {
       console.error('Delete error:', error)

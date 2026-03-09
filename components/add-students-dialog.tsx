@@ -32,6 +32,7 @@ export function AddStudentsDialog({
 
   useEffect(() => {
     if (isOpen) {
+      setMessage(null)
       fetchStudents()
     }
   }, [isOpen, search, sectionId])
