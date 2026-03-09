@@ -314,10 +314,10 @@ export async function sendGradeReceivedEmail(params: {
   courseCode: string
   grade: number
   feedback?: string
-  submissionId: string
+  assignmentId: string
 }) {
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
-  const submissionUrl = `${baseUrl}/student/assignments`
+  const submissionUrl = `${baseUrl}/student/assignments/${params.assignmentId}`
 
   return sendEmail({
     to: params.to,

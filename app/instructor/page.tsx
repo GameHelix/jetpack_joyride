@@ -375,7 +375,7 @@ export default async function InstructorDashboard() {
                       </p>
                     </div>
                     <Link
-                      href={`/instructor/assignments/${submission.assignmentId}/submissions/${submission.id}`}
+                      href={`/instructor/assignments/${submission.assignmentId}`}
                       className="px-3 py-2 sm:px-4 bg-[#F95B0E] hover:bg-[#d94f0c] text-white rounded-xl transition font-medium"
                     >
                       Grade

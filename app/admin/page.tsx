@@ -108,7 +108,7 @@ export default async function AdminDashboard() {
           </Link>
 
           <Link
-            href="/moderator/courses"
+            href="/admin/courses"
             className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition group"
           >
             <div className="flex items-center">

@@ -10,13 +10,10 @@ export const dynamic = 'force-dynamic'
 async function getInstructorExams() {
   const session = await getServerSession(authOptions)
   if (!session?.user) {
-    console.log('[EXAMS DEBUG] No session found')
     return []
   }
 
   try {
-    console.log('[EXAMS DEBUG] Fetching exams for instructor:', session.user.id, session.user.email)
-
     const exams = await prisma.exam.findMany({
       where: {
         section: {
@@ -39,19 +36,9 @@ async function getInstructorExams() {
       orderBy: { startTime: 'desc' },
     })
 
-    console.log('[EXAMS DEBUG] Found exams:', exams.length)
-    if (exams.length > 0) {
-      console.log('[EXAMS DEBUG] First exam:', {
-        id: exams[0].id,
-        title: exams[0].title,
-        sectionId: exams[0].sectionId,
-        instructorId: exams[0].section?.instructorId
-      })
-    }
-
     return exams
   } catch (error) {
-    console.error('[EXAMS DEBUG] Failed to fetch instructor exams:', error)
+    console.error('Failed to fetch instructor exams:', error)
     return []
   }
 }
@@ -59,7 +46,7 @@ async function getInstructorExams() {
 export default async function InstructorExamsPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user || !['INSTRUCTOR', 'ADMIN'].includes(session.user.role)) {
-    redirect('/signin')
+    redirect('/auth/signin')
   }
 
   const exams = await getInstructorExams()
@@ -72,7 +59,7 @@ export default async function InstructorExamsPage() {
   const pastExams = exams.filter((exam: any) => new Date(exam.endTime) <= now)
 
   return (
-    <DashboardLayout role="INSTRUCTOR">
+    <DashboardLayout role={session.user.role}>
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
