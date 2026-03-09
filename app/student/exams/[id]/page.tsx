@@ -11,7 +11,7 @@ interface Question {
   questionType: string
   options: string[]
   points: number
-  order: number
+  orderIndex: number
 }
 
 interface Exam {
@@ -391,7 +391,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
   }
 
   // Show exam questions
-  const sortedQuestions = [...exam.questions].sort((a, b) => a.order - b.order)
+  const sortedQuestions = [...exam.questions].sort((a, b) => a.orderIndex - b.orderIndex)
   const answeredCount = Object.keys(answers).length
   const progressPercent = (answeredCount / exam.questions.length) * 100
 

@@ -48,7 +48,7 @@ async function getExamDetails(id: string, userId: string) {
 
     return exam
   } catch (error) {
-    console.error('[EXAM DETAILS] Error fetching exam:', error)
+    console.error('Error fetching exam:', error)
     return null
   }
 }

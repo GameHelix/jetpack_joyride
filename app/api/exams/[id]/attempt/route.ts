@@ -172,8 +172,8 @@ export async function PATCH(
 
         totalPoints += question.points
 
-        let isCorrect = false
-        let points = 0
+        let isCorrect: boolean | null = null
+        let points: number | null = null
 
         // Auto-grade for multiple choice and true/false
         if (question.questionType === 'multiple_choice' || question.questionType === 'true_false') {
@@ -193,13 +193,13 @@ export async function PATCH(
             attemptId: attempt.id,
             questionId: ans.questionId,
             answer: ans.answer,
-            isCorrect: isCorrect || null,
-            points: points || null,
+            isCorrect,
+            points,
           },
           update: {
             answer: ans.answer,
-            isCorrect: isCorrect || null,
-            points: points || null,
+            isCorrect,
+            points,
           },
         })
       })

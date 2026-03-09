@@ -183,9 +183,9 @@ export default function NewExamPage() {
         }
       }
 
-      // Combine date and time for API
-      const startDateTimeString = `${formData.startDate}T${formData.startTime}:00.000Z`
-      const endDateTimeString = `${formData.endDate}T${formData.endTime}:00.000Z`
+      // Combine date and time for API (convert local time to UTC ISO string)
+      const startDateTimeString = new Date(`${formData.startDate}T${formData.startTime}:00`).toISOString()
+      const endDateTimeString = new Date(`${formData.endDate}T${formData.endTime}:00`).toISOString()
 
       const payload = {
         sectionId: formData.sectionId,
