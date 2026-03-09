@@ -24,6 +24,7 @@ export default function EditCoursePage({ params }: EditCoursePageProps) {
     description: '',
     term: '',
     visibility: true,
+    capacity: 30,
   })
 
   // Fetch course data on component mount
@@ -49,6 +50,7 @@ export default function EditCoursePage({ params }: EditCoursePageProps) {
           description: data.course.description || '',
           term: data.course.term || '',
           visibility: data.course.visibility ?? true,
+          capacity: data.course.sections?.[0]?.capacity ?? 30,
         })
       }
     } catch (err) {
@@ -136,7 +138,7 @@ export default function EditCoursePage({ params }: EditCoursePageProps) {
                 required
                 value={formData.code}
                 onChange={(e) =>
-                  setFormData({ ...formData, code: e.target.value.toUpperCase() })
+                  setFormData({ ...formData, code: e.target.value.trim().toUpperCase() })
                 }
                 className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., CS101"
@@ -205,6 +207,31 @@ export default function EditCoursePage({ params }: EditCoursePageProps) {
                 placeholder="e.g., Spring 2026, Fall 2026"
                 maxLength={50}
               />
+            </div>
+
+            {/* Section Capacity */}
+            <div>
+              <label
+                htmlFor="capacity"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
+              >
+                Section Capacity *
+              </label>
+              <input
+                type="number"
+                id="capacity"
+                required
+                min="1"
+                max="500"
+                value={formData.capacity}
+                onChange={(e) =>
+                  setFormData({ ...formData, capacity: parseInt(e.target.value) || 1 })
+                }
+                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <p className="mt-1 text-xs sm:text-sm text-gray-500">
+                Maximum number of students allowed in this section
+              </p>
             </div>
 
             {/* Visibility */}

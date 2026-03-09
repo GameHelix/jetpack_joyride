@@ -157,7 +157,7 @@ export default function NewCoursePage() {
                 required
                 value={formData.code}
                 onChange={(e) =>
-                  setFormData({ ...formData, code: e.target.value.toUpperCase() })
+                  setFormData({ ...formData, code: e.target.value.trim().toUpperCase() })
                 }
                 className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-xl text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., CS101"

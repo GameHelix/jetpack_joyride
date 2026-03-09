@@ -6,7 +6,7 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const createCourseSchema = z.object({
-  code: z.string().min(2).max(20),
+  code: z.string().min(2).max(20).transform((val) => val.trim().toUpperCase()),
   title: z.string().min(3).max(200),
   description: z.string().optional(),
   term: z.string().min(3).max(50),

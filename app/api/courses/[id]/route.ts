@@ -6,11 +6,12 @@ import { z } from 'zod'
 export const dynamic = 'force-dynamic'
 
 const updateCourseSchema = z.object({
-  code: z.string().min(2).max(20).optional(),
+  code: z.string().min(2).max(20).transform((val) => val.trim().toUpperCase()).optional(),
   title: z.string().min(3).max(200).optional(),
   description: z.string().optional(),
   term: z.string().min(3).max(50).optional(),
   visibility: z.boolean().optional(),
+  capacity: z.number().int().min(1).max(500).optional(),
 })
 
 // GET /api/courses/[id] - Get course details
@@ -131,10 +132,11 @@ export async function PUT(
       )
     }
 
-    // Update course
+    // Update course (exclude capacity from course-level update)
+    const { capacity, ...courseData } = data
     const course = await prisma.course.update({
       where: { id: params.id },
-      data,
+      data: courseData,
       include: {
         sections: true,
         createdBy: {
@@ -145,6 +147,17 @@ export async function PUT(
         },
       },
     })
+
+    // Update section capacity if provided
+    if (capacity !== undefined) {
+      const userSection = existingCourse.sections[0]
+      if (userSection) {
+        await prisma.section.update({
+          where: { id: userSection.id },
+          data: { capacity },
+        })
+      }
+    }
 
     // Create audit log
     await prisma.auditLog.create({
@@ -225,19 +238,12 @@ export async function DELETE(
       )
     }
 
-    // Check if there are any enrollments
-    const hasEnrollments = course.sections.some(
-      (section) => section._count.enrollments > 0
-    )
-
-    if (hasEnrollments) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Cannot delete course with active enrollments',
-        },
-        { status: 409 }
-      )
+    // Delete all enrollments in all sections first to allow course deletion
+    const sectionIds = course.sections.map((s) => s.id)
+    if (sectionIds.length > 0) {
+      await prisma.enrollment.deleteMany({
+        where: { sectionId: { in: sectionIds } },
+      })
     }
 
     // Delete course (cascade will delete sections, lessons, etc.)
