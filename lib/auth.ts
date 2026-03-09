@@ -115,7 +115,7 @@ export const authOptions: NextAuthOptions = {
           // Check if role changed - if so, rotate token
           if (token.role !== dbUser.role) {
             token.iat = Math.floor(Date.now() / 1000) // Rotate token on role change
-            console.log(`[SECURITY] Token rotated for user ${token.id} due to role change`)
+            console.warn(`Token rotated for user ${token.id} due to role change`)
           }
           token.role = dbUser.role
           token.name = dbUser.name
