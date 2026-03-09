@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Only admins can view analytics
-    if (user.role !== 'ADMIN' && user.role !== 'MODERATOR') {
+    if (user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden: Only admins can view analytics' },
         { status: 403 }
@@ -126,25 +126,26 @@ export async function GET(request: NextRequest) {
     let dailyActivity: any[] = []
     if (startDate) {
       const daysDiff = Math.ceil((now.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000))
-      const dailyLogs = await prisma.auditLog.groupBy({
-        by: ['createdAt'],
-        _count: true,
-        where: { createdAt: dateFilter },
-      })
 
-      // Group by date
-      const activityMap = new Map()
+      // Build date keys and query each day's count
+      const activityMap = new Map<string, number>()
+      const dayBoundaries: { key: string; gte: Date; lt: Date }[] = []
       for (let i = 0; i < daysDiff; i++) {
-        const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000)
-        const dateKey = date.toISOString().split('T')[0]
+        const dayStart = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000)
+        const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
+        const dateKey = dayStart.toISOString().split('T')[0]
         activityMap.set(dateKey, 0)
+        dayBoundaries.push({ key: dateKey, gte: dayStart, lt: dayEnd })
       }
 
-      for (const log of dailyLogs) {
-        const dateKey = new Date(log.createdAt).toISOString().split('T')[0]
-        if (activityMap.has(dateKey)) {
-          activityMap.set(dateKey, activityMap.get(dateKey) + log._count)
-        }
+      const dayCounts = await Promise.all(
+        dayBoundaries.map(({ key, gte, lt }) =>
+          prisma.auditLog.count({ where: { createdAt: { gte, lt } } }).then(count => ({ key, count }))
+        )
+      )
+
+      for (const { key, count } of dayCounts) {
+        activityMap.set(key, count)
       }
 
       dailyActivity = Array.from(activityMap.entries()).map(([date, count]) => ({

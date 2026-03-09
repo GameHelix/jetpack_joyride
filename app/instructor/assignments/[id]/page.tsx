@@ -47,17 +47,6 @@ export default async function AssignmentGradingPage({
         },
         orderBy: { submittedAt: 'desc' },
       },
-      tabSwitches: {
-        include: {
-          student: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-        orderBy: { timestamp: 'asc' },
-      },
     },
   })
 
