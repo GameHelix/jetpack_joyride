@@ -11,6 +11,7 @@ const FILE_SIZE_LIMITS = {
   GLOBAL_MAX: 104857600, // 100MB absolute maximum
   DEFAULT_MAX: 10485760, // 10MB default for general uploads
   ASSIGNMENT: 52428800, // 50MB for assignments
+  LESSON: 52428800, // 50MB for lesson materials
   PROFILE: 5242880, // 5MB for profile images
 } as const
 
@@ -20,7 +21,7 @@ const uploadUrlSchema = z.object({
   sizeBytes: z.number().positive(),
   allowedTypes: z.array(z.string()).optional(),
   prefix: z.string().optional(),
-  context: z.enum(['assignment', 'profile', 'general']).optional().default('general'),
+  context: z.enum(['assignment', 'profile', 'general', 'lesson']).optional().default('general'),
 })
 
 export async function POST(request: NextRequest) {
@@ -40,6 +41,7 @@ export async function POST(request: NextRequest) {
     // Client cannot override these limits
     const contextLimits = {
       assignment: FILE_SIZE_LIMITS.ASSIGNMENT,
+      lesson: FILE_SIZE_LIMITS.LESSON,
       profile: FILE_SIZE_LIMITS.PROFILE,
       general: FILE_SIZE_LIMITS.DEFAULT_MAX,
     }
