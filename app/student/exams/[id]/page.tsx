@@ -53,7 +53,7 @@ export default function ExamTakingPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
       return
     }
 

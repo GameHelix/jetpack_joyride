@@ -41,7 +41,7 @@ export default function BulkNotificationPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       if (!['ADMIN', 'MODERATOR', 'INSTRUCTOR'].includes(session?.user?.role || '')) {
         router.push('/dashboard')

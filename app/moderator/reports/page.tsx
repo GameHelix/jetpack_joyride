@@ -68,7 +68,7 @@ export default function ModeratorReportsPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       if (session?.user?.role !== 'MODERATOR') {
         router.push('/dashboard')

@@ -47,7 +47,7 @@ export default function NewExamPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       loadSections()
     }

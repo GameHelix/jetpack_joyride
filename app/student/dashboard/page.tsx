@@ -62,7 +62,7 @@ export default function StudentDashboardPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       loadDashboardData()
     }

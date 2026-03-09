@@ -93,7 +93,7 @@ export default function UserActivityPage({ params }: { params: { userId: string 
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       if (session?.user?.role !== 'MODERATOR' && session?.user?.role !== 'ADMIN') {
         router.push('/dashboard')

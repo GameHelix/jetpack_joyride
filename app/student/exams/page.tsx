@@ -4,42 +4,68 @@ import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard-layout'
 import ScrollToTop from '@/components/scroll-to-top'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
-
-async function getAvailableExams() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user) return []
-
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/exams`, {
-    headers: {
-      'Cookie': `next-auth.session-token=${session.user.id}`,
-    },
-    cache: 'no-store',
-  })
-
-  if (!response.ok) return []
-  const data = await response.json()
-  return data.exams || []
-}
 
 export default async function StudentExamsPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user || session.user.role !== 'STUDENT') {
-    redirect('/signin')
+    redirect('/auth/signin')
   }
 
-  const exams = await getAvailableExams()
+  const exams = await prisma.exam.findMany({
+    where: {
+      section: {
+        enrollments: {
+          some: {
+            userId: session.user.id,
+            status: 'ENROLLED',
+          },
+        },
+      },
+    },
+    include: {
+      section: {
+        include: {
+          course: true,
+        },
+      },
+      _count: {
+        select: {
+          questions: true,
+          examAttempts: true,
+        },
+      },
+      examAttempts: {
+        where: { userId: session.user.id },
+        select: {
+          id: true,
+          isCompleted: true,
+          score: true,
+          submittedAt: true,
+        },
+      },
+    },
+    orderBy: { startTime: 'desc' },
+  })
+
   const now = new Date()
 
-  const upcomingExams = exams.filter((exam: any) => new Date(exam.startTime) > now)
-  const activeExams = exams.filter((exam: any) =>
-    new Date(exam.startTime) <= now && new Date(exam.endTime) > now
+  // Attach existing attempt to each exam
+  const examsWithAttempt = exams.map((exam) => ({
+    ...exam,
+    existingAttempt: exam.examAttempts[0] || null,
+  }))
+
+  const upcomingExams = examsWithAttempt.filter((exam) => new Date(exam.startTime) > now)
+  const activeExams = examsWithAttempt.filter(
+    (exam) => new Date(exam.startTime) <= now && new Date(exam.endTime) > now
   )
-  const pastExams = exams.filter((exam: any) => new Date(exam.endTime) <= now)
+  const pastExams = examsWithAttempt.filter((exam) => new Date(exam.endTime) <= now)
 
   return (
-    <DashboardLayout role="STUDENT">
+    <DashboardLayout role={session.user.role}>
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 -my-8 p-4 md:p-8 min-h-screen">
         <div className="max-w-6xl mx-auto">
         <div className="mb-8 mt-[15px]">
@@ -52,7 +78,7 @@ export default async function StudentExamsPage() {
           <div className="mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-green-800 mb-4">Active Exams</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {activeExams.map((exam: any) => (
+              {activeExams.map((exam) => (
                 <div
                   key={exam.id}
                   className="bg-green-50 border-2 border-green-300 rounded-xl p-6 hover:shadow-lg transition-all"
@@ -122,7 +148,7 @@ export default async function StudentExamsPage() {
           <div className="mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-blue-800 mb-4">Upcoming Exams</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {upcomingExams.map((exam: any) => (
+              {upcomingExams.map((exam) => (
                 <div
                   key={exam.id}
                   className="bg-white border border-gray-200 rounded-xl p-6"
@@ -170,7 +196,7 @@ export default async function StudentExamsPage() {
           <div className="mb-8">
             <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Past Exams</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {pastExams.map((exam: any) => (
+              {pastExams.map((exam) => (
                 <div
                   key={exam.id}
                   className="bg-gray-50 border border-gray-200 rounded-xl p-6"
@@ -195,7 +221,7 @@ export default async function StudentExamsPage() {
                         </span>
                       </div>
                       <div className="text-xs text-gray-500">
-                        Submitted: {new Date(exam.existingAttempt.submittedAt).toLocaleString()}
+                        Submitted: {new Date(exam.existingAttempt.submittedAt!).toLocaleString()}
                       </div>
                     </div>
                   )}

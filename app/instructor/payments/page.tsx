@@ -38,7 +38,7 @@ export default function InstructorPaymentsPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       loadPayments()
     }

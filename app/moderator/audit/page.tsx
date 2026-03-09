@@ -36,9 +36,9 @@ export default function ModeratorAuditPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
-      if (session?.user?.role !== 'MODERATOR') {
+      if (session?.user?.role !== 'MODERATOR' && session?.user?.role !== 'ADMIN') {
         router.push('/dashboard')
       } else {
         fetchAuditLogs()

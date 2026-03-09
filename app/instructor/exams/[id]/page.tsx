@@ -56,7 +56,7 @@ async function getExamDetails(id: string, userId: string) {
 export default async function ExamDetailsPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   if (!session?.user || !['INSTRUCTOR', 'ADMIN'].includes(session.user.role)) {
-    redirect('/signin')
+    redirect('/auth/signin')
   }
 
   const exam = await getExamDetails(params.id, session.user.id)

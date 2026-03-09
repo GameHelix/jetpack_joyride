@@ -34,7 +34,7 @@ export default function InstructorCaseRoomsPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/signin')
+      router.push('/auth/signin')
     } else if (status === 'authenticated') {
       loadRooms()
     }

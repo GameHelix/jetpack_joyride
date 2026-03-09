@@ -130,7 +130,7 @@ export async function PUT(
       courseCode: submission.assignment.section.course.code,
       grade: data.grade,
       feedback: data.feedback,
-      submissionId: params.id,
+      assignmentId: submission.assignment.id,
     }).catch((error) => {
       console.error(`Failed to send grade email to ${submission.student.email}:`, error)
     })
