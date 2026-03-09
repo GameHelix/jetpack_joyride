@@ -27,9 +27,12 @@ export default async function InstructorCoursesPage() {
     where: { instructorId: userId },
     include: {
       course: true,
+      enrollments: {
+        where: { status: 'ENROLLED' },
+        select: { id: true },
+      },
       _count: {
         select: {
-          enrollments: true,
           assignments: true,
           lessons: true,
         },
@@ -141,7 +144,7 @@ export default async function InstructorCoursesPage() {
                             <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
-                            <span className="font-semibold text-blue-900">{section._count.enrollments}</span>
+                            <span className="font-semibold text-blue-900">{section.enrollments.length}</span>
                             <span className="text-blue-600">/ {section.capacity}</span>
                           </div>
                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg">
@@ -165,7 +168,7 @@ export default async function InstructorCoursesPage() {
                           courseId={section.course.id}
                           courseCode={section.course.code}
                           courseTitle={section.course.title}
-                          hasEnrollments={section._count.enrollments > 0}
+                          hasEnrollments={section.enrollments.length > 0}
                         />
                       </div>
                     </div>
