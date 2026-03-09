@@ -123,7 +123,22 @@ export async function GET(request: NextRequest) {
 
     if (session.user.role === 'STUDENT') {
       where.studentId = session.user.id
+    } else if (session.user.role === 'INSTRUCTOR') {
+      // Instructors can only see payments for students enrolled in their sections
+      const enrollments = await prisma.enrollment.findMany({
+        where: {
+          section: { instructorId: session.user.id },
+          status: 'ENROLLED',
+        },
+        select: { userId: true },
+        distinct: ['userId'],
+      })
+      const studentIds = enrollments.map((e) => e.userId)
+      where.studentId = studentId && studentIds.includes(studentId)
+        ? studentId
+        : { in: studentIds }
     } else if (studentId) {
+      // ADMIN and MODERATOR can filter by any studentId
       where.studentId = studentId
     }
 
