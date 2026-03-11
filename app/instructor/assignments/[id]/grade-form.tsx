@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import AIGradingAssistant from '@/components/ai-grading-assistant'
 
 interface Submission {
   id: string
@@ -69,19 +68,8 @@ export default function GradeSubmissionForm({ submission }: { submission: Submis
     )
   }
 
-  const handleAIGradeSuggestion = (suggestedGrade: number, suggestedFeedback: string) => {
-    setGrade(suggestedGrade.toString())
-    setFeedback(suggestedFeedback)
-  }
-
   return (
     <>
-      {submission.text && submission.text.trim().length > 0 && (
-        <AIGradingAssistant
-          submissionId={submission.id}
-          onGradeSuggestion={handleAIGradeSuggestion}
-        />
-      )}
       <form onSubmit={handleSubmit} className="border-t border-gray-200 pt-4 mt-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

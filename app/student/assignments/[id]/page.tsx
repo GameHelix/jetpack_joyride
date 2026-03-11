@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
-import AIStudentHelp from '@/components/ai-student-help'
 import { useTabSwitchDetection } from '@/hooks/use-tab-switch-detection'
 
 interface Assignment {
@@ -211,11 +210,6 @@ export default function SubmitAssignmentPage({ params }: { params: { id: string 
           <p className="mt-2 text-gray-600">
             {assignment.section.course.code}: {assignment.section.course.title}
           </p>
-        </div>
-
-        {/* AI Help Section */}
-        <div className="mb-6">
-          <AIStudentHelp assignmentId={params.id} />
         </div>
 
         {/* Tab Switch Monitoring Notice */}

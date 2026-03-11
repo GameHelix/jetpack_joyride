@@ -60,13 +60,11 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 #### Assignments & Grading
 - Create assignments with due dates and point values
 - File upload support with Cloudflare R2 storage
-- AI-powered grading assistance
 - Late submission tracking with automatic warnings
 - Comprehensive grading interface with rubrics
 
 #### Examination System
 - Create exams with multiple question types
-- AI-powered question generation
 - Automatic grading for objective questions
 - Exam scheduling with time limits
 - Student exam attempts tracking
@@ -78,12 +76,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 - **Timetable**: Visual schedule management
 - **Payments**: Track course payments and financial records
 - **Real-time Notifications**: Keep users informed of important events
-
-#### AI Integration
-- AI-powered question generation for exams
-- Intelligent grading assistance
-- Concept explanation for students
-- Student help with contextual understanding
 
 ### Security & Administration
 
@@ -127,10 +119,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 - **File Storage**: Cloudflare R2
 - **Email**: Resend
 
-### AI & Analytics
-- **AI Provider**: Google Gemini
-- **Features**: Question generation, grading assistance, student help
-
 ### Development Tools
 - **Language**: TypeScript
 - **Linting**: ESLint
@@ -167,7 +155,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 - Authentication configuration (NextAuth.js)
 - Role-based access control (RBAC)
 - Database client management (Prisma)
-- AI service integration
 
 #### 3. Data Layer
 - Prisma ORM for type-safe database queries
@@ -177,7 +164,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 #### 4. External Services
 - **Cloudflare R2**: Scalable file storage for assignments and uploads
 - **Resend**: Reliable email delivery for notifications
-- **Google Gemini**: AI-powered features (question generation, grading)
 
 ### Data Flow Example
 
@@ -197,7 +183,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 - PostgreSQL database
 - Cloudflare R2 account (for file uploads)
 - Resend account (for email)
-- Google Gemini API key (for AI features)
 
 ### Installation
 
@@ -231,9 +216,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js 14, 
 
    # Email (Resend)
    RESEND_API_KEY="your-resend-api-key"
-
-   # AI (Google Gemini)
-   GEMINI_API_KEY="your-gemini-api-key"
    ```
 
 4. **Set up the database**
@@ -279,8 +261,7 @@ educy/
 ├── lib/                   # Utility functions
 │   ├── auth.ts           # NextAuth configuration
 │   ├── rbac.ts           # Role-based access control
-│   ├── prisma.ts         # Prisma client
-│   └── ai.ts             # AI integration
+│   └── prisma.ts         # Prisma client
 ├── prisma/               # Database schema and migrations
 │   └── schema.prisma     # Prisma schema
 ├── public/               # Static assets
@@ -339,11 +320,6 @@ See `prisma/schema.prisma` for the complete schema definition.
 - `GET /api/admin/audit-logs` - Audit logs
 - `PUT /api/admin/system-settings` - Update settings
 
-### AI Features
-- `POST /api/ai/generate-questions` - Generate exam questions
-- `POST /api/ai/grading-assist` - AI grading assistance
-- `POST /api/ai/student-help` - Get AI help
-
 ## Recent Updates
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed information about recent updates and bug fixes.
@@ -385,7 +361,6 @@ For support, email support@educy.com or open an issue in the GitHub repository.
 - Built with [Next.js](https://nextjs.org/)
 - Database powered by [Prisma](https://www.prisma.io/)
 - UI components styled with [Tailwind CSS](https://tailwindcss.com/)
-- AI features powered by [Google Gemini](https://ai.google.dev/)
 - File storage by [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 - Email delivery by [Resend](https://resend.com/)
 

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import DashboardLayout from '@/components/dashboard-layout'
-import { AIQuestionGenerator } from '@/components/ai-question-generator'
 import { ExcelQuestionImporter } from '@/components/excel-question-importer'
 
 interface Question {
@@ -42,7 +41,6 @@ export default function NewExamPage() {
     points: 1,
   }])
 
-  const [showAIGenerator, setShowAIGenerator] = useState(false)
   const [showExcelImporter, setShowExcelImporter] = useState(false)
 
   useEffect(() => {
@@ -107,10 +105,6 @@ export default function NewExamPage() {
     const newQuestions = [...questions]
     newQuestions[questionIndex].options[optionIndex] = value
     setQuestions(newQuestions)
-  }
-
-  function handleAIGenerate(generatedQuestions: Question[]) {
-    setQuestions([...questions, ...generatedQuestions])
   }
 
   function handleExcelImport(importedQuestions: Question[]) {
@@ -404,16 +398,6 @@ export default function NewExamPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowAIGenerator(true)}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  AI Generate
-                </button>
-                <button
-                  type="button"
                   onClick={() => setShowExcelImporter(true)}
                   className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5"
                 >
@@ -625,13 +609,6 @@ export default function NewExamPage() {
             </button>
           </div>
         </form>
-
-        {/* AI Question Generator Modal */}
-        <AIQuestionGenerator
-          isOpen={showAIGenerator}
-          onClose={() => setShowAIGenerator(false)}
-          onGenerate={handleAIGenerate}
-        />
 
         {/* Excel Question Importer Modal */}
         <ExcelQuestionImporter

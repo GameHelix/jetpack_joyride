@@ -1,6 +1,6 @@
 # Educy - Complete Course Management Platform
 
-**Modern, AI-powered, full-stack course management system for educational institutions**
+**Modern, full-stack course management system for educational institutions**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/tests-14/16%20passed-brightgreen)]()
@@ -31,7 +31,7 @@
 
 ## 🎯 Overview
 
-Educy is a comprehensive course management platform designed for data science education and other technical courses. It provides complete functionality for admins, instructors, and students with AI-powered features, secure file management, and automated workflows.
+Educy is a comprehensive course management platform designed for data science education and other technical courses. It provides complete functionality for admins, instructors, and students with secure file management, role-based access control, and automated workflows.
 
 ### Key Capabilities
 
@@ -42,7 +42,6 @@ Educy is a comprehensive course management platform designed for data science ed
 - ✅ **Enrollment System** - Student enrollment requests with instructor approval + direct enrollment
 - ✅ **Assignment System** - Create, submit, grade with file/text support
 - ✅ **Late Submission Tracking** - Automatic detection and flagging of late submissions
-- ✅ **AI Integration** - Student tutoring, grading assistance, concept explanations
 - ✅ **File Storage** - Secure upload/download with two-phase confirmation
 - ✅ **Email Notifications** - Automated emails with rate limiting
 - ✅ **Role-Based Access** - 4 roles (Admin, Moderator, Instructor, Student)
@@ -76,7 +75,6 @@ graph TB
         E --> G[Course Management]
         E --> H[Assignment System]
         E --> I[File Operations]
-        E --> J[AI Services]
     end
 
     subgraph "Data Layer"
@@ -84,7 +82,6 @@ graph TB
         G --> K
         H --> K
         I --> L[Cloudflare R2]
-        J --> M[Google Gemini API]
     end
 
     subgraph "External Services"
@@ -92,7 +89,6 @@ graph TB
         H -.-> N
         K -.-> O[Neon PostgreSQL]
         L -.-> P[Cloudflare]
-        M -.-> Q[Google AI]
     end
 
     style A fill:#4A90E2
@@ -100,7 +96,6 @@ graph TB
     style C fill:#FF6B6B
     style K fill:#4ECDC4
     style L fill:#F7B731
-    style M fill:#5F27CD
     style N fill:#00D2D3
 ```
 
@@ -115,7 +110,6 @@ sequenceDiagram
     participant RBAC as RBAC Check
     participant DB as Database
     participant S3 as R2 Storage
-    participant AI as Gemini AI
     participant Email as Resend
 
     U->>F: Access Protected Page
@@ -128,8 +122,6 @@ sequenceDiagram
     DB-->>API: Data
     API->>S3: Upload/Download (if needed)
     S3-->>API: Presigned URL
-    API->>AI: AI Request (if needed)
-    AI-->>API: AI Response
     API->>Email: Send Email (async)
     API-->>F: Response
     F-->>U: Render Page
@@ -226,10 +218,6 @@ educy/
 │   │   │   ├── audit-logs/route.ts
 │   │   │   ├── rooms/[id]/route.ts
 │   │   │   └── users/route.ts
-│   │   ├── ai/                  # AI Features
-│   │   │   ├── explain-concept/route.ts
-│   │   │   ├── grading-assist/route.ts
-│   │   │   └── student-help/route.ts
 │   │   ├── assignments/         # Assignment APIs
 │   │   │   └── [id]/
 │   │   │       ├── route.ts
@@ -290,8 +278,6 @@ educy/
 │   └── globals.css              # Global Styles
 │
 ├── components/                  # React Components
-│   ├── ai-grading-assistant.tsx
-│   ├── ai-student-help.tsx
 │   ├── course-actions.tsx       # Course CRUD action buttons
 │   ├── delete-course-button.tsx  # Delete course with confirmation
 │   ├── leave-course-button.tsx   # Student unenroll button
@@ -303,7 +289,6 @@ educy/
 │       └── session-provider.tsx
 │
 ├── lib/                         # Utility Libraries
-│   ├── ai.ts                   # Google Gemini integration
 │   ├── auth.ts                 # Auth utilities
 │   ├── email.ts                # Resend email functions
 │   ├── prisma.ts               # Prisma client
@@ -360,7 +345,6 @@ graph TB
     subgraph "External Services"
         I[Cloudflare R2<br/>File Storage]
         J[Resend<br/>Email Service]
-        K[Google Gemini<br/>AI API]
         L[Neon<br/>PostgreSQL Host]
     end
 
@@ -374,7 +358,6 @@ graph TB
     E --> H
     E --> I
     E --> J
-    E --> K
     G -.-> L
 
     style A fill:#000000,color:#ffffff
@@ -383,7 +366,6 @@ graph TB
     style G fill:#336791,color:#ffffff
     style I fill:#F6821F,color:#ffffff
     style J fill:#000000,color:#ffffff
-    style K fill:#4285F4,color:#ffffff
 ```
 
 ### Detailed Stack
@@ -400,7 +382,6 @@ graph TB
 | **Auth** | NextAuth.js | 4 | Authentication & sessions |
 | **File Storage** | Cloudflare R2 | - | S3-compatible object storage |
 | **Email** | Resend | - | Transactional emails |
-| **AI** | Google Gemini | 1.5-flash | AI-powered features |
 | **Validation** | Zod | - | Schema validation |
 | **Password Hashing** | bcryptjs | - | Secure password hashing |
 | **AWS SDK** | @aws-sdk/client-s3 | - | R2 file operations |
@@ -450,12 +431,6 @@ R2_BUCKET_NAME="educy"
 R2_PUBLIC_URL="https://pub-your-bucket-id.r2.dev"
 
 # =============================================================================
-# AI FEATURES (Google Gemini)
-# =============================================================================
-# Get from https://ai.google.dev/
-GEMINI_API_KEY="your-gemini-api-key"
-
-# =============================================================================
 # EMAIL SERVICE (Resend)
 # =============================================================================
 # Get from https://resend.com/
@@ -492,13 +467,7 @@ NEXTAUTH_URL="http://localhost:3000"
 4. Copy Account ID, Access Key, Secret Key
 5. Update R2 variables in `.env`
 
-#### 4. AI Features (Google Gemini) - FREE tier available
-
-1. Go to [Google AI Studio](https://ai.google.dev/)
-2. Create API key
-3. Update `GEMINI_API_KEY` in `.env`
-
-#### 5. Email (Resend) - FREE 3000 emails/month
+#### 4. Email (Resend) - FREE 3000 emails/month
 
 1. Go to [resend.com](https://resend.com)
 2. Verify your domain (or use test domain)
@@ -518,7 +487,6 @@ graph LR
     A --> D[Assignment APIs]
     A --> E[Enrollment APIs]
     A --> F[File APIs]
-    A --> G[AI APIs]
     A --> H[Auth APIs]
 
     B --> B1[Users]
@@ -600,14 +568,6 @@ graph LR
 | GET | `/api/files/[id]/download-url` | Authorized | Get download presigned URL |
 | GET | `/api/files/[id]` | Authorized | Get file metadata |
 | DELETE | `/api/files/[id]` | Owner/Admin | Delete file |
-
-### AI APIs
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/ai/student-help` | Student+ | Get AI tutoring help |
-| POST | `/api/ai/grading-assist` | Instructor+ | Get AI grading suggestions |
-| POST | `/api/ai/explain-concept` | Student+ | Get concept explanation |
 
 ### Authentication APIs
 
@@ -878,7 +838,6 @@ sequenceDiagram
 - ✅ Schedule lessons with room booking
 - ✅ Create assignments with due dates
 - ✅ Grade submissions with feedback
-- ✅ AI-assisted grading suggestions
 - ✅ Approve/reject enrollments
 - ✅ View weekly teaching schedule
 - ✅ Download student submissions
@@ -889,7 +848,6 @@ sequenceDiagram
 - ✅ Modern dashboard with gradient cards and visual icons
 - ✅ Submit assignments (file or text) with late detection
 - ✅ View grades and feedback
-- ✅ AI-powered tutoring help
 - ✅ Weekly class timetable
 - ✅ Download course materials
 - ✅ Password recovery (forgot/reset)
@@ -908,7 +866,6 @@ sequenceDiagram
 - ✅ Email notifications with rate limiting (600ms delay)
 - ✅ Audit logging with severity levels
 - ✅ File upload/download with two-phase confirmation
-- ✅ AI integration (Google Gemini)
 - ✅ Race condition prevention (atomic transactions)
 - ✅ Secure password generation and recovery
 - ✅ Input validation (Zod)
@@ -971,7 +928,7 @@ npx tsx scripts/test-fixes.ts
 - ✅ **Integration Tests:** 23/27 passing (85% - auth checks expected)
 - ✅ **Bug Fix Tests:** 14/16 passed (2 skipped - empty tables)
 - ✅ **Build:** 0 errors, 0 warnings
-- ✅ **All Services:** Database, R2, AI, Email verified working
+- ✅ **All Services:** Database, R2, Email verified working
 
 See [Test Report](./docs/TEST_REPORT.md) and [Testing Documentation](./docs/tests/TESTING_GUIDE.md) for details.
 
@@ -989,7 +946,6 @@ graph LR
     D -->|Deploy| E[Production]
     E -->|Connect| F[Neon DB]
     E -->|Connect| G[Cloudflare R2]
-    E -->|Connect| H[Gemini AI]
     E -->|Connect| I[Resend Email]
 
     style C fill:#000000,color:#ffffff
@@ -1130,7 +1086,7 @@ Student Portal:
 **Build:** ✅ Perfect (0 errors, 0 warnings)
 **Tests:** ✅ 14/16 passed (2 skipped)
 **Bugs Fixed:** ✅ 14 critical/high/medium issues resolved
-**Services:** ✅ All integrated (DB, R2, AI, Email)
+**Services:** ✅ All integrated (DB, R2, Email)
 **Security:** ✅ Production-grade (password recovery added)
 **Documentation:** ✅ Complete with test reports
 **Production Ready:** ✅ YES
@@ -1195,7 +1151,6 @@ Built with ❤️ using Next.js, React, Prisma, PostgreSQL, Tailwind CSS, and ma
 **External Services:**
 - [Neon](https://neon.tech) - PostgreSQL hosting
 - [Cloudflare R2](https://cloudflare.com/r2) - Object storage
-- [Google Gemini](https://ai.google.dev) - AI API
 - [Resend](https://resend.com) - Email delivery
 - [Vercel](https://vercel.com) - Hosting platform
 
@@ -1222,5 +1177,5 @@ For issues, questions, or contributions:
 
 ```
 Built with Next.js 14 • TypeScript • Tailwind CSS
-Powered by Neon • Cloudflare • Google AI • Resend
+Powered by Neon • Cloudflare • Resend
 ```
