@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* ─── Custom scrollbar ─────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #050514; }
+::-webkit-scrollbar-thumb  { background: #00d4ff44; border-radius: 3px; }
+
+/* ─── Body reset ────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #050514;
+  color: #e0f8ff;
+  font-family: 'Courier New', 'Consolas', monospace;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* ─── Game canvas ────────────────────────────── */
+canvas { display: block; }
+
+/* ─── Neon text utilities ─────────────────────── */
+.neon-cyan  { text-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.4); }
+.neon-red   { text-shadow: 0 0 10px #ff2244, 0 0 20px rgba(255,34,68,0.4); }
+.neon-gold  { text-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255,215,0,0.4); }
