@@ -93,7 +93,9 @@ export function useGameEngine(difficulty: Difficulty, soundEnabled: boolean) {
   const powerUpTimerRef = useRef(POWERUP_SPAWN_INTERVAL);
 
   // ── High score (localStorage) ─────────────────
+  // Use both a ref (for sync access inside game loop) and state (for UI re-renders)
   const [highScore, setHighScore] = useState<number>(0);
+  const highScoreRef = useRef<number>(0);
 
   // ── React UI state ───────────────────────────
   const [uiState, setUIState] = useState<UIState>({
@@ -114,6 +116,7 @@ export function useGameEngine(difficulty: Difficulty, soundEnabled: boolean) {
   // ── Sync high score from localStorage ────────
   useEffect(() => {
     const stored = parseInt(localStorage.getItem('jj_highscore') ?? '0', 10);
+    highScoreRef.current = stored;
     setHighScore(stored);
     setUIState(prev => ({ ...prev, highScore: stored }));
   }, []);
@@ -201,29 +204,36 @@ export function useGameEngine(difficulty: Difficulty, soundEnabled: boolean) {
     livesRef.current--;
     play('hit');
     if (livesRef.current <= 0) {
-      // Game over
+      // Game over — update high score and immediately sync UI so the overlay appears
       play('death');
       stopBGM();
       gameStateRef.current = 'gameover';
-      const hs = Math.max(highScore, Math.floor(scoreRef.current));
+      const hs = Math.max(highScoreRef.current, Math.floor(scoreRef.current));
+      highScoreRef.current = hs;
       localStorage.setItem('jj_highscore', String(hs));
       setHighScore(hs);
+      syncUI(); // ← must call here; the game loop exits early on 'gameover' so syncUI
+                //   would never run otherwise
     } else {
-      // Flash invincible
+      // Flash invincible and respawn to center so the player doesn't keep touching
+      // the floor/ceiling and re-trigger die() once invincibility expires
       p.invincible = true;
       p.invincibleTimer = INVINCIBLE_FRAMES;
       p.powerUp = 'none';
       p.powerUpTimer = 0;
+      p.y = CEILING_Y + (GROUND_Y - CEILING_Y) / 2 - p.height / 2;
+      p.velocity = 0;
     }
   }
 
   // ── Sync React UI from refs ───────────────────
+  // Uses refs throughout so it's safe to call from any callback without stale-closure issues
   function syncUI() {
     const p = playerRef.current;
     setUIState({
       gameState: gameStateRef.current,
       score: Math.floor(scoreRef.current),
-      highScore,
+      highScore: highScoreRef.current, // ← ref, always current
       distance: Math.floor(distanceRef.current),
       coins: coinsCountRef.current,
       activePowerUp: p.powerUp,
